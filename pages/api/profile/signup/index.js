@@ -51,17 +51,10 @@ export default async (req, res) => {
       const newUser = await JSON.parse(user);
       console.log(newUser);
 
-<<<<<<< HEAD
       await fetch(`${process.env.COMMERCEJS_API}/customers`, {
         method: 'POST',
         headers: {
           'X-Authorization': `${process.env.COMMERCEJS_PK}`,
-=======
-      await fetch(`https://api.chec.io/v1/customers`, {
-        method: 'POST',
-        headers: {
-          'X-Authorization': `sk_test_289027baa9186e35b7e1679bd0c9c69c7e08aac8f38d3`,
->>>>>>> 7aac0881dd2e583cc6f0d0f4c33d845ce190195a
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
