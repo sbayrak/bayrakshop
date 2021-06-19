@@ -42,10 +42,27 @@ export default async (req, res) => {
     } else if (compareVerificationRequest) {
       res.status(201).json({ msg: true });
       await db.collection('verificationRequests').deleteOne({ email, token });
-      await db.collection('users').insertOne({
+      const user = await db.collection('users').insertOne({
         email: email,
         password: compareVerificationRequest.password,
         madeAt: compareVerificationRequest.madeAt,
+      });
+
+      const newUser = await JSON.parse(user);
+      console.log(newUser);
+
+      await fetch(`https://api.chec.io/v1/customers`, {
+        method: 'POST',
+        headers: {
+          'X-Authorization': `sk_test_289027baa9186e35b7e1679bd0c9c69c7e08aac8f38d3`,
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          email: newUser.ops[0].email,
+          password: newUser.ops[0].password,
+          external_id: newUser.ops[0]._id,
+        }),
       });
     }
   }
