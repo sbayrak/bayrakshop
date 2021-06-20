@@ -1,5 +1,6 @@
 import { connectToDatabase } from '../../../../util/mongodb';
 import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcryptjs';
 
 export default async (req, res) => {
   const { db } = await connectToDatabase();
@@ -32,6 +33,7 @@ export default async (req, res) => {
     }
   } else if (req.method === 'GET') {
     const { email, token } = req.query;
+    const salt = await bcrypt.genSalt();
 
     const compareVerificationRequest = await db
       .collection('verificationRequests')
@@ -41,14 +43,18 @@ export default async (req, res) => {
       res.status(201).json({ msg: false });
     } else if (compareVerificationRequest) {
       res.status(201).json({ msg: true });
+
+      const hashedPassword = await bcrypt.hash(
+        compareVerificationRequest.password,
+        salt
+      );
       await db.collection('verificationRequests').deleteOne({ email, token });
       const user = await db.collection('users').insertOne({
         email: email,
-        password: compareVerificationRequest.password,
+        password: hashedPassword,
         madeAt: compareVerificationRequest.madeAt,
         commercejs_id: '',
       });
-
       const newUser = await JSON.parse(user);
 
       const customer = await fetch(`${process.env.COMMERCEJS_API}/customers`, {
