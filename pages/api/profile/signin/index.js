@@ -12,7 +12,6 @@ export default async (req, res) => {
       const user = await db.collection('users').findOne({
         email,
       });
-      console.log(user);
 
       const hashedPassword = await bcrypt.compare(password, user.password);
 
