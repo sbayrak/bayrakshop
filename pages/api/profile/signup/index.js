@@ -46,12 +46,12 @@ export default async (req, res) => {
         email: email,
         password: compareVerificationRequest.password,
         madeAt: compareVerificationRequest.madeAt,
+        commercejs_id: '',
       });
 
       const newUser = await JSON.parse(user);
-      console.log(newUser);
 
-      await fetch(`${process.env.COMMERCEJS_API}/customers`, {
+      const customer = await fetch(`${process.env.COMMERCEJS_API}/customers`, {
         method: 'POST',
         headers: {
           'X-Authorization': `${process.env.COMMERCEJS_PK}`,
@@ -64,6 +64,16 @@ export default async (req, res) => {
           external_id: newUser.ops[0]._id,
         }),
       });
+      const customerToJson = await customer.json();
+
+      await db.collection('users').updateOne(
+        {
+          email: newUser.ops[0].email,
+        },
+        {
+          $set: { commercejs_id: customerToJson.id },
+        }
+      );
     }
   }
 };
