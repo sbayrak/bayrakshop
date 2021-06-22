@@ -28,6 +28,10 @@ export default function Home({ isConnected }) {
       </Typography>
       <Link href='/auth/signup'>
         <a>Sign Up</a>
+      </Link>{' '}
+      &nbsp;
+      <Link href='/auth/password-reset'>
+        <a>Forgot password</a>
       </Link>
       <Button onClick={() => signIn()}>Sign In</Button>
       <br /> <br />

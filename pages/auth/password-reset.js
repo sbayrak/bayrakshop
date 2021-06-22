@@ -1,6 +1,7 @@
 import { Container, Button, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -16,10 +17,37 @@ export default function PasswordReset() {
   const router = useRouter();
   const [email, setEmail] = useState('');
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
 
-    const response = await fetch(`${process}`);
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/profile/password-reset`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (data.msg === 'notexists') {
+      router.push(data.callbackUrl);
+    } else if (data) {
+      await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/profile/password-reset/email/`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, token: data.token }),
+        }
+      );
+      router.push(data.callbackUrl);
+    }
   };
 
   return (
@@ -31,6 +59,7 @@ export default function PasswordReset() {
           name='email'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          label='E-mail'
         ></TextField>
         <Button variant='outlined' type='submit'>
           Submit
