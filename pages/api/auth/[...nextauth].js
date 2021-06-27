@@ -22,10 +22,12 @@ const options = {
             body: JSON.stringify(credentials),
           }
         );
+
         const result = await response.json();
+
         user = result;
 
-        if (user) {
+        if (user.email) {
           return user;
         } else {
           return null;

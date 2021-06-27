@@ -38,6 +38,7 @@ export default async (req, res) => {
   } else if (req.method === 'PATCH') {
     const { password } = req.body;
     const { email } = req.query;
+
     const salt = await bcryptjs.genSalt();
     const hashedPassword = await bcryptjs.hash(password, salt);
 

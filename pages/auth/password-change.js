@@ -71,6 +71,8 @@ function PasswordChange({ data, urlQuery }) {
               type='password'
               label='New Password'
               name='password'
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             ></TextField>
             <Button variant='outlined' type='submit'>
               Submit

@@ -13,7 +13,7 @@ import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 // @@@@@@@@@ NEXTJS @@@@@@@@@@
 import { signIn } from 'next-auth/client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 // @@@@@@@@@ NEXTJS @@@@@@@@@@
@@ -28,14 +28,10 @@ const useStyles = makeStyles((theme) => ({
   rootContainer: {
     height: '70vh',
     boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
-    // background: 'rgb(5,221,250)',
-    // background:
-    //   'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
 
     [theme.breakpoints.down('sm')]: {
       height: '90vh',
       boxShadow: '3px 3px 15px -10px rgba(0,0,0,0)',
-      // marginTop: theme.spacing(20),
     },
   },
   gridItemLeft: {},
@@ -96,16 +92,11 @@ const useStyles = makeStyles((theme) => ({
       height: '65vh',
       borderWidth: '10px',
     },
-    // background: 'rgb(5,221,250)',
-    // background:
-    //   'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
   },
   formContainer: {
     width: '70%',
     padding: theme.spacing(5),
     borderRadius: '5px',
-    // backgroundColor: '#f6f6f6',
-    // boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
     [theme.breakpoints.down('sm')]: {
       padding: theme.spacing(1.5),
       width: '90%',
@@ -174,24 +165,50 @@ const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signInError, setSignInError] = useState('');
+  const [errorEmail, setErrorEmail] = useState(false);
+  const [errorPassword, setErrorPassword] = useState(false);
   const router = useRouter();
   const classes = useStyles();
+
+  function emailIsValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  useEffect(() => {
+    if (email.length >= 1) {
+      setErrorEmail(false);
+      setErrorPassword(false);
+      console.log('calling useEffect');
+    }
+  }, [email, password]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    signIn('credentials', {
-      redirect: false,
-      callbackUrl: `${window.location.origin}/`,
-      email: email,
-      password: password,
-    }).then(function (data) {
-      if (data.error) {
-        setSignInError(data.error);
-      } else if (data.status === 200 && data.ok === true) {
-        router.push(data.url);
-      }
-    });
+    if (!email) {
+      setErrorEmail(true);
+      console.log('first if called');
+    }
+    if (!password) {
+      setErrorPassword(true);
+      console.log('second if called');
+    } else if (!emailIsValid(email)) {
+      setErrorEmail(true);
+    } else if (email && password) {
+      signIn('credentials', {
+        redirect: false,
+        callbackUrl: `${window.location.origin}/`,
+        email: email,
+        password: password,
+      }).then(function (data) {
+        if (data.error) {
+          setSignInError(data.error);
+        } else if (data.status === 200 && data.ok === true) {
+          router.push(data.url);
+        }
+        console.log(data);
+      });
+    }
   };
 
   return (
@@ -250,6 +267,9 @@ const SignIn = () => {
                         label='E-mail'
                         fullWidth
                         className={classes.txtField}
+                        error={errorEmail}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                       ></TextField>
                     </Grid>
                     <Grid
@@ -263,8 +283,11 @@ const SignIn = () => {
                         type='password'
                         name='password'
                         label='Password'
+                        error={errorPassword}
                         fullWidth
                         className={classes.txtField}
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                       ></TextField>
                     </Grid>
                     <Grid
@@ -326,7 +349,7 @@ const SignIn = () => {
         <form onSubmit={submitHandler}>
           <TextField
             variant='outlined'
-            type='email'
+            type='text'
             name='email'
             label='Email'
             value={email}
