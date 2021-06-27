@@ -15,8 +15,11 @@ export default async (req, res) => {
 
       const hashedPassword = await bcrypt.compare(password, user.password);
 
+      // if (!hashedPassword) {
+      //   res.status(401).json({});
+      // }
       if (!hashedPassword) {
-        res.status(401).json({});
+        res.status(401).json({ msg: 'wrong' });
       }
       res.status(201).json(user);
     }
