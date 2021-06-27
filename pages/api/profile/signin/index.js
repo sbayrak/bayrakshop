@@ -20,8 +20,9 @@ export default async (req, res) => {
       // }
       if (!hashedPassword) {
         res.status(401).json({ msg: 'wrong' });
+      } else {
+        res.status(201).json(user);
       }
-      res.status(201).json(user);
     }
   }
 };

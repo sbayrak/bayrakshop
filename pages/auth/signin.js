@@ -6,6 +6,7 @@ import {
   TextField,
   Box,
   Grid,
+  Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
@@ -210,6 +211,7 @@ const SignIn = () => {
       });
     }
   };
+  console.log(signInError);
 
   return (
     <>
@@ -305,6 +307,16 @@ const SignIn = () => {
                         Sign In
                       </Button>
                     </Grid>
+
+                    <Grid item xs={12} md={12}>
+                      {' '}
+                      {signInError && (
+                        <Typography>
+                          Please check your e-mail or password again.
+                        </Typography>
+                      )}
+                    </Grid>
+
                     <Grid
                       item
                       xs={12}
@@ -345,30 +357,6 @@ const SignIn = () => {
           </Grid>
         </Container>
       </Box>
-      {/* <Container>
-        <form onSubmit={submitHandler}>
-          <TextField
-            variant='outlined'
-            type='text'
-            name='email'
-            label='Email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          ></TextField>
-          <TextField
-            variant='outlined'
-            type='password'
-            name='password'
-            label='Password'
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          ></TextField>
-          <Button variant='outlined' type='submit'>
-            Sign In
-          </Button>
-        </form>
-        {signInError && <Typography>Oops! something went wrong</Typography>}
-      </Container> */}
     </>
   );
 };

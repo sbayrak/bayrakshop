@@ -27,10 +27,10 @@ const options = {
 
         user = result;
 
-        if (user.email) {
-          return user;
-        } else {
+        if (user.msg) {
           return null;
+        } else {
+          return user;
         }
 
         // const res =
