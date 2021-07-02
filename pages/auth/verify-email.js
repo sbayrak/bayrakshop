@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 export const getServerSideProps = async (context) => {
   const urlQuery = context.query;
   const compare = await fetch(
-    `${process.env.NEXT_PUBLIC_URL}/api/profile/signup?email=${urlQuery.email}&token=${urlQuery.token}`,
+    `${process.env.NEXT_PUBLIC_URL}/api/profile/signup?email=${urlQuery.email}&token=${urlQuery.token}&firstname=${urlQuery.firstname}&lastname=${urlQuery.lastname}`,
     {
       method: 'GET',
     }

@@ -6,7 +6,7 @@ export default async (req, res) => {
   const { db } = await connectToDatabase();
 
   if (req.method === 'POST') {
-    const { email, password } = req.body;
+    const { firstname, lastname, email, password } = req.body;
     const token = uuidv4();
     const date = new Date();
     const callbackUrl = `${process.env.NEXTAUTH_URL}/auth/verification-message`;
@@ -22,6 +22,8 @@ export default async (req, res) => {
       const newVerificationRequest = await db
         .collection('verificationRequests')
         .insertOne({
+          firstname: firstname,
+          lastname: lastname,
           email: email,
           password: password,
           token,
@@ -32,7 +34,7 @@ export default async (req, res) => {
       res.status(201).json(newVerificationRequest.ops);
     }
   } else if (req.method === 'GET') {
-    const { email, token } = req.query;
+    const { firstname, lastname, email, token } = req.query;
     const salt = await bcrypt.genSalt();
 
     const compareVerificationRequest = await db
@@ -50,6 +52,8 @@ export default async (req, res) => {
       );
       await db.collection('verificationRequests').deleteOne({ email, token });
       const user = await db.collection('users').insertOne({
+        firstname: firstname,
+        lastname: lastname,
         email: email,
         password: hashedPassword,
         madeAt: compareVerificationRequest.madeAt,
@@ -65,6 +69,8 @@ export default async (req, res) => {
           Accept: 'application/json',
         },
         body: JSON.stringify({
+          firstname: newUser.ops[0].firstname,
+          lastname: newUser.ops[0].lastname,
           email: newUser.ops[0].email,
           password: newUser.ops[0].password,
           external_id: newUser.ops[0]._id,
