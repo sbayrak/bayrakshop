@@ -45,7 +45,18 @@ const useStyles = makeStyles((theme) => ({
       borderWidth: '2px',
     },
   },
-  root: {},
+  root: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
+  },
+  mobileRoot: {
+    width: '100%',
+    display: 'none',
+    [theme.breakpoints.down('sm')]: {
+      display: 'inline',
+    },
+  },
   gridContainerRoot: {},
   gridContainerTop: {
     borderBottom: '1px solid rgba(196,196,196,0.5)',
@@ -399,226 +410,233 @@ const Navbar = () => {
     </Container>
   );
 
+  const mobile = (
+    <div className={classes.mobileRoot}>
+      <div className={classes.mobile}>
+        <div className={classes.logoWrapper}>
+          <Typography variant='h6'>
+            <Link href='/'>
+              <a className={classes.logoLink}>
+                <StorefrontIcon /> &nbsp; Koslow
+                <span className={classes.shopName}>Shop</span>
+              </a>
+            </Link>
+          </Typography>
+        </div>
+        <div>
+          <IconButton>
+            <Badge badgeContent={1} color='error'>
+              <ShoppingCartIcon />
+            </Badge>
+          </IconButton>
+
+          <IconButton onClick={(e) => setOpenDrawer(!openDrawer)}>
+            <MenuIcon />
+          </IconButton>
+        </div>
+      </div>
+      <SwipeableDrawer
+        open={openDrawer}
+        anchor='top'
+        onClose={(e) => setOpenDrawer(!open)}
+      >
+        <div className={classes.drawerWrapper}>
+          <div className={classes.item}>
+            <ul className={classes.mobileToolsUl}>
+              <li>
+                <div className={classes.search}>
+                  <div className={classes.searchIcon}>
+                    <SearchIcon
+                      className={classes.mobileToolsProfile}
+                      fontSize='large'
+                    />
+                  </div>
+                  <InputBase
+                    placeholder='Search…'
+                    classes={{
+                      root: classes.inputRoot,
+                      input: classes.inputInput,
+                    }}
+                  />
+                </div>
+              </li>
+              <li>
+                <Link href='#!'>
+                  <a className={classes.mobileToolsProfile}>
+                    <PersonIcon fontSize='large' />
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <IconButton>
+                  <Badge badgeContent={1} color='error'>
+                    <ShoppingCartIcon
+                      className={classes.mobileToolsProfile}
+                      fontSize='large'
+                    />
+                  </Badge>
+                </IconButton>
+              </li>
+            </ul>
+          </div>
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls='panel1a-content'
+              id='panel1a-header'
+            >
+              <Typography>Products</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div style={{ width: '100%' }}>
+                <ul className={classes.mobileProductsUl}>
+                  <li className={classes.mobileProductsLi}>
+                    <Link href='#!'>
+                      <a
+                        target='_blank'
+                        rel='noreferrer noopener'
+                        className={classes.mobileProductsLinks}
+                      >
+                        <ArrowRightIcon /> Baklava
+                      </a>
+                    </Link>
+                  </li>
+                  <li className={classes.mobileProductsLi}>
+                    <Link href='#!'>
+                      <a
+                        target='_blank'
+                        rel='noreferrer noopener'
+                        className={classes.mobileProductsLinks}
+                      >
+                        <ArrowRightIcon /> Lokum
+                      </a>
+                    </Link>
+                  </li>
+                  <li className={classes.mobileProductsLi}>
+                    <Link href='#!'>
+                      <a
+                        target='_blank'
+                        rel='noreferrer noopener'
+                        className={classes.mobileProductsLinks}
+                      >
+                        <ArrowRightIcon /> Cakes
+                      </a>
+                    </Link>
+                  </li>
+                  <li className={classes.mobileProductsLi}>
+                    <Link href='#!'>
+                      <a
+                        target='_blank'
+                        rel='noreferrer noopener'
+                        className={classes.mobileProductsLinks}
+                      >
+                        <ArrowRightIcon /> Appetizers
+                      </a>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography>More Information</Typography>
+            </AccordionSummary>
+            <AccordionDetails className={classes.accordionInfo}>
+              <ul className={classes.mobileInformationUl}>
+                <li>
+                  <Link href='/about-us'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={classes.mobileInformationLinks}
+                    >
+                      About Us
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href='/privacy'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={classes.mobileInformationLinks}
+                    >
+                      Privacy
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href='/careers'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={classes.mobileInformationLinks}
+                    >
+                      Careers
+                    </a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href='/contact'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={classes.mobileInformationLinks}
+                    >
+                      Contact
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+              <div className={classes.mobileInformationBottom}>
+                <div>
+                  <Link href='/track-your-order'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={classes.mobileInformationLinks}
+                    >
+                      Track Your Order
+                    </a>
+                  </Link>
+                </div>
+                <div className={classes.socialWrapper}>
+                  <Link href='#!'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={`${classes.topLeftLinks} ${classes.socialLinks}`}
+                    >
+                      <FacebookIcon fontSize='small' />
+                    </a>
+                  </Link>
+
+                  <Link href='#!'>
+                    <a
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className={`${classes.topLeftLinks} ${classes.socialLinks}`}
+                    >
+                      <InstagramIcon fontSize='small' />
+                    </a>
+                  </Link>
+                </div>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+        </div>
+      </SwipeableDrawer>
+    </div>
+  );
+
   return (
     <>
       <AppBar position='static' elevation={1} className={classes.appbar}>
         <Toolbar>
-          <div className={classes.mobile}>
-            <div className={classes.logoWrapper}>
-              <Typography variant='h6'>
-                <Link href='/'>
-                  <a className={classes.logoLink}>
-                    <StorefrontIcon /> &nbsp; Koslow
-                    <span className={classes.shopName}>Shop</span>
-                  </a>
-                </Link>
-              </Typography>
-            </div>
-            <div>
-              <IconButton>
-                <Badge badgeContent={1} color='error'>
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
-
-              <IconButton onClick={(e) => setOpenDrawer(!openDrawer)}>
-                <MenuIcon />
-              </IconButton>
-            </div>
-          </div>
-          <SwipeableDrawer
-            open={openDrawer}
-            anchor='top'
-            onClose={(e) => setOpenDrawer(!open)}
-          >
-            <div className={classes.drawerWrapper}>
-              <div className={classes.item}>
-                <ul className={classes.mobileToolsUl}>
-                  <li>
-                    <div className={classes.search}>
-                      <div className={classes.searchIcon}>
-                        <SearchIcon
-                          className={classes.mobileToolsProfile}
-                          fontSize='large'
-                        />
-                      </div>
-                      <InputBase
-                        placeholder='Search…'
-                        classes={{
-                          root: classes.inputRoot,
-                          input: classes.inputInput,
-                        }}
-                      />
-                    </div>
-                  </li>
-                  <li>
-                    <Link href='#!'>
-                      <a className={classes.mobileToolsProfile}>
-                        <PersonIcon fontSize='large' />
-                      </a>
-                    </Link>
-                  </li>
-                  <li>
-                    <IconButton>
-                      <Badge badgeContent={1} color='error'>
-                        <ShoppingCartIcon
-                          className={classes.mobileToolsProfile}
-                          fontSize='large'
-                        />
-                      </Badge>
-                    </IconButton>
-                  </li>
-                </ul>
-              </div>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<ExpandMoreIcon />}
-                  aria-controls='panel1a-content'
-                  id='panel1a-header'
-                >
-                  <Typography>Products</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <div style={{ width: '100%' }}>
-                    <ul className={classes.mobileProductsUl}>
-                      <li className={classes.mobileProductsLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.mobileProductsLinks}
-                          >
-                            <ArrowRightIcon /> Baklava
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.mobileProductsLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.mobileProductsLinks}
-                          >
-                            <ArrowRightIcon /> Lokum
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.mobileProductsLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.mobileProductsLinks}
-                          >
-                            <ArrowRightIcon /> Cakes
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.mobileProductsLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.mobileProductsLinks}
-                          >
-                            <ArrowRightIcon /> Appetizers
-                          </a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </AccordionDetails>
-              </Accordion>
-
-              <Accordion>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography>More Information</Typography>
-                </AccordionSummary>
-                <AccordionDetails className={classes.accordionInfo}>
-                  <ul className={classes.mobileInformationUl}>
-                    <li>
-                      <Link href='/about-us'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={classes.mobileInformationLinks}
-                        >
-                          About Us
-                        </a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href='/privacy'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={classes.mobileInformationLinks}
-                        >
-                          Privacy
-                        </a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href='/careers'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={classes.mobileInformationLinks}
-                        >
-                          Careers
-                        </a>
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href='/contact'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={classes.mobileInformationLinks}
-                        >
-                          Contact
-                        </a>
-                      </Link>
-                    </li>
-                  </ul>
-                  <div className={classes.mobileInformationBottom}>
-                    <div>
-                      <Link href='/track-your-order'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={classes.mobileInformationLinks}
-                        >
-                          Track Your Order
-                        </a>
-                      </Link>
-                    </div>
-                    <div className={classes.socialWrapper}>
-                      <Link href='#!'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={`${classes.topLeftLinks} ${classes.socialLinks}`}
-                        >
-                          <FacebookIcon fontSize='small' />
-                        </a>
-                      </Link>
-
-                      <Link href='#!'>
-                        <a
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className={`${classes.topLeftLinks} ${classes.socialLinks}`}
-                        >
-                          <InstagramIcon fontSize='small' />
-                        </a>
-                      </Link>
-                    </div>
-                  </div>
-                </AccordionDetails>
-              </Accordion>
-            </div>
-          </SwipeableDrawer>
+          {desktop}
+          {mobile}
         </Toolbar>
       </AppBar>
     </>
