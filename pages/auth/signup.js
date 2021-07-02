@@ -373,7 +373,7 @@ export default function SignUp() {
                     gutterBottom
                     paragraph
                   >
-                    Discover new season clothes
+                    Discover handmade desserts
                   </Typography>
                   <Typography
                     variant='h6'

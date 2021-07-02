@@ -36,9 +36,9 @@ const useStyles = makeStyles((theme) => ({
   appbar: {
     backgroundColor: '#f6f6f6',
     boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
-    borderBottom: '10px solid',
+    borderBottom: '5px solid',
     borderImageSlice: 1,
-    borderWidth: '20px',
+    borderWidth: '10px',
     borderImageSource:
       'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
     [theme.breakpoints.down('xs')]: {
@@ -118,8 +118,8 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(1.5),
     textDecoration: 'none',
     color: '#5652de',
-    fontSize: '16px',
-    fontWeight: theme.typography.fontWeightMedium,
+    fontSize: '18px',
+    fontWeight: theme.typography.fontWeightBold,
   },
   logoWrapper: {
     paddingLeft: theme.spacing(1),
@@ -215,6 +215,7 @@ const useStyles = makeStyles((theme) => ({
   },
   search: {
     display: 'flex',
+    alignItems: 'center',
     border: '1px solid rgba(233,233,233,1)',
   },
   mobileToolsProfileTypo: {
@@ -222,6 +223,12 @@ const useStyles = makeStyles((theme) => ({
   },
   item: {
     marginBottom: theme.spacing(7),
+  },
+  toolLinks: {
+    color: '#5652de',
+  },
+  inputRoot: {
+    paddingLeft: theme.spacing(1),
   },
 }));
 
@@ -380,11 +387,18 @@ const Navbar = () => {
             <div>
               <ul className={classes.bottomMidUl}>
                 <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
-                    <a className={classes.bottomMidLinks}>
-                      <SearchIcon fontSize='large' />
-                    </a>
-                  </Link>
+                  <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                      <SearchIcon className={`  ${classes.toolLinks}`} />
+                    </div>
+                    <InputBase
+                      placeholder='Search…'
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                    />
+                  </div>
                 </li>
                 <li className={classes.bottomMidLi}>
                   <Link href='#!'>
