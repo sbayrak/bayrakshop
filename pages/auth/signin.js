@@ -273,7 +273,7 @@ const SignIn = () => {
                         paragraph
                         className={classes.Typo3}
                       >
-                        Login
+                        Sign In
                       </Typography>
                     </Grid>
                     <Grid
