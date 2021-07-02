@@ -8,6 +8,13 @@ import {
   Container,
   Grid,
   Badge,
+  IconButton,
+  SwipeableDrawer,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Divider,
+  InputBase,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -15,10 +22,14 @@ import StorefrontIcon from '@material-ui/icons/Storefront';
 import SearchIcon from '@material-ui/icons/Search';
 import PersonIcon from '@material-ui/icons/Person';
 import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import MenuIcon from '@material-ui/icons/Menu';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 // @@@ MATERIAL-UI @@@
 
 // @@@ NEXTJS @@@
 import Link from 'next/link';
+import { useState } from 'react';
 // @@@ NEXTJS @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -30,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     borderWidth: '20px',
     borderImageSource:
       'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
+    [theme.breakpoints.down('xs')]: {
+      borderWidth: '2px',
+    },
   },
   root: {},
   gridContainerRoot: {},
@@ -109,71 +123,471 @@ const useStyles = makeStyles((theme) => ({
   shopName: {
     fontWeight: theme.typography.fontWeightLight,
   },
+  mobile: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  drawerWrapper: {
+    border: '1px solid red',
+    boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
+    borderBottom: '10px solid',
+    borderImageSlice: 1,
+    borderWidth: '20px',
+    borderImageSource:
+      'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
+    [theme.breakpoints.down('xs')]: {
+      borderWidth: '2px',
+    },
+  },
+  mobileInformationUl: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    listStyle: 'none',
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: '12px',
+  },
+  mobileInformationLinks: {
+    textDecoration: 'none',
+    color: theme.palette.grey[600],
+    padding: theme.spacing(0.5),
+    paddingLeft: theme.spacing(0.75),
+    paddingRight: theme.spacing(0.75),
+  },
+  accordionInfo: {
+    backgroundColor: theme.palette.grey[100],
+    flexDirection: 'column',
+  },
+  mobileInformationBottom: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    color: theme.palette.grey[600],
+    padding: theme.spacing(0.5),
+    paddingLeft: theme.spacing(0.75),
+    paddingRight: theme.spacing(0.75),
+    fontWeight: theme.typography.fontWeightRegular,
+    fontSize: '12px',
+  },
+  mobileProductsUl: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    listStyle: 'none',
+  },
+  mobileProductsLi: {
+    marginBottom: theme.spacing(2),
+  },
+  mobileProductsLinks: {
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+    color: theme.palette.grey[600],
+    padding: theme.spacing(0.5),
+    paddingLeft: theme.spacing(0.75),
+    paddingRight: theme.spacing(0.75),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+  mobileToolsUl: {
+    listStyle: 'none',
+    display: 'flex',
+    alignItems: 'center',
+  },
+
+  mobileToolsProfile: {
+    color: '#5652de',
+    display: 'flex',
+    alignItems: 'center',
+    textDecoration: 'none',
+  },
+  search: {
+    display: 'flex',
+    border: '1px solid rgba(233,233,233,1)',
+  },
+  mobileToolsProfileTypo: {
+    color: theme.palette.grey[600],
+  },
+  item: {
+    marginBottom: theme.spacing(7),
+  },
 }));
 
 const Navbar = () => {
   const classes = useStyles();
+  const [openDrawer, setOpenDrawer] = useState(false);
+
+  const desktop = (
+    <Container className={classes.root}>
+      <Grid item className={classes.gridContainerRoot}>
+        <Grid container item className={classes.gridContainerTop}>
+          <div className={classes.wrapperTop}>
+            <ul className={classes.topLeft}>
+              <li className={classes.topLeftLi}>
+                <Link href='/about-us'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={classes.topLeftLinks}
+                  >
+                    About Us
+                  </a>
+                </Link>
+              </li>
+              <li className={classes.topLeftLi}>
+                <Link href='/privacy'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={classes.topLeftLinks}
+                  >
+                    Privacy
+                  </a>
+                </Link>
+              </li>
+              <li className={classes.topLeftLi}>
+                <Link href='/careers'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={classes.topLeftLinks}
+                  >
+                    Careers
+                  </a>
+                </Link>
+              </li>
+              <li className={classes.topLeftLi}>
+                <Link href='/contact'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={classes.topLeftLinks}
+                  >
+                    Contact
+                  </a>
+                </Link>
+              </li>
+            </ul>
+            <div className={classes.topRight}>
+              <div>
+                <Link href='/track-your-order'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={classes.topLeftLinks}
+                  >
+                    Track Your Order
+                  </a>
+                </Link>
+              </div>
+              <div className={classes.socialWrapper}>
+                <Link href='#!'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={`${classes.topLeftLinks} ${classes.socialLinks}`}
+                  >
+                    <FacebookIcon fontSize='small' />
+                  </a>
+                </Link>
+
+                <Link href='#!'>
+                  <a
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className={`${classes.topLeftLinks} ${classes.socialLinks}`}
+                  >
+                    <InstagramIcon fontSize='small' />
+                  </a>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Grid>
+
+        <Grid item className={classes.gridContainerBottom}>
+          <div className={classes.wrapperBottom}>
+            <div className={classes.logoWrapper}>
+              <Typography variant='h5'>
+                <Link href='/'>
+                  <a className={classes.logoLink}>
+                    <StorefrontIcon fontSize='large' /> &nbsp; Koslow
+                    <span className={classes.shopName}>Shop</span>
+                  </a>
+                </Link>
+              </Typography>
+            </div>
+            <div>
+              <ul className={classes.bottomMidUl}>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a
+                      target='_blank'
+                      rel='noreferrer noopener'
+                      className={classes.bottomMidLinks}
+                    >
+                      Baklava
+                    </a>
+                  </Link>
+                </li>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a
+                      target='_blank'
+                      rel='noreferrer noopener'
+                      className={classes.bottomMidLinks}
+                    >
+                      Lokum
+                    </a>
+                  </Link>
+                </li>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a
+                      target='_blank'
+                      rel='noreferrer noopener'
+                      className={classes.bottomMidLinks}
+                    >
+                      Cakes
+                    </a>
+                  </Link>
+                </li>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a
+                      target='_blank'
+                      rel='noreferrer noopener'
+                      className={classes.bottomMidLinks}
+                    >
+                      Appetizers
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <ul className={classes.bottomMidUl}>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a className={classes.bottomMidLinks}>
+                      <SearchIcon fontSize='large' />
+                    </a>
+                  </Link>
+                </li>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a className={classes.bottomMidLinks}>
+                      <PersonIcon fontSize='large' />
+                    </a>
+                  </Link>
+                </li>
+                <li className={classes.bottomMidLi}>
+                  <Link href='#!'>
+                    <a className={classes.bottomMidLinks}>
+                      <Badge badgeContent={1} color='error'>
+                        <ShoppingCartIcon fontSize='large' />
+                      </Badge>
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </Grid>
+      </Grid>
+    </Container>
+  );
+
   return (
     <>
       <AppBar position='static' elevation={1} className={classes.appbar}>
         <Toolbar>
-          <Container className={classes.root}>
-            <Grid item className={classes.gridContainerRoot}>
-              <Grid container item className={classes.gridContainerTop}>
-                <div className={classes.wrapperTop}>
-                  <ul className={classes.topLeft}>
-                    <li className={classes.topLeftLi}>
+          <div className={classes.mobile}>
+            <div className={classes.logoWrapper}>
+              <Typography variant='h6'>
+                <Link href='/'>
+                  <a className={classes.logoLink}>
+                    <StorefrontIcon /> &nbsp; Koslow
+                    <span className={classes.shopName}>Shop</span>
+                  </a>
+                </Link>
+              </Typography>
+            </div>
+            <div>
+              <IconButton>
+                <Badge badgeContent={1} color='error'>
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+
+              <IconButton onClick={(e) => setOpenDrawer(!openDrawer)}>
+                <MenuIcon />
+              </IconButton>
+            </div>
+          </div>
+          <SwipeableDrawer
+            open={openDrawer}
+            anchor='top'
+            onClose={(e) => setOpenDrawer(!open)}
+          >
+            <div className={classes.drawerWrapper}>
+              <div className={classes.item}>
+                <ul className={classes.mobileToolsUl}>
+                  <li>
+                    <div className={classes.search}>
+                      <div className={classes.searchIcon}>
+                        <SearchIcon
+                          className={classes.mobileToolsProfile}
+                          fontSize='large'
+                        />
+                      </div>
+                      <InputBase
+                        placeholder='Search…'
+                        classes={{
+                          root: classes.inputRoot,
+                          input: classes.inputInput,
+                        }}
+                      />
+                    </div>
+                  </li>
+                  <li>
+                    <Link href='#!'>
+                      <a className={classes.mobileToolsProfile}>
+                        <PersonIcon fontSize='large' />
+                      </a>
+                    </Link>
+                  </li>
+                  <li>
+                    <IconButton>
+                      <Badge badgeContent={1} color='error'>
+                        <ShoppingCartIcon
+                          className={classes.mobileToolsProfile}
+                          fontSize='large'
+                        />
+                      </Badge>
+                    </IconButton>
+                  </li>
+                </ul>
+              </div>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls='panel1a-content'
+                  id='panel1a-header'
+                >
+                  <Typography>Products</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <div style={{ width: '100%' }}>
+                    <ul className={classes.mobileProductsUl}>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='#!'>
+                          <a
+                            target='_blank'
+                            rel='noreferrer noopener'
+                            className={classes.mobileProductsLinks}
+                          >
+                            <ArrowRightIcon /> Baklava
+                          </a>
+                        </Link>
+                      </li>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='#!'>
+                          <a
+                            target='_blank'
+                            rel='noreferrer noopener'
+                            className={classes.mobileProductsLinks}
+                          >
+                            <ArrowRightIcon /> Lokum
+                          </a>
+                        </Link>
+                      </li>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='#!'>
+                          <a
+                            target='_blank'
+                            rel='noreferrer noopener'
+                            className={classes.mobileProductsLinks}
+                          >
+                            <ArrowRightIcon /> Cakes
+                          </a>
+                        </Link>
+                      </li>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='#!'>
+                          <a
+                            target='_blank'
+                            rel='noreferrer noopener'
+                            className={classes.mobileProductsLinks}
+                          >
+                            <ArrowRightIcon /> Appetizers
+                          </a>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography>More Information</Typography>
+                </AccordionSummary>
+                <AccordionDetails className={classes.accordionInfo}>
+                  <ul className={classes.mobileInformationUl}>
+                    <li>
                       <Link href='/about-us'>
                         <a
                           target='_blank'
                           rel='noopener noreferrer'
-                          className={classes.topLeftLinks}
+                          className={classes.mobileInformationLinks}
                         >
                           About Us
                         </a>
                       </Link>
                     </li>
-                    <li className={classes.topLeftLi}>
+                    <li>
                       <Link href='/privacy'>
                         <a
                           target='_blank'
                           rel='noopener noreferrer'
-                          className={classes.topLeftLinks}
+                          className={classes.mobileInformationLinks}
                         >
                           Privacy
                         </a>
                       </Link>
                     </li>
-                    <li className={classes.topLeftLi}>
+                    <li>
                       <Link href='/careers'>
                         <a
                           target='_blank'
                           rel='noopener noreferrer'
-                          className={classes.topLeftLinks}
+                          className={classes.mobileInformationLinks}
                         >
                           Careers
                         </a>
                       </Link>
-                    </li>{' '}
-                    <li className={classes.topLeftLi}>
+                    </li>
+                    <li>
                       <Link href='/contact'>
                         <a
                           target='_blank'
                           rel='noopener noreferrer'
-                          className={classes.topLeftLinks}
+                          className={classes.mobileInformationLinks}
                         >
                           Contact
                         </a>
                       </Link>
                     </li>
                   </ul>
-                  <div className={classes.topRight}>
+                  <div className={classes.mobileInformationBottom}>
                     <div>
                       <Link href='/track-your-order'>
                         <a
                           target='_blank'
                           rel='noopener noreferrer'
-                          className={classes.topLeftLinks}
+                          className={classes.mobileInformationLinks}
                         >
                           Track Your Order
                         </a>
@@ -201,100 +615,10 @@ const Navbar = () => {
                       </Link>
                     </div>
                   </div>
-                </div>
-              </Grid>
-
-              <Grid item className={classes.gridContainerBottom}>
-                <div className={classes.wrapperBottom}>
-                  <div className={classes.logoWrapper}>
-                    <Typography variant='h5'>
-                      <Link href='/'>
-                        <a className={classes.logoLink}>
-                          <StorefrontIcon fontSize='large' /> &nbsp; Koslow
-                          <span className={classes.shopName}>Shop</span>
-                        </a>
-                      </Link>
-                    </Typography>
-                  </div>
-                  <div>
-                    <ul className={classes.bottomMidUl}>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.bottomMidLinks}
-                          >
-                            Baklava
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.bottomMidLinks}
-                          >
-                            Lokum
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.bottomMidLinks}
-                          >
-                            Cakes
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a
-                            target='_blank'
-                            rel='noreferrer noopener'
-                            className={classes.bottomMidLinks}
-                          >
-                            Appetizers
-                          </a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                  <div>
-                    <ul className={classes.bottomMidUl}>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a className={classes.bottomMidLinks}>
-                            <SearchIcon fontSize='large' />
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a className={classes.bottomMidLinks}>
-                            <PersonIcon fontSize='large' />
-                          </a>
-                        </Link>
-                      </li>
-                      <li className={classes.bottomMidLi}>
-                        <Link href='#!'>
-                          <a className={classes.bottomMidLinks}>
-                            <Badge badgeContent={1} color='error'>
-                              <ShoppingCartIcon fontSize='large' />
-                            </Badge>
-                          </a>
-                        </Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </Grid>
-            </Grid>
-          </Container>
+                </AccordionDetails>
+              </Accordion>
+            </div>
+          </SwipeableDrawer>
         </Toolbar>
       </AppBar>
     </>
