@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+import ErrorIcon from '@material-ui/icons/Error';
 // @@@@@@@@@ MATERIAL-UI @@@@@@@@@@
 
 // @@@@@@@@@ NEXTJS @@@@@@@@@@
@@ -160,6 +161,25 @@ const useStyles = makeStyles((theme) => ({
     color: '#5652de',
     fontWeight: theme.typography.fontWeightBold,
   },
+  formBottomItems: {
+    padding: 0,
+    paddingLeft: theme.spacing(1),
+  },
+  item: {
+    marginTop: theme.spacing(4),
+  },
+  errorMsg: {
+    paddingLeft: theme.spacing(1),
+    padding: theme.spacing(1),
+    color: '#F44336',
+    borderRadius: '5px',
+    display: 'flex',
+    alignItems: 'center',
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '12px',
+      padding: theme.spacing(1),
+    },
+  },
 }));
 
 const SignIn = () => {
@@ -292,6 +312,17 @@ const SignIn = () => {
                         onChange={(e) => setPassword(e.target.value)}
                       ></TextField>
                     </Grid>
+                    <Grid item xs={12} md={12}>
+                      {signInError && (
+                        <Typography
+                          variant='body2'
+                          className={classes.errorMsg}
+                        >
+                          <ErrorIcon /> &nbsp; Please check your e-mail or
+                          password again.
+                        </Typography>
+                      )}
+                    </Grid>
                     <Grid
                       item
                       xs={12}
@@ -308,20 +339,11 @@ const SignIn = () => {
                       </Button>
                     </Grid>
 
-                    <Grid item xs={12} md={12}>
-                      {' '}
-                      {signInError && (
-                        <Typography>
-                          Please check your e-mail or password again.
-                        </Typography>
-                      )}
-                    </Grid>
-
                     <Grid
                       item
                       xs={12}
                       md={12}
-                      className={classes.gridRightItem}
+                      className={`${classes.gridRightItem} ${classes.formBottomItems} ${classes.item}`}
                     >
                       <Link href='/auth/password-reset'>
                         <a className={classes.forgotPw}>
@@ -333,7 +355,7 @@ const SignIn = () => {
                       item
                       xs={12}
                       md={12}
-                      className={classes.gridRightItem}
+                      className={`${classes.gridRightItem} ${classes.formBottomItems}`}
                     >
                       <Typography variant='body2'>or</Typography>
                     </Grid>
@@ -341,9 +363,12 @@ const SignIn = () => {
                       item
                       xs={12}
                       md={12}
-                      className={classes.gridRightItem}
+                      className={`${classes.gridRightItem} ${classes.formBottomItems}`}
                     >
-                      <Typography className={classes.signupLink}>
+                      <Typography
+                        className={classes.signupLink}
+                        variant='body2'
+                      >
                         Don't you have an account ?{' '}
                         <Link href='/auth/signup'>
                           <a className={classes.signupSubLink}>Sign Up</a>
