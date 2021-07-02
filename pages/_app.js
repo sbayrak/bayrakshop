@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../src/theme';
 import { Provider } from 'next-auth/client';
+import Navbar from '../components/layout/Navbar';
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -30,6 +31,7 @@ export default function MyApp(props) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Provider session={pageProps.session}>
+          <Navbar></Navbar>
           <Component {...pageProps} />
         </Provider>
       </ThemeProvider>
