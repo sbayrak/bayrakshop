@@ -199,7 +199,6 @@ const SignIn = () => {
     if (email.length >= 1) {
       setErrorEmail(false);
       setErrorPassword(false);
-      console.log('calling useEffect');
     }
   }, [email, password]);
 
@@ -208,11 +207,9 @@ const SignIn = () => {
 
     if (!email) {
       setErrorEmail(true);
-      console.log('first if called');
     }
     if (!password) {
       setErrorPassword(true);
-      console.log('second if called');
     } else if (!emailIsValid(email)) {
       setErrorEmail(true);
     } else if (email && password) {
@@ -227,11 +224,9 @@ const SignIn = () => {
         } else if (data.status === 200 && data.ok === true) {
           router.push(data.url);
         }
-        console.log(data);
       });
     }
   };
-  console.log(signInError);
 
   return (
     <>
