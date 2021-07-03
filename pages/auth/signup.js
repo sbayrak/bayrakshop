@@ -277,6 +277,7 @@ export default function SignUp() {
                         type='text'
                         name='firstname'
                         label='Firstname'
+                        error={errorFirstname}
                         className={classes.txtField}
                         value={firstname}
                         onChange={(e) => setFirstname(e.target.value)}
@@ -288,6 +289,7 @@ export default function SignUp() {
                         type='text'
                         name='lastname'
                         label='Lastname'
+                        error={errorLastname}
                         className={classes.txtField}
                         value={lastname}
                         onChange={(e) => setLastname(e.target.value)}
@@ -336,8 +338,8 @@ export default function SignUp() {
                           variant='body2'
                           className={classes.errorMsg}
                         >
-                          <ErrorIcon /> &nbsp; Please check your e-mail or
-                          password again.
+                          <ErrorIcon /> &nbsp; This e-mail is already registered
+                          or an error occured.
                         </Typography>
                       )}
                     </Grid>
