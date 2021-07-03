@@ -234,12 +234,20 @@ const useStyles = makeStyles((theme) => ({
   inputRoot: {
     paddingLeft: theme.spacing(1),
   },
+  menuItem: {
+    paddingBottom: theme.spacing(2),
+    marginTop: theme.spacing(1),
+  },
+  menu: {
+    marginTop: theme.spacing(10),
+  },
 }));
 
 const Navbar = () => {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
+  const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(null);
   const [session, loading] = useSession();
 
   const handleMenuClick = (e) => {
@@ -247,6 +255,12 @@ const Navbar = () => {
   };
   const handleClose = () => {
     setOpenMenu(false);
+  };
+  const handleDesktopMenuClick = (e) => {
+    setOpenDesktopProfileMenu(e.currentTarget);
+  };
+  const handleDesktopMenuClose = () => {
+    setOpenDesktopProfileMenu(false);
   };
 
   const desktop = (
@@ -414,11 +428,48 @@ const Navbar = () => {
                   </div>
                 </li>
                 <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
-                    <a className={classes.bottomMidLinks}>
-                      <PersonIcon fontSize='large' />
-                    </a>
-                  </Link>
+                  <IconButton
+                    onClick={handleDesktopMenuClick}
+                    className={classes.mobileToolsProfile}
+                  >
+                    <PersonIcon fontSize='large' />
+                  </IconButton>
+                  {session ? (
+                    <Link href='/profile'>
+                      <a className={classes.mobileToolsProfile}>
+                        <PersonIcon />
+                      </a>
+                    </Link>
+                  ) : (
+                    <Menu
+                      anchorEl={openDesktopProfileMenu}
+                      keepMounted
+                      open={openDesktopProfileMenu}
+                      onClose={handleDesktopMenuClose}
+                      className={classes.menu}
+                    >
+                      <MenuItem
+                        onClick={handleClose}
+                        className={classes.menuItem}
+                      >
+                        <Link href='/auth/signin'>
+                          <a className={classes.mobileProductsLinks}>
+                            <ArrowRightIcon /> Login
+                          </a>
+                        </Link>
+                      </MenuItem>
+                      <MenuItem
+                        onClick={handleClose}
+                        className={classes.menuItem}
+                      >
+                        <Link href='/auth/signup'>
+                          <a className={classes.mobileProductsLinks}>
+                            <ArrowRightIcon /> Register
+                          </a>
+                        </Link>
+                      </MenuItem>
+                    </Menu>
+                  )}
                 </li>
                 <li className={classes.bottomMidLi}>
                   <Link href='#!'>
@@ -501,7 +552,7 @@ const Navbar = () => {
               </li>
               {session ? (
                 <li className={classes.mobileProductsLi}>
-                  <Link href='#!'>
+                  <Link href='/profile'>
                     <a className={classes.mobileToolsProfile}>
                       <PersonIcon fontSize='large' />
                     </a>
@@ -520,6 +571,7 @@ const Navbar = () => {
                     keepMounted
                     open={openMenu}
                     onClose={handleClose}
+                    className={classes.menu}
                   >
                     <MenuItem onClick={handleClose}>
                       <Link href='#!'>
