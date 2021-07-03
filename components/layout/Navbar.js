@@ -15,6 +15,8 @@ import {
   AccordionDetails,
   Divider,
   InputBase,
+  Menu,
+  MenuItem,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -30,6 +32,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 // @@@ NEXTJS @@@
 import Link from 'next/link';
 import { useState } from 'react';
+import { useSession } from 'next-auth/client';
 // @@@ NEXTJS @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -187,6 +190,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     listStyle: 'none',
+    backgroundColor: theme.palette.grey[100],
   },
   mobileProductsLi: {
     marginBottom: theme.spacing(2),
@@ -235,6 +239,15 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openMenu, setOpenMenu] = useState(false);
+  const [session, loading] = useSession();
+
+  const handleMenuClick = (e) => {
+    setOpenMenu(e.currentTarget);
+  };
+  const handleClose = () => {
+    setOpenMenu(false);
+  };
 
   const desktop = (
     <Container className={classes.root}>
@@ -451,6 +464,7 @@ const Navbar = () => {
       </div>
       <SwipeableDrawer
         open={openDrawer}
+        onOpen={(e) => console.log('')}
         anchor='top'
         onClose={(e) => setOpenDrawer(!open)}
       >
@@ -474,13 +488,7 @@ const Navbar = () => {
                   />
                 </div>
               </li>
-              <li>
-                <Link href='#!'>
-                  <a className={classes.mobileToolsProfile}>
-                    <PersonIcon fontSize='large' />
-                  </a>
-                </Link>
-              </li>
+
               <li>
                 <IconButton>
                   <Badge badgeContent={1} color='error'>
@@ -491,8 +499,90 @@ const Navbar = () => {
                   </Badge>
                 </IconButton>
               </li>
+              {session ? (
+                <li className={classes.mobileProductsLi}>
+                  <Link href='#!'>
+                    <a className={classes.mobileToolsProfile}>
+                      <PersonIcon fontSize='large' />
+                    </a>
+                  </Link>
+                </li>
+              ) : (
+                <li className={classes.mobileProductsLi}>
+                  <IconButton
+                    onClick={handleMenuClick}
+                    className={classes.mobileToolsProfile}
+                  >
+                    <PersonIcon fontSize='large' />
+                  </IconButton>
+                  <Menu
+                    anchorEl={openMenu}
+                    keepMounted
+                    open={openMenu}
+                    onClose={handleClose}
+                  >
+                    <MenuItem onClick={handleClose}>
+                      <Link href='#!'>
+                        <a className={classes.mobileProductsLinks}>
+                          <ArrowRightIcon /> Login
+                        </a>
+                      </Link>
+                    </MenuItem>
+                    <MenuItem onClick={handleClose}>
+                      <Link href='#!'>
+                        <a className={classes.mobileProductsLinks}>
+                          <ArrowRightIcon /> Register
+                        </a>
+                      </Link>
+                    </MenuItem>
+                  </Menu>
+                </li>
+              )}
             </ul>
           </div>
+
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls='panel1a-content'
+              id='panel1a-header'
+            >
+              <Typography>Profile</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <div style={{ width: '100%' }}>
+                <ul className={classes.mobileProductsUl}>
+                  {session ? (
+                    <li className={classes.mobileProductsLi}>
+                      <Link href='#!'>
+                        <a className={classes.mobileToolsProfile}>
+                          <PersonIcon fontSize='large' />
+                        </a>
+                      </Link>
+                    </li>
+                  ) : (
+                    <>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='#!'>
+                          <a className={classes.mobileProductsLinks}>
+                            <ArrowRightIcon /> Login
+                          </a>
+                        </Link>
+                      </li>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='#!'>
+                          <a className={classes.mobileProductsLinks}>
+                            <ArrowRightIcon /> Register
+                          </a>
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </div>
+            </AccordionDetails>
+          </Accordion>
+
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -647,7 +737,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position='static' elevation={1} className={classes.appbar}>
+      <AppBar position='fixed' elevation={1} className={classes.appbar}>
         <Toolbar>
           {desktop}
           {mobile}
