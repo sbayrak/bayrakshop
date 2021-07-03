@@ -18,11 +18,12 @@ import { signIn } from 'next-auth/client';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useSession } from 'next-auth/client';
 // @@@@@@@@@ NEXTJS @@@@@@@@@@
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
+    height: '90vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -32,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
 
     [theme.breakpoints.down('sm')]: {
-      height: '90vh',
+      height: '80vh',
       boxShadow: '3px 3px 15px -10px rgba(0,0,0,0)',
     },
   },
@@ -190,6 +191,9 @@ const SignIn = () => {
   const [errorPassword, setErrorPassword] = useState(false);
   const router = useRouter();
   const classes = useStyles();
+  const [session, loading] = useSession();
+
+  if (session) router.push('/');
 
   function emailIsValid(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

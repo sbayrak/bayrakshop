@@ -1,3 +1,4 @@
+// @@@ MATERIAL-UI @@@
 import {
   Container,
   Grid,
@@ -9,13 +10,18 @@ import {
 import { makeStyles } from '@material-ui/core';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 import ErrorIcon from '@material-ui/icons/Error';
-import { useState } from 'react';
+// @@@ MATERIAL-UI @@@
+
+// @@@ NEXTJS @@@
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { useSession } from 'next-auth/client';
+// @@@ NEXTJS @@@
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100vh',
+    height: '90vh',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -25,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
 
     [theme.breakpoints.down('sm')]: {
-      height: '90vh',
+      height: '80vh',
       boxShadow: '3px 3px 15px -10px rgba(0,0,0,0)',
     },
   },
@@ -177,44 +183,71 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const [firstname, setFirstname] = useState('');
+  const [errorFirstname, setErrorFirstname] = useState(false);
   const [lastname, setLastname] = useState('');
+  const [errorLastname, setErrorLastname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signInError, setSignInError] = useState('');
+  const [SignUpError, setSignUpError] = useState('');
   const [errorEmail, setErrorEmail] = useState(false);
   const [errorPassword, setErrorPassword] = useState(false);
   const router = useRouter();
   const classes = useStyles();
+  const [session, loading] = useSession();
+
+  if (session) router.push('/');
+
+  function emailIsValid(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  useEffect(() => {
+    if (email.length >= 1) setErrorEmail(false);
+    if (password.length >= 1) setErrorPassword(false);
+    if (firstname.length >= 1) setErrorFirstname(false);
+    if (lastname.length >= 1) setErrorLastname(false);
+  }, [firstname, lastname, email, password]);
 
   const signUpHandler = async (e) => {
     e.preventDefault();
-    const submitData = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/profile/signup`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ firstname, lastname, email, password }),
+
+    if (!email) setErrorEmail(true);
+    if (!password) setErrorPassword(true);
+    if (!firstname) setErrorFirstname(true);
+    if (!lastname) setErrorLastname(true);
+    if (!emailIsValid(email)) setErrorEmail(true);
+    else if (email && password && firstname && lastname) {
+      const submitData = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/profile/signup`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ firstname, lastname, email, password }),
+        }
+      );
+      const result = await submitData.json();
+      if (result.msg === 'exists') {
+        setSignUpError(true);
+      } else if (result) {
+        await fetch(
+          `${process.env.NEXT_PUBLIC_URL}/api/profile/signup/email/`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              firstname: result[0].firstname,
+              lastname: result[0].lastname,
+              email: result[0].email,
+              token: result[0].token,
+            }),
+          }
+        );
+        router.push(result[0].callbackUrl);
       }
-    );
-    const result = await submitData.json();
-    if (result.msg === 'exists') {
-      console.log(result.msg);
-    } else if (result) {
-      await fetch(`${process.env.NEXT_PUBLIC_URL}/api/profile/signup/email/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstname: result[0].firstname,
-          lastname: result[0].lastname,
-          email: result[0].email,
-          token: result[0].token,
-        }),
-      });
-      router.push(result[0].callbackUrl);
     }
   };
 
@@ -298,7 +331,7 @@ export default function SignUp() {
                       ></TextField>
                     </Grid>
                     <Grid item xs={12} md={12}>
-                      {signInError && (
+                      {SignUpError && (
                         <Typography
                           variant='body2'
                           className={classes.errorMsg}
