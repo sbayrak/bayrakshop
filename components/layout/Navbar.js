@@ -1,10 +1,13 @@
+/* eslint-disable */
+// eslint-disable-next-line no-use-before-define
+/* eslint-disable no-alert, no-console */
+
 // @@@ MATERIAL-UI @@@
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
   Container,
   Grid,
   Badge,
@@ -13,7 +16,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Divider,
   InputBase,
   Menu,
   MenuItem,
@@ -247,7 +249,7 @@ const Navbar = () => {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
-  const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(null);
+  const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
   const [session, loading] = useSession();
 
   const handleMenuClick = (e) => {
