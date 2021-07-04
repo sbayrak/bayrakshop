@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Box } from '@material-ui/core';
 import { connectToDatabase } from '../util/mongodb';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -23,9 +23,7 @@ export default function Home({ isConnected }) {
         <title>Create Next App</title>
         <link rel='icon' href='/favicon.ico' />
       </Head>
-      <Typography variant='h3'>
-        This is a boilerplate for NextJS, MongoDB and Material-UI stack!
-      </Typography>
+      <Box style={{ height: '80vh' }}></Box>
       <Link href='/auth/signup'>
         <a>Sign Up</a>
       </Link>{' '}
