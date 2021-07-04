@@ -29,6 +29,8 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import MailIcon from '@material-ui/icons/Mail';
+import PhoneIcon from '@material-ui/icons/Phone';
 // @@@ MATERIAL-UI @@@
 
 // @@@ NEXTJS @@@
@@ -95,6 +97,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[600],
     fontWeight: theme.typography.fontWeightRegular,
     fontSize: '12px',
+    display: 'flex',
+    alignItems: 'center',
   },
   socialWrapper: {
     display: 'flex',
@@ -272,46 +276,26 @@ const Navbar = () => {
           <div className={classes.wrapperTop}>
             <ul className={classes.topLeft}>
               <li className={classes.topLeftLi}>
-                <Link href='/about-us'>
+                <Link href='tel:+491112223344'>
                   <a
                     target='_blank'
                     rel='noopener noreferrer'
                     className={classes.topLeftLinks}
                   >
-                    About Us
+                    <PhoneIcon style={{ color: '#5652de' }} fontSize='small' />
+                    &nbsp; +49 111 222 33 44
                   </a>
                 </Link>
               </li>
               <li className={classes.topLeftLi}>
-                <Link href='/privacy'>
+                <Link href='mailto:info@koslowshop.com'>
                   <a
                     target='_blank'
                     rel='noopener noreferrer'
                     className={classes.topLeftLinks}
                   >
-                    Privacy
-                  </a>
-                </Link>
-              </li>
-              <li className={classes.topLeftLi}>
-                <Link href='/careers'>
-                  <a
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className={classes.topLeftLinks}
-                  >
-                    Careers
-                  </a>
-                </Link>
-              </li>
-              <li className={classes.topLeftLi}>
-                <Link href='/contact'>
-                  <a
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className={classes.topLeftLinks}
-                  >
-                    Contact
+                    <MailIcon fontSize='small' style={{ color: '#5652de' }} />
+                    &nbsp; info@koslowshop.com
                   </a>
                 </Link>
               </li>
@@ -435,6 +419,9 @@ const Navbar = () => {
                     className={classes.mobileToolsProfile}
                   >
                     <PersonIcon fontSize='large' />
+                    <span style={{ textAlign: 'left', fontSize: '12px' }}>
+                      Login <br /> Register
+                    </span>
                   </IconButton>
                   {session ? (
                     <Link href='/profile'>
