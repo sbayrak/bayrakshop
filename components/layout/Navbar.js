@@ -41,7 +41,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 // @@@ NEXTJS @@@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/client';
 import Image from 'next/image';
 // @@@ NEXTJS @@@
@@ -74,6 +74,8 @@ const useStyles = makeStyles((theme) => ({
   gridContainerRoot: {},
   gridContainerTop: {
     borderBottom: '1px solid rgba(196,196,196,0.5)',
+    display: 'inline',
+    transition: '0.5s ease',
   },
   wrapperTop: {
     display: 'flex',
@@ -97,7 +99,6 @@ const useStyles = makeStyles((theme) => ({
   },
   topLeftLi: {},
   topLeftLinks: {
-    padding: theme.spacing(0.5),
     paddingLeft: theme.spacing(0.75),
     paddingRight: theme.spacing(0.75),
     textDecoration: 'none',
@@ -312,7 +313,21 @@ const Navbar = () => {
   const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
+  const [topGrid, setTopGrid] = useState('inline');
   const [session, loading] = useSession();
+
+  var winY;
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleScroll = () => {
+    if (window.pageYOffset > 50) {
+      setTopGrid('none');
+    } else {
+      setTopGrid('inline');
+    }
+  };
 
   const handleMenuClick = (e) => {
     setOpenMenu(e.currentTarget);
@@ -330,7 +345,12 @@ const Navbar = () => {
   const desktop = (
     <Container className={classes.root}>
       <Grid item className={classes.gridContainerRoot}>
-        <Grid container item className={classes.gridContainerTop}>
+        <Grid
+          container
+          item
+          className={classes.gridContainerTop}
+          style={{ display: `${topGrid}` }}
+        >
           <div className={classes.wrapperTop}>
             <ul className={classes.topLeft}>
               <li className={classes.topLeftLi}>
