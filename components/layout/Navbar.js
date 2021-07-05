@@ -2,6 +2,7 @@
 // eslint-disable-next-line no-use-before-define
 /* eslint-disable no-alert, no-console */
 
+import baklava from '../../public/signin_left2.jpg';
 // @@@ MATERIAL-UI @@@
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -19,6 +20,10 @@ import {
   InputBase,
   Menu,
   MenuItem,
+  Box,
+  Divider,
+  Button,
+  Paper,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -31,12 +36,14 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import MailIcon from '@material-ui/icons/Mail';
 import PhoneIcon from '@material-ui/icons/Phone';
+import DeleteIcon from '@material-ui/icons/Delete';
 // @@@ MATERIAL-UI @@@
 
 // @@@ NEXTJS @@@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useSession } from 'next-auth/client';
+import Image from 'next/image';
 // @@@ NEXTJS @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -247,11 +254,62 @@ const useStyles = makeStyles((theme) => ({
   menu: {
     marginTop: theme.spacing(10),
   },
+  shoppingCartContainer: {
+    padding: theme.spacing(5),
+    width: 450,
+  },
+  shoppingCartTypo1: {
+    fontWeight: theme.typography.fontWeightMedium,
+  },
+  shoppingCartTypo2: {
+    color: theme.palette.grey[700],
+    marginBottom: theme.spacing(5),
+  },
+  shoppingCartItems: {
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
+  },
+  shoppingCartLinks: {
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  shoppingCartLink1: {
+    textDecoration: 'none',
+    padding: theme.spacing(1),
+    borderRadius: '5px',
+    marginBottom: theme.spacing(1),
+    backgroundColor: '#5652de',
+    border: '1px solid #5652de',
+    color: '#f6f6f6',
+    textAlign: 'center',
+    fontWeight: theme.typography.fontWeightMedium,
+    transition: '0.3s ease',
+    '&:hover': {
+      backgroundColor: '#6788f5',
+    },
+  },
+  shoppingCartLink2: {
+    textDecoration: 'none',
+    padding: theme.spacing(1),
+    borderRadius: '5px',
+    marginBottom: theme.spacing(1),
+    backgroundColor: '#f6f6f6',
+    border: '1px solid #5652de',
+    color: '#5652de',
+    textAlign: 'center',
+    fontWeight: theme.typography.fontWeightMedium,
+    transition: '0.3s ease',
+    '&:hover': {
+      backgroundColor: '#6788f5',
+      color: '#f6f6f6',
+    },
+  },
 }));
 
 const Navbar = () => {
   const classes = useStyles();
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
   const [session, loading] = useSession();
@@ -461,13 +519,113 @@ const Navbar = () => {
                   )}
                 </li>
                 <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
-                    <a className={classes.bottomMidLinks}>
-                      <Badge badgeContent={1} color='error'>
-                        <ShoppingCartIcon fontSize='large' />
-                      </Badge>
-                    </a>
-                  </Link>
+                  <IconButton
+                    onClick={(e) =>
+                      setOpenShoppingCartDrawer(!openShoppingCartDrawer)
+                    }
+                  >
+                    <Badge badgeContent={1} color='error'>
+                      <ShoppingCartIcon color='primary' fontSize='large' />
+                    </Badge>
+                  </IconButton>
+                  <SwipeableDrawer
+                    anchor='right'
+                    open={openShoppingCartDrawer}
+                    onClose={(e) =>
+                      setOpenShoppingCartDrawer(!openShoppingCartDrawer)
+                    }
+                    onOpen={(e) => console.log('')}
+                  >
+                    <Box component='div'>
+                      <Grid container className={classes.shoppingCartContainer}>
+                        <Grid item md={12}>
+                          <Typography
+                            variant='h5'
+                            className={classes.shoppingCartTypo1}
+                          >
+                            SHOPPING CART
+                          </Typography>
+                        </Grid>
+                        <Grid item md={12}>
+                          <Typography
+                            variant='body2'
+                            gutterBottom
+                            paragraph
+                            className={classes.shoppingCartTypo2}
+                          >
+                            You have 1 item in your cart.
+                          </Typography>
+                          <Divider />
+                        </Grid>
+                        <Grid
+                          container
+                          item
+                          md={12}
+                          className={classes.shoppingCartItems}
+                        >
+                          <Grid item md={3}>
+                            <Image src={baklava} width={75} height={75} />
+                          </Grid>
+                          <Grid item md={8}>
+                            <Typography
+                              variant='subtitle1'
+                              className={classes.shoppingCartTypo1}
+                            >
+                              1 kg Baklava
+                            </Typography>
+                            <Typography
+                              variant='body2'
+                              className={classes.shoppingCartTypo2}
+                            >
+                              1 Piece - €39.00
+                            </Typography>
+                          </Grid>
+                          <Grid item md={1}>
+                            <IconButton>
+                              <DeleteIcon fontSize='small' />
+                            </IconButton>
+                          </Grid>
+
+                          <Grid item md={12}>
+                            <Divider />
+                          </Grid>
+                        </Grid>
+                        <Divider></Divider>
+                        <Grid item md={7}>
+                          <Typography
+                            variant='subtitle1'
+                            className={classes.shoppingCartTypo1}
+                          >
+                            Total
+                          </Typography>
+                          <Typography
+                            variant='subtitle2'
+                            gutterBottom
+                            paragraph
+                          >
+                            €39.00
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          md={12}
+                          className={classes.shoppingCartLinks}
+                        >
+                          <Link href='#!'>
+                            <a className={classes.shoppingCartLink1}>
+                              PROCEED TO CHECKOUT
+                            </a>
+                          </Link>
+
+                          <Link href='#!'>
+                            <a className={classes.shoppingCartLink2}>
+                              CONTINUE TO SHOPPING
+                            </a>
+                          </Link>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </SwipeableDrawer>
                 </li>
               </ul>
             </div>
