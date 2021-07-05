@@ -6,7 +6,7 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 // @@@ nextjs @@@
 
 // @@@ COMPONENT IMPORTS @@@
-import Hero from '../components/hero/Hero';
+import Hero from '../components/index/Hero';
 // @@@ COMPONENT IMPORTS @@@
 
 export default function Home() {
