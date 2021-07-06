@@ -16,7 +16,10 @@ import PhoneIcon from '@material-ui/icons/Phone';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import paypal from '../../public/paypal-logo.png';
+
 import Link from 'next/link';
+import Image from 'next/image';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
@@ -123,6 +126,7 @@ const useStyles = makeStyles((theme) => ({
       display: 'inline',
     },
   },
+  paypalImg: {},
 }));
 
 const Footer = () => {
@@ -269,6 +273,32 @@ const Footer = () => {
                 <MailIcon color='primary' /> &nbsp; info@koslowshop.com
               </li>
             </ul>
+          </Grid>
+          <Grid container item md={12}>
+            <Grid item md={8}></Grid>
+            <Grid
+              item
+              md={4}
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <div
+                style={{
+                  position: 'relative',
+                  width: '50%',
+                  height: '50px',
+                }}
+              >
+                <Image
+                  src={paypal}
+                  placeholder='blur'
+                  layout='fill'
+                  objectFit='cover'
+                ></Image>
+              </div>
+            </Grid>
           </Grid>
           <Grid item md={12}>
             <Divider />
@@ -456,6 +486,22 @@ const Footer = () => {
                   <MailIcon color='primary' /> &nbsp; info@koslowshop.com
                 </li>
               </ul>
+            </Grid>
+            <Grid xs={12}>
+              <div
+                style={{
+                  position: 'relative',
+                  width: '55%',
+                  height: '50px',
+                }}
+              >
+                <Image
+                  src={paypal}
+                  placeholder='blur'
+                  layout='fill'
+                  objectFit='cover'
+                ></Image>
+              </div>
             </Grid>
             <Grid item md={12}>
               <Divider />
