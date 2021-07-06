@@ -16,10 +16,11 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
     border: '1px solid red',
-    height: '400vh',
+    height: '80vh',
     marginTop: theme.spacing(15),
     [theme.breakpoints.down('sm')]: {
       marginTop: theme.spacing(0),
+      height: '20vh',
     },
   },
   hero: {
@@ -30,6 +31,9 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
     height: '700px',
     [theme.breakpoints.down('sm')]: {
+      height: '400px',
+    },
+    [theme.breakpoints.down('xs')]: {
       height: '200px',
     },
   },
@@ -43,6 +47,10 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     padding: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
+      top: 150,
+      right: 150,
+    },
+    [theme.breakpoints.down('xs')]: {
       top: 50,
       right: 0,
     },
@@ -52,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
     color: '#f6f6f6',
     marginBottom: theme.spacing(6),
     [theme.breakpoints.down('sm')]: {
+      fontSize: '28px',
+      marginBottom: theme.spacing(2),
+    },
+    [theme.breakpoints.down('xs')]: {
       fontSize: '18px',
       marginBottom: theme.spacing(2),
     },
@@ -79,6 +91,13 @@ const useStyles = makeStyles((theme) => ({
       boxShadow: '1px 1px 11px 2px rgba(233,233,233,0.59)',
     },
     [theme.breakpoints.down('sm')]: {
+      fontSize: '18px',
+      padding: theme.spacing(0.5),
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      marginBottom: theme.spacing(0),
+    },
+    [theme.breakpoints.down('xs')]: {
       fontSize: '12px',
       padding: theme.spacing(0.5),
       paddingLeft: theme.spacing(1),
