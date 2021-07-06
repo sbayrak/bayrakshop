@@ -7,6 +7,7 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 
 // @@@ COMPONENT IMPORTS @@@
 import Hero from '../components/index/Hero';
+import MostSold from '../components/index/MostSold';
 // @@@ COMPONENT IMPORTS @@@
 
 export default function Home() {
@@ -21,5 +22,10 @@ export default function Home() {
     router.push(data.url);
   };
   console.log(session);
-  return <Hero></Hero>;
+  return (
+    <>
+      <Hero></Hero>
+      <MostSold></MostSold>
+    </>
+  );
 }
