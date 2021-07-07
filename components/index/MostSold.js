@@ -154,32 +154,32 @@ const MostSold = () => {
             </TabPanel>
             <TabPanel value={value} index={2}>
               <Grid container spacing={3}>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
               </Grid>
             </TabPanel>
             <TabPanel value={value} index={3}>
               <Grid container spacing={3}>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
-                <Grid item md={3}>
+                <Grid item md={3} xs={6}>
                   <MostSoldCard />
                 </Grid>
               </Grid>
