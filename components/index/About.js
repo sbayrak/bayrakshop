@@ -15,7 +15,7 @@ import baklava from '../../public/baklava.jpg';
 const useStyles = makeStyles((theme) => ({
   root: {
     border: '1px solid red',
-    marginTop: theme.spacing(20),
+    marginTop: theme.spacing(15),
     marginBottom: theme.spacing(10),
   },
   rootLeftGrid: {
