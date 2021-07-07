@@ -16,6 +16,9 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(15),
     marginBottom: theme.spacing(10),
+    backgroundColor: '#fff',
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
   },
   rootLeftGrid: {
     padding: theme.spacing(1),
