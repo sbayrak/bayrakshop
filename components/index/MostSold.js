@@ -52,20 +52,17 @@ function a11yProps(index) {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    border: '1px solid red',
     marginTop: theme.spacing(15),
   },
   tabRoot: {
     flexGrow: 1,
     width: '100%',
     backgroundColor: theme.palette.background.paper,
-    border: '1px solid red',
   },
   rootContainer: {
     padding: theme.spacing(1),
   },
   Typo1: {
-    border: '1px solid red',
     fontWeight: theme.typography.fontWeightRegular,
     padding: theme.spacing(1),
     marginBottom: theme.spacing(3),
@@ -73,7 +70,6 @@ const useStyles = makeStyles((theme) => ({
     borderRight: '5px solid #5652de',
   },
   tabs: {
-    border: '1px solid red',
     backgroundColor: '#5652de',
   },
   tab: {

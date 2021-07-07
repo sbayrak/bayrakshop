@@ -15,7 +15,6 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
-    border: '1px solid red',
     height: '80vh',
     marginTop: theme.spacing(15),
     [theme.breakpoints.down('sm')]: {
