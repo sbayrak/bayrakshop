@@ -9,6 +9,7 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 import Hero from '../components/index/Hero';
 import MostSold from '../components/index/MostSold';
 import InformativeBanner from '../components/layout/InformativeBanner';
+import About from '../components/index/About';
 // @@@ COMPONENT IMPORTS @@@
 
 export default function Home() {
@@ -28,6 +29,7 @@ export default function Home() {
       <Hero></Hero>
       <MostSold></MostSold>
       <InformativeBanner></InformativeBanner>
+      <About></About>
     </>
   );
 }
