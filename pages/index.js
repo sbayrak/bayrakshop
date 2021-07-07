@@ -8,6 +8,7 @@ import { signIn, signOut, useSession } from 'next-auth/client';
 // @@@ COMPONENT IMPORTS @@@
 import Hero from '../components/index/Hero';
 import MostSold from '../components/index/MostSold';
+import InformativeBanner from '../components/layout/InformativeBanner';
 // @@@ COMPONENT IMPORTS @@@
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
     <>
       <Hero></Hero>
       <MostSold></MostSold>
+      <InformativeBanner></InformativeBanner>
     </>
   );
 }
