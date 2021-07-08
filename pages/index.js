@@ -10,6 +10,8 @@ import Hero from '../components/index/Hero';
 import MostSold from '../components/index/MostSold';
 import InformativeBanner from '../components/layout/InformativeBanner';
 import About from '../components/index/About';
+import Contact from '../components/index/Contact';
+import MoreProducts from '../components/index/MoreProducts';
 // @@@ COMPONENT IMPORTS @@@
 
 export default function Home() {
@@ -30,6 +32,8 @@ export default function Home() {
       <MostSold></MostSold>
       <InformativeBanner></InformativeBanner>
       <About></About>
+      <MoreProducts></MoreProducts>
+      <Contact></Contact>
     </>
   );
 }

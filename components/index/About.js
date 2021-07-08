@@ -14,16 +14,24 @@ import baklava from '../../public/baklava.jpg';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginTop: theme.spacing(15),
-    marginBottom: theme.spacing(10),
-    backgroundColor: '#fff',
+    marginTop: theme.spacing(25),
+    marginBottom: theme.spacing(25),
+    backgroundColor: '#fafafa',
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(10),
+    },
   },
   rootLeftGrid: {
     padding: theme.spacing(1),
     paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
+    borderLeft: '2px solid rgba(86,82,222,0.1)',
+    borderTop: '2px solid rgba(86,82,222,0.1)',
   },
+  rootRightGrid: {},
   leftGridItem: {
     padding: theme.spacing(0.5),
     paddingBottom: theme.spacing(1),
@@ -65,7 +73,8 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     borderRadius: '5px',
     marginBottom: theme.spacing(1),
-    backgroundColor: '#5652de',
+    // backgroundColor: '#4062bb',
+    backgroundColor: '#4062bb',
     color: '#f6f6f6',
     textAlign: 'center',
     fontWeight: theme.typography.fontWeightMedium,
@@ -198,7 +207,7 @@ const About = () => {
                 </Link>
               </Grid>
             </Grid>
-            <Grid item md={6}>
+            <Grid item md={6} className={classes.rootRightGrid}>
               <Grid item md={12}>
                 <div className={classes.imgWrapper}>
                   <Image

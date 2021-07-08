@@ -13,10 +13,9 @@ import EmojiEmotionsIcon from '@material-ui/icons/EmojiEmotions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    boxShadow: theme.shadows[1],
     marginTop: theme.spacing(10),
     marginBottom: theme.spacing(10),
-    backgroundColor: '#fff',
+    backgroundColor: '#f9f9f9',
   },
   rootContainer: {
     padding: theme.spacing(1),

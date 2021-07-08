@@ -23,6 +23,7 @@ import Image from 'next/image';
 
 const useStyles = makeStyles((theme) => ({
   wrapper: {
+    marginTop: theme.spacing(15),
     border: '1px solid red',
     position: 'static',
     bottom: 0,
