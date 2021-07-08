@@ -323,7 +323,7 @@ const Navbar = () => {
 
   const handleScroll = () => {
     if (window.pageYOffset > 50) {
-      setTopGrid('none');
+      setTopGrid('inline');
     } else {
       setTopGrid('inline');
     }
