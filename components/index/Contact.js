@@ -15,6 +15,10 @@ const useStyles = makeStyles((theme) => ({
   rootContact: {
     marginTop: theme.spacing(25),
     marginBottom: theme.spacing(25),
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(10),
+      marginBottom: theme.spacing(10),
+    },
     backgroundColor: '#fafafa',
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
