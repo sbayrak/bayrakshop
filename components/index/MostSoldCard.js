@@ -119,7 +119,7 @@ const MostSoldCard = () => {
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
-    if (quantity < 0) setQuantity(0);
+    if (quantity <= 1) setQuantity(1);
   }, [quantity]);
 
   const desktop = (
