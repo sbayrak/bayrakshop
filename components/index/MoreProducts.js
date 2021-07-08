@@ -57,6 +57,13 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '20px',
     },
   },
+  productTypo1: {
+    color: theme.palette.grey[800],
+  },
+  productTypo2: {
+    color: '#5652de',
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }));
 
 const MoreProducts = () => {
@@ -66,6 +73,16 @@ const MoreProducts = () => {
       <Box component='div'>
         <Container>
           <Grid container>
+            <Grid container item md={12}>
+              <Typography
+                variant='h4'
+                gutterBottom
+                className={classes.productTypo1}
+              >
+                Discover more{' '}
+                <span className={classes.productTypo2}>desserts.</span>
+              </Typography>
+            </Grid>
             <Grid container item md={12} xs={12}>
               <Grid item md={6} className={classes.gridItem} xs={6}>
                 <div className={classes.imgWrapper}>

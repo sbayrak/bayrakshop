@@ -19,14 +19,6 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
   },
-  contactTypo1: {
-    marginBottom: theme.spacing(7),
-    [theme.breakpoints.down('xs')]: {
-      marginBottom: theme.spacing(4),
-      fontSize: '24px',
-      fontWeight: theme.typography.fontWeightMedium,
-    },
-  },
   contactLeftGridItem: {
     marginBottom: theme.spacing(5),
     [theme.breakpoints.down('xs')]: {
@@ -70,6 +62,20 @@ const useStyles = makeStyles((theme) => ({
     paddingLeft: theme.spacing(3),
     borderLeft: '2px solid rgba(86,82,222,0.1)',
   },
+
+  contactTypo1: {
+    color: theme.palette.grey[800],
+    marginBottom: theme.spacing(7),
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: theme.spacing(4),
+      fontSize: '24px',
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+  },
+  contactTypo2: {
+    color: '#5652de',
+    fontWeight: theme.typography.fontWeightMedium,
+  },
 }));
 
 const Contact = () => {
@@ -87,8 +93,14 @@ const Contact = () => {
                     className={classes.contactTypo1}
                     gutterBottom
                     paragraph
+                  ></Typography>
+                  <Typography
+                    variant='h4'
+                    gutterBottom
+                    className={classes.contactTypo1}
                   >
-                    How can you find us ?
+                    How can you find{' '}
+                    <span className={classes.contactTypo2}>us ?</span>
                   </Typography>
                 </Grid>
                 <Grid md={12} className={classes.contactLeftGridItem}>
