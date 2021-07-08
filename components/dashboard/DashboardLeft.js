@@ -32,15 +32,16 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     position: 'fixed',
     left: 0,
+    borderRight: '1px #f6f6f6 inset',
   },
   root: {
     width: '100%',
     marginTop: theme.spacing(15),
   },
   rootAccordion: {
-    backgroundColor: '#f6f6f6',
     borderRadius: 0,
-    marginBottom: theme.spacing(0.5),
+    marginBottom: theme.spacing(1),
+    backgroundColor: '#6788f5',
   },
   accordionTypo1: {
     display: 'flex',
@@ -51,10 +52,11 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionSubTypo1: {
     marginLeft: theme.spacing(2),
-    color: '#5652de',
+    color: '#f6f6f6',
   },
   accordionUl: {
     listStyle: 'none',
+    width: '100%',
   },
   accordionLi: {
     display: 'flex',
@@ -63,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
   accordionLiLink: {
     textDecoration: 'none',
-    color: '#5652de',
+    color: '#f6f6f6',
     width: '100%',
     borderRadius: '5px',
     padding: theme.spacing(1),
@@ -71,15 +73,16 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(1.5),
     transition: '0.5s ease',
     '&:hover': {
-      backgroundColor: 'rgba(86,82,222,0.8)',
-      color: '#f6f6f6',
+      backgroundColor: '#f6f6f6',
+      color: 'rgba(86,82,222,1)',
     },
   },
   accordionTitle: {
-    paddingTop: theme.spacing(5),
-    paddingBottom: theme.spacing(5),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     paddingLeft: theme.spacing(5),
   },
+  accordionDetails: {},
 }));
 
 const DashboardLeft = () => {
@@ -94,22 +97,28 @@ const DashboardLeft = () => {
             style={{ borderRadius: 0 }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<ExpandMoreIcon color='secondary' />}
               aria-controls='panel1a-content'
               id='panel1a-header'
               className={classes.accordionTitle}
             >
               <Typography variant='h6' className={classes.accordionTypo1}>
-                <InboxIcon color='primary' className={classes.accordionIcon} />{' '}
+                <InboxIcon
+                  color='secondary'
+                  className={classes.accordionIcon}
+                />{' '}
                 <span className={classes.accordionSubTypo1}>Products</span>
               </Typography>
             </AccordionSummary>
             <AccordionDetails
-              style={{ borderTop: '1px solid rgba(86,82,222,0.2)' }}
+              style={{
+                borderTop: '1px solid rgba(233,233,233,0.5)',
+              }}
+              className={classes.accordionDetails}
             >
               <ul className={classes.accordionUl}>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -124,7 +133,7 @@ const DashboardLeft = () => {
                   </Link>
                 </li>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -137,7 +146,7 @@ const DashboardLeft = () => {
                   </Link>
                 </li>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -158,13 +167,16 @@ const DashboardLeft = () => {
             style={{ borderRadius: 0 }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<ExpandMoreIcon color='secondary' />}
               aria-controls='panel1a-content'
               id='panel1a-header'
               className={classes.accordionTitle}
             >
               <Typography variant='h6' className={classes.accordionTypo1}>
-                <InboxIcon color='primary' className={classes.accordionIcon} />{' '}
+                <InboxIcon
+                  color='secondary'
+                  className={classes.accordionIcon}
+                />{' '}
                 <span className={classes.accordionSubTypo1}>Users</span>
               </Typography>
             </AccordionSummary>
@@ -173,7 +185,7 @@ const DashboardLeft = () => {
             >
               <ul className={classes.accordionUl}>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -186,7 +198,7 @@ const DashboardLeft = () => {
                   </Link>
                 </li>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -207,13 +219,16 @@ const DashboardLeft = () => {
             style={{ borderRadius: 0 }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<ExpandMoreIcon color='secondary' />}
               aria-controls='panel1a-content'
               id='panel1a-header'
               className={classes.accordionTitle}
             >
               <Typography variant='h6' className={classes.accordionTypo1}>
-                <InboxIcon color='primary' className={classes.accordionIcon} />{' '}
+                <InboxIcon
+                  color='secondary'
+                  className={classes.accordionIcon}
+                />{' '}
                 <span className={classes.accordionSubTypo1}>Orders</span>
               </Typography>
             </AccordionSummary>
@@ -222,7 +237,7 @@ const DashboardLeft = () => {
             >
               <ul className={classes.accordionUl}>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -235,7 +250,7 @@ const DashboardLeft = () => {
                   </Link>
                 </li>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -256,13 +271,16 @@ const DashboardLeft = () => {
             style={{ borderRadius: 0 }}
           >
             <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
+              expandIcon={<ExpandMoreIcon color='secondary' />}
               aria-controls='panel1a-content'
               id='panel1a-header'
               className={classes.accordionTitle}
             >
               <Typography variant='h6' className={classes.accordionTypo1}>
-                <InboxIcon color='primary' className={classes.accordionIcon} />{' '}
+                <InboxIcon
+                  color='secondary'
+                  className={classes.accordionIcon}
+                />{' '}
                 <span className={classes.accordionSubTypo1}>Pages</span>
               </Typography>
             </AccordionSummary>
@@ -271,7 +289,7 @@ const DashboardLeft = () => {
             >
               <ul className={classes.accordionUl}>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
@@ -284,7 +302,7 @@ const DashboardLeft = () => {
                   </Link>
                 </li>
                 <li className={classes.accordionLi}>
-                  <ArrowRightIcon />
+                  <ArrowRightIcon color='secondary' />
                   &nbsp;
                   <Link href='#!'>
                     <a
