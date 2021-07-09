@@ -28,4 +28,7 @@ export default async (req, res) => {
     const getProducts = await db.collection('products').find().toArray();
     res.status(201).json(getProducts);
   }
+  if (req.method === 'DELETE') {
+    const { db } = await connectToDatabase();
+  }
 };
