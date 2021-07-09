@@ -60,32 +60,6 @@ export default async (req, res) => {
         commercejs_id: '',
       });
       const newUser = await JSON.parse(user);
-
-      const customer = await fetch(`${process.env.COMMERCEJS_API}/customers`, {
-        method: 'POST',
-        headers: {
-          'X-Authorization': `${process.env.COMMERCEJS_PK}`,
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({
-          firstname: newUser.ops[0].firstname,
-          lastname: newUser.ops[0].lastname,
-          email: newUser.ops[0].email,
-          password: newUser.ops[0].password,
-          external_id: newUser.ops[0]._id,
-        }),
-      });
-      const customerToJson = await customer.json();
-
-      await db.collection('users').updateOne(
-        {
-          email: newUser.ops[0].email,
-        },
-        {
-          $set: { commercejs_id: customerToJson.id },
-        }
-      );
     }
   }
 };
