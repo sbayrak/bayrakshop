@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     position: 'fixed',
     left: 0,
     top: 0,
-    borderRight: '1px #f6f6f6 inset',
+    borderRight: '1px #5652de inset',
     zIndex: 999999,
     border: '1px solid red',
   },
