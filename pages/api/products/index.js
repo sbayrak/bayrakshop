@@ -1,4 +1,5 @@
 import { connectToDatabase } from '../../../util/mongodb';
+import { ObjectId } from 'mongodb';
 
 export default async (req, res) => {
   const { db } = await connectToDatabase();
@@ -30,5 +31,16 @@ export default async (req, res) => {
   }
   if (req.method === 'DELETE') {
     const { db } = await connectToDatabase();
+    const product_Id_ToBe_Deleted = req.body;
+
+    const findProductToBeDeleted = await db
+      .collection('products')
+      .deleteOne({ _id: ObjectId(product_Id_ToBe_Deleted.id) });
+
+    if (findProductToBeDeleted.deletedCount === 1) {
+      res.status(201).json({ msg: 'ok' });
+    } else if (findProductToBeDeleted.deletedCount === 0) {
+      res.status(201).json({ msg: 'fail' });
+    }
   }
 };
