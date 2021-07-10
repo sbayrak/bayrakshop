@@ -74,12 +74,34 @@ const AddNewProduct = () => {
   const [description, setDescription] = useState('');
   const [quantity, setQuantity] = useState('');
   const [switchState, setSwitchState] = useState(false);
+  const [imageState, setImageState] = useState('');
 
   const handleChange = (event) => {
     setSwitchState(!switchState);
   };
 
-  console.log(switchState);
+  const newProductSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('file', imageState);
+    formData.append(
+      'upload_preset',
+      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`
+    );
+
+    const submitData = await fetch(
+      ` https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const result = await submitData.json();
+    console.log(result);
+  };
+
   return (
     <>
       <Box component='div'>
@@ -95,7 +117,7 @@ const AddNewProduct = () => {
                 </Typography>
               </Grid>
               <Grid container item md={12}>
-                <form>
+                <form onSubmit={newProductSubmitHandler}>
                   <Grid container>
                     <Grid
                       item
@@ -192,6 +214,7 @@ const AddNewProduct = () => {
                           id='contained-button-file'
                           multiple
                           type='file'
+                          onChange={(e) => setImageState(e.target.files[0])}
                         />
                         <label htmlFor='contained-button-file'>
                           <Button
@@ -199,6 +222,7 @@ const AddNewProduct = () => {
                             color='primary'
                             component='span'
                             disableElevation
+                            onChange={(e) => setImageState(e.target.files[0])}
                           >
                             Upload
                           </Button>
@@ -211,7 +235,12 @@ const AddNewProduct = () => {
                       md={6}
                       className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
                     >
-                      <Button variant='contained' color='primary' fullWidth>
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        fullWidth
+                        type='submit'
+                      >
                         submit
                       </Button>
                     </Grid>
