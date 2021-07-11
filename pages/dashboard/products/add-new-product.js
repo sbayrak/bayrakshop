@@ -184,7 +184,7 @@ const AddNewProduct = () => {
                 onClose={handleSnackbarClose}
               >
                 <Typography
-                  variant='h6'
+                  variant='body1'
                   color='secondary'
                   className={classes.snackbarTypo}
                 >
