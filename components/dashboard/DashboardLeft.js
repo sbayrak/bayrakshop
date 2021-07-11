@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     top: 0,
     borderRight: '1px #5652de inset',
     zIndex: 999999,
-    border: '1px solid red',
+    borderLeft: '1px #5652de solid',
   },
   root: {
     width: '100%',
