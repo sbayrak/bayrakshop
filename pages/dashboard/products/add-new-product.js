@@ -79,6 +79,7 @@ const useStyles = makeStyles((theme) => ({
   snackbarTypo: {
     display: 'flex',
     justifyContent: 'space-around',
+    alignItems: 'center',
   },
 }));
 
