@@ -15,7 +15,7 @@ import { makeStyles } from '@material-ui/core/styles';
 // @@@ nextjs @@@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';
 // @@@ nextjs @@@
 
@@ -75,12 +75,13 @@ const AddNewProduct = () => {
   const [quantity, setQuantity] = useState('');
   const [switchState, setSwitchState] = useState(false);
   const [imageState, setImageState] = useState('');
+  const [uploadedImages, setUploadedImages] = useState([]);
 
   const handleChange = (event) => {
     setSwitchState(!switchState);
   };
 
-  const newProductSubmitHandler = async (e) => {
+  const newImageUploadHandler = async (e) => {
     e.preventDefault();
 
     const formData = new FormData();
@@ -99,7 +100,14 @@ const AddNewProduct = () => {
     );
 
     const result = await submitData.json();
-    console.log(result);
+    setUploadedImages([...uploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
+    console.log(uploadedImages);
+  };
+
+  console.log(uploadedImages);
+
+  const asd = async (e) => {
+    e.preventDefault();
   };
 
   return (
@@ -117,7 +125,7 @@ const AddNewProduct = () => {
                 </Typography>
               </Grid>
               <Grid container item md={12}>
-                <form onSubmit={newProductSubmitHandler}>
+                <form onSubmit={asd}>
                   <Grid container>
                     <Grid
                       item
@@ -199,15 +207,45 @@ const AddNewProduct = () => {
                       </Typography>
                     </Grid>
                     <Grid item md={6}></Grid>
+
                     <Grid
                       item
                       md={6}
-                      className={`${classes.gridFormItem} ${classes.imageWrapper}`}
+                      className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
                     >
-                      <Typography variant='h6' className={classes.activeTypo}>
-                        Image
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        fullWidth
+                        disabled={uploadedImages.length > 0 ? false : true}
+                        type='submit'
+                      >
+                        submit
+                      </Button>
+                      <Typography variant='caption'>
+                        *Don't forget to upload atleast 1 picture of the product
                       </Typography>
-                      <div className={classes.root}>
+                    </Grid>
+                  </Grid>
+                </form>
+                <Grid
+                  item
+                  md={6}
+                  className={`${classes.gridFormItem} ${classes.imageWrapper}`}
+                >
+                  <Typography variant='h6' className={classes.activeTypo}>
+                    Image
+                  </Typography>
+                  <div className={classes.root}>
+                    <form
+                      onSubmit={newImageUploadHandler}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div style={{ marginRight: '20px' }}>
                         <input
                           accept='image/*'
                           className={classes.input}
@@ -224,28 +262,34 @@ const AddNewProduct = () => {
                             disableElevation
                             onChange={(e) => setImageState(e.target.files[0])}
                           >
-                            Upload
+                            Select
                           </Button>
                         </label>
                       </div>
-                    </Grid>
-                    <Grid item md={6}></Grid>
-                    <Grid
-                      item
-                      md={6}
-                      className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
-                    >
+
+                      <Typography gutterBottom paragraph></Typography>
                       <Button
                         variant='contained'
                         color='primary'
                         fullWidth
                         type='submit'
                       >
-                        submit
+                        Upload
                       </Button>
-                    </Grid>
-                  </Grid>
-                </form>
+                    </form>
+                  </div>
+                </Grid>
+                <Grid item md={6}>
+                  {uploadedImages &&
+                    uploadedImages.map((img) => (
+                      <Image
+                        src={img.secure_url}
+                        width={256}
+                        height={56}
+                        key={img.asset_id}
+                      />
+                    ))}
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
