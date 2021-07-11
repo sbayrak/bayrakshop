@@ -8,13 +8,16 @@ import {
   Switch,
   Button,
   InputAdornment,
+  Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';
 // @@@ nextjs @@@
@@ -65,10 +68,23 @@ const useStyles = makeStyles((theme) => ({
   submitBtnWrapper: {
     marginTop: theme.spacing(5),
   },
+  snackbar: {
+    borderRadius: '5px',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(10),
+    paddingRight: theme.spacing(10),
+    backgroundColor: '#4caf50',
+  },
+  snackbarTypo: {
+    display: 'flex',
+    justifyContent: 'space-around',
+  },
 }));
 
 const AddNewProduct = () => {
   const classes = useStyles();
+  const router = useRouter();
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
   const [description, setDescription] = useState('');
@@ -76,9 +92,20 @@ const AddNewProduct = () => {
   const [switchState, setSwitchState] = useState(false);
   const [imageState, setImageState] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
+  const [successProduct, setSuccessProduct] = useState(false);
+  const [snackbar, setSnackbar] = useState(true);
 
+  console.log(router);
   const handleChange = (event) => {
     setSwitchState(!switchState);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar(false);
   };
 
   const newImageUploadHandler = async (e) => {
@@ -101,13 +128,44 @@ const AddNewProduct = () => {
 
     const result = await submitData.json();
     setUploadedImages([...uploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
-    console.log(uploadedImages);
   };
 
-  console.log(uploadedImages);
-
-  const asd = async (e) => {
+  const newProductSubmitHandler = async (e) => {
     e.preventDefault();
+
+    const submitData = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/products`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: name,
+          price: price,
+          description: description,
+          quantity: quantity,
+          active: switchState,
+          image: uploadedImages,
+        }),
+      }
+    );
+
+    const result = await submitData.json();
+    setSuccessProduct(true);
+    setName('');
+    setPrice('');
+    setDescription('');
+    setQuantity('');
+    setSwitchState(false);
+    setImageState('');
+    setUploadedImages([]);
+    console.log(result);
+    setTimeout(() => {
+      router.push(
+        `${process.env.NEXT_PUBLIC_URL}/dashboard/products/${result._id}`
+      );
+    }, 3000);
   };
 
   return (
@@ -118,6 +176,26 @@ const AddNewProduct = () => {
             <DashboardLeft></DashboardLeft>
           </Grid>
           <Grid item md={8}>
+            {successProduct && (
+              <Snackbar
+                open={snackbar}
+                autoHideDuration={5000}
+                className={classes.snackbar}
+                onClose={handleSnackbarClose}
+              >
+                <Typography
+                  variant='h6'
+                  color='secondary'
+                  className={classes.snackbarTypo}
+                >
+                  <CheckCircleOutlineIcon
+                    color='secondary'
+                    style={{ marginRight: '10px' }}
+                  />
+                  Success! The product has been saved.
+                </Typography>
+              </Snackbar>
+            )}
             <Grid container className={classes.gridContainer}>
               <Grid item md={12}>
                 <Typography variant='h4' className={classes.Typo1}>
@@ -125,7 +203,7 @@ const AddNewProduct = () => {
                 </Typography>
               </Grid>
               <Grid container item md={12}>
-                <form onSubmit={asd}>
+                <form onSubmit={newProductSubmitHandler}>
                   <Grid container>
                     <Grid
                       item
@@ -138,6 +216,8 @@ const AddNewProduct = () => {
                         fullWidth
                         helperText='*Please enter name of the product'
                         color='primary'
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
                       ></TextField>
                     </Grid>
                     <Grid
@@ -151,6 +231,8 @@ const AddNewProduct = () => {
                         fullWidth
                         helperText='*Please enter price of the product'
                         color='primary'
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
                       ></TextField>
                     </Grid>
                     <Grid item md={12} className={classes.gridFormItem}>
@@ -162,6 +244,8 @@ const AddNewProduct = () => {
                         color='primary'
                         rows={4}
                         helperText='*Please enter a relavant description of the product'
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                       ></TextField>
                     </Grid>
                     <Grid
@@ -175,6 +259,8 @@ const AddNewProduct = () => {
                         fullWidth
                         color='primary'
                         helperText='*Please enter the quantity of the product or leave it empty'
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
                       ></TextField>
                     </Grid>
                     <Grid item md={6}></Grid>

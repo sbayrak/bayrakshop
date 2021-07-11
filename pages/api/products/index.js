@@ -16,7 +16,7 @@ export default async (req, res) => {
         price,
         active,
         quantity,
-        image: '',
+        image: image,
       });
       const newProductJSON = await newProduct.ops[0];
 
