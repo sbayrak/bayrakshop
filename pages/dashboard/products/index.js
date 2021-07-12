@@ -91,7 +91,7 @@ const columns = [
     headerName: 'Edit',
     width: 120,
     renderCell: (params) => (
-      <Link href={`/dashboard/products/${params.value}`}>
+      <Link href={`/dashboard/products/edit-product?id=${params.value}`}>
         <a>
           <IconButton>
             <EditIcon color='primary' />
