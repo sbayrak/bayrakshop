@@ -1,17 +1,17 @@
 // @@@ MATERIAL-UI @@@
 import {
   Box,
-  Container,
   Grid,
   Typography,
   TextField,
   Switch,
   Button,
-  InputAdornment,
   Snackbar,
+  CircularProgress,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -37,19 +37,33 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(5),
     marginTop: theme.spacing(20),
     boxShadow: theme.shadows[1],
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(1),
+      paddingTop: theme.spacing(4),
+      paddingBottom: theme.spacing(4),
+    },
   },
   Typo1: {
     marginBottom: theme.spacing(4),
     color: theme.palette.grey[800],
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '24px',
+    },
   },
   gridFormItem: {
     marginBottom: theme.spacing(8),
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: theme.spacing(1),
+    },
   },
   gridFormItemTopLeft: {
     paddingRight: theme.spacing(4),
   },
   gridFormItemTopRight: {
     paddingLeft: theme.spacing(4),
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: theme.spacing(0),
+    },
   },
   switchWrapper: {
     border: '1px solid rgba(0,0,0,0.2)',
@@ -81,22 +95,36 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-around',
     alignItems: 'center',
   },
+  formItemTypo: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '16px',
+    },
+  },
 }));
 
 const AddNewProduct = () => {
   const classes = useStyles();
   const router = useRouter();
   const [name, setName] = useState('');
+  const [errorName, setErrorName] = useState(false);
   const [price, setPrice] = useState('');
+  const [errorPrice, setErrorPrice] = useState(false);
   const [description, setDescription] = useState('');
+  const [errorDescription, setErrorDescription] = useState(false);
   const [quantity, setQuantity] = useState('');
   const [switchState, setSwitchState] = useState(false);
   const [imageState, setImageState] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
   const [successProduct, setSuccessProduct] = useState(false);
   const [snackbar, setSnackbar] = useState(true);
+  const [spinner, setSpinner] = useState(false);
 
-  console.log(router);
+  useEffect(() => {
+    if (name.length > 1) setErrorName(false);
+    if (price.length > 1) setErrorPrice(false);
+    if (description.length > 1) setErrorDescription(false);
+  }, [name, price, description]);
+
   const handleChange = (event) => {
     setSwitchState(!switchState);
   };
@@ -111,6 +139,7 @@ const AddNewProduct = () => {
 
   const newImageUploadHandler = async (e) => {
     e.preventDefault();
+    setSpinner(true);
 
     const formData = new FormData();
     formData.append('file', imageState);
@@ -128,45 +157,58 @@ const AddNewProduct = () => {
     );
 
     const result = await submitData.json();
+    if (result) {
+      setSpinner(false);
+    }
     setUploadedImages([...uploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
   };
 
   const newProductSubmitHandler = async (e) => {
     e.preventDefault();
 
-    const submitData = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/products`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: name,
-          price: price,
-          description: description,
-          quantity: quantity,
-          active: switchState,
-          image: uploadedImages,
-        }),
-      }
-    );
-
-    const result = await submitData.json();
-    setSuccessProduct(true);
-    setName('');
-    setPrice('');
-    setDescription('');
-    setQuantity('');
-    setSwitchState(false);
-    setImageState('');
-    setUploadedImages([]);
-    console.log(result);
-    setTimeout(() => {
-      router.push(
-        `${process.env.NEXT_PUBLIC_URL}/dashboard/products/${result._id}`
+    if (!name) {
+      setErrorName(true);
+    }
+    if (!price) {
+      setErrorPrice(true);
+    }
+    if (!description) {
+      setErrorDescription(true);
+    } else {
+      const submitData = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/products`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            name: name,
+            price: price,
+            description: description,
+            quantity: quantity,
+            active: switchState,
+            image: uploadedImages,
+          }),
+        }
       );
-    }, 3000);
+
+      const result = await submitData.json();
+      setSuccessProduct(true);
+      setName('');
+      setPrice('');
+      setDescription('');
+      setQuantity('');
+      setSwitchState(false);
+      setImageState('');
+      setUploadedImages([]);
+
+      setTimeout(() => {
+        router.push(
+          `${process.env.NEXT_PUBLIC_URL}/dashboard/products/${result._id}`
+        );
+      }, 2000);
+    }
   };
 
   return (
@@ -180,7 +222,7 @@ const AddNewProduct = () => {
             {successProduct && (
               <Snackbar
                 open={snackbar}
-                autoHideDuration={5000}
+                autoHideDuration={2000}
                 className={classes.snackbar}
                 onClose={handleSnackbarClose}
               >
@@ -197,21 +239,24 @@ const AddNewProduct = () => {
                 </Typography>
               </Snackbar>
             )}
-            <Grid container className={classes.gridContainer}>
+            <Grid container className={classes.gridContainer} xs={12}>
               <Grid item md={12}>
                 <Typography variant='h4' className={classes.Typo1}>
                   Add New Product
                 </Typography>
               </Grid>
-              <Grid container item md={12}>
+              <Grid container item md={12} xs={12}>
                 <form onSubmit={newProductSubmitHandler}>
                   <Grid container>
                     <Grid
                       item
                       md={6}
+                      xs={12}
                       className={`${classes.gridFormItem} ${classes.gridFormItemTopLeft}`}
                     >
-                      <Typography variant='h6'>Name</Typography>
+                      <Typography variant='h6' className={classes.formItemTypo}>
+                        Name
+                      </Typography>
                       <TextField
                         variant='outlined'
                         fullWidth
@@ -219,14 +264,18 @@ const AddNewProduct = () => {
                         color='primary'
                         value={name}
                         onChange={(e) => setName(e.target.value)}
+                        error={errorName}
                       ></TextField>
                     </Grid>
                     <Grid
                       item
                       md={6}
+                      xs={11}
                       className={`${classes.gridFormItem} ${classes.gridFormItemTopRight}`}
                     >
-                      <Typography variant='h6'>Price</Typography>
+                      <Typography variant='h6' className={classes.formItemTypo}>
+                        Price
+                      </Typography>
                       <TextField
                         variant='outlined'
                         fullWidth
@@ -234,10 +283,13 @@ const AddNewProduct = () => {
                         color='primary'
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
+                        error={errorPrice}
                       ></TextField>
                     </Grid>
                     <Grid item md={12} className={classes.gridFormItem}>
-                      <Typography variant='h6'>Description</Typography>
+                      <Typography variant='h6' className={classes.formItemTypo}>
+                        Description
+                      </Typography>
                       <TextField
                         variant='outlined'
                         multiline
@@ -247,6 +299,7 @@ const AddNewProduct = () => {
                         helperText='*Please enter a relavant description of the product'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
+                        error={errorDescription}
                       ></TextField>
                     </Grid>
                     <Grid
@@ -254,7 +307,9 @@ const AddNewProduct = () => {
                       md={6}
                       className={`${classes.gridFormItem} ${classes.gridFormItemTopLeft}`}
                     >
-                      <Typography variant='h6'>Quantity</Typography>
+                      <Typography variant='h6' className={classes.formItemTypo}>
+                        Quantity
+                      </Typography>
                       <TextField
                         variant='outlined'
                         fullWidth
@@ -277,7 +332,10 @@ const AddNewProduct = () => {
                           marginBottom: '10px',
                         }}
                       >
-                        <Typography variant='h6' className={classes.activeTypo}>
+                        <Typography
+                          variant='h6'
+                          className={`${classes.activeTypo} ${classes.formItemTypo}`}
+                        >
                           Active
                         </Typography>
                         <Switch
@@ -298,6 +356,7 @@ const AddNewProduct = () => {
                     <Grid
                       item
                       md={6}
+                      xs={11}
                       className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
                     >
                       <Button
@@ -318,6 +377,7 @@ const AddNewProduct = () => {
                 <Grid
                   item
                   md={6}
+                  xs={12}
                   className={`${classes.gridFormItem} ${classes.imageWrapper}`}
                 >
                   <Typography variant='h6' className={classes.activeTypo}>
@@ -353,20 +413,27 @@ const AddNewProduct = () => {
                           </Button>
                         </label>
                       </div>
-
-                      <Typography gutterBottom paragraph></Typography>
                       <Button
                         variant='contained'
                         color='primary'
                         fullWidth
                         type='submit'
+                        disableElevation
+                        startIcon={<CloudUploadIcon />}
                       >
-                        Upload
+                        {spinner ? (
+                          <CircularProgress
+                            color='secondary'
+                            fontSize='small'
+                          />
+                        ) : (
+                          'Upload'
+                        )}
                       </Button>
                     </form>
                   </div>
                 </Grid>
-                <Grid item md={6}>
+                <Grid item md={6} xs={12}>
                   {uploadedImages &&
                     uploadedImages.map((img) => (
                       <Image
