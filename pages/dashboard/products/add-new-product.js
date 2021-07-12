@@ -8,10 +8,12 @@ import {
   Button,
   Snackbar,
   CircularProgress,
+  IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CancelIcon from '@material-ui/icons/Cancel';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -99,6 +101,16 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       fontSize: '16px',
     },
+  },
+  imgWrapper: {
+    marginLeft: theme.spacing(2),
+    border: '1px solid rgba(0,0,0,0.2)',
+    borderRadius: '5px',
+    width: '50%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 }));
 
@@ -209,6 +221,16 @@ const AddNewProduct = () => {
         );
       }, 2000);
     }
+  };
+
+  const removeUploadedImageHandler = (e) => {
+    e.preventDefault();
+
+    const filteredImage = uploadedImages.filter(
+      (img) => img.asset_id !== e.currentTarget.dataset.id
+    );
+
+    setUploadedImages(filteredImage);
   };
 
   return (
@@ -436,12 +458,23 @@ const AddNewProduct = () => {
                 <Grid item md={6} xs={12}>
                   {uploadedImages &&
                     uploadedImages.map((img) => (
-                      <Image
-                        src={img.secure_url}
-                        width={256}
-                        height={56}
-                        key={img.asset_id}
-                      />
+                      <div
+                        data-id={`${img.asset_id}`}
+                        className={classes.imgWrapper}
+                      >
+                        <Image
+                          src={img.secure_url}
+                          width={256}
+                          height={56}
+                          key={img.asset_id}
+                        />{' '}
+                        <IconButton
+                          data-id={`${img.asset_id}`}
+                          onClick={removeUploadedImageHandler}
+                        >
+                          <CancelIcon />
+                        </IconButton>
+                      </div>
                     ))}
                 </Grid>
               </Grid>
