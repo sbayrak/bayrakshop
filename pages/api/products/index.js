@@ -7,15 +7,15 @@ export default async (req, res) => {
   if (req.method === 'POST') {
     const { name, description, price, active, quantity, image } = req.body;
 
-    if (!name || !description || !price || !quantity) {
+    if (!name || !description || !price) {
       res.status(201).json({ msg: 'missing' });
-    } else if (name && description && price && quantity) {
+    } else if (name && description && price) {
       const newProduct = await db.collection('products').insertOne({
         name,
         description,
         price,
         active,
-        quantity,
+        quantity: quantity ? quantity : 0,
         image: image,
         date: new Date(),
       });
