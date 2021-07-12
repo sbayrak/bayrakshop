@@ -222,7 +222,77 @@ const DashboardLeft = () => {
                   </li>
                 </ul>
               </AccordionDetails>
-            </Accordion>{' '}
+            </Accordion>
+
+            <Accordion
+              elevation={1}
+              className={classes.rootAccordion}
+              style={{ borderRadius: 0 }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon color='secondary' />}
+                aria-controls='panel1a-content'
+                id='panel1a-header'
+                className={classes.accordionTitle}
+              >
+                <Typography variant='h6' className={classes.accordionTypo1}>
+                  <InboxIcon
+                    color='secondary'
+                    className={classes.accordionIcon}
+                  />{' '}
+                  <span className={classes.accordionSubTypo1}>Categories</span>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails
+                style={{
+                  borderTop: '1px solid rgba(233,233,233,0.5)',
+                }}
+                className={classes.accordionDetails}
+              >
+                <ul className={classes.accordionUl}>
+                  <li className={classes.accordionLi}>
+                    <ArrowRightIcon color='secondary' />
+                    &nbsp;
+                    <Link href='/dashboard/categories'>
+                      <a
+                        rel='noreferrer noopener'
+                        className={classes.accordionLiLink}
+                      >
+                        <Typography variant='subtitle1'>Categories</Typography>
+                      </a>
+                    </Link>
+                  </li>
+                  <li className={classes.accordionLi}>
+                    <ArrowRightIcon color='secondary' />
+                    &nbsp;
+                    <Link href='/dashboard/categories/add-new-category'>
+                      <a
+                        rel='noreferrer noopener'
+                        className={classes.accordionLiLink}
+                      >
+                        <Typography variant='subtitle1'>
+                          Add New Category
+                        </Typography>
+                      </a>
+                    </Link>
+                  </li>
+                  <li className={classes.accordionLi}>
+                    <ArrowRightIcon color='secondary' />
+                    &nbsp;
+                    <Link href='/dashboard/categories/edit-category'>
+                      <a
+                        rel='noreferrer noopener'
+                        className={classes.accordionLiLink}
+                      >
+                        <Typography variant='subtitle1'>
+                          Edit Category
+                        </Typography>
+                      </a>
+                    </Link>
+                  </li>
+                </ul>
+              </AccordionDetails>
+            </Accordion>
             <Accordion
               elevation={1}
               className={classes.rootAccordion}
@@ -444,6 +514,70 @@ const DashboardLeft = () => {
             </ul>
           </AccordionDetails>
         </Accordion>{' '}
+        <Accordion
+          elevation={1}
+          className={classes.rootAccordion}
+          style={{ borderRadius: 0 }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon color='secondary' />}
+            aria-controls='panel1a-content'
+            id='panel1a-header'
+            className={classes.accordionTitle}
+          >
+            <Typography variant='h6' className={classes.accordionTypo1}>
+              <InboxIcon color='secondary' className={classes.accordionIcon} />{' '}
+              <span className={classes.accordionSubTypo1}>Categories</span>
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails
+            style={{
+              borderTop: '1px solid rgba(233,233,233,0.5)',
+            }}
+            className={classes.accordionDetails}
+          >
+            <ul className={classes.accordionUl}>
+              <li className={classes.accordionLi}>
+                <ArrowRightIcon color='secondary' />
+                &nbsp;
+                <Link href='/dashboard/categories'>
+                  <a
+                    rel='noreferrer noopener'
+                    className={classes.accordionLiLink}
+                  >
+                    <Typography variant='subtitle1'>Categories</Typography>
+                  </a>
+                </Link>
+              </li>
+              <li className={classes.accordionLi}>
+                <ArrowRightIcon color='secondary' />
+                &nbsp;
+                <Link href='/dashboard/categories/add-new-category'>
+                  <a
+                    rel='noreferrer noopener'
+                    className={classes.accordionLiLink}
+                  >
+                    <Typography variant='subtitle1'>
+                      Add New Category
+                    </Typography>
+                  </a>
+                </Link>
+              </li>
+              <li className={classes.accordionLi}>
+                <ArrowRightIcon color='secondary' />
+                &nbsp;
+                <Link href='/dashboard/categories/edit-category'>
+                  <a
+                    rel='noreferrer noopener'
+                    className={classes.accordionLiLink}
+                  >
+                    <Typography variant='subtitle1'>Edit Category</Typography>
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          </AccordionDetails>
+        </Accordion>
         <Accordion
           elevation={1}
           className={classes.rootAccordion}
