@@ -472,7 +472,7 @@ const AddNewProduct = () => {
                           data-id={`${img.asset_id}`}
                           onClick={removeUploadedImageHandler}
                         >
-                          <CancelIcon />
+                          <CancelIcon style={{ color: '#F44336' }} />
                         </IconButton>
                       </div>
                     ))}
