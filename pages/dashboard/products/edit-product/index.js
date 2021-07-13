@@ -7,25 +7,39 @@ import {
   TextField,
   Switch,
   Button,
+  IconButton,
+  CircularProgress,
+  Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import DashboardLeft from '../../../../components/dashboard/DashboardLeft';
+import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import CancelIcon from '@material-ui/icons/Cancel';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
-import DashboardLeft from '../../../../components/dashboard/DashboardLeft';
-import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { useState, useEffect } from 'react';
+import { connectToDatabase } from '../../../../util/mongodb';
+import { ObjectId } from 'mongodb';
+
 // @@@ nextjs @@@
 
 export const getServerSideProps = async (context) => {
   const urlQuery = context.query;
-  console.log(urlQuery);
+  const { db } = await connectToDatabase();
+
+  const getProduct = await db
+    .collection('products')
+    .findOne({ _id: ObjectId(urlQuery.id) });
+
+  const resultProduct = await JSON.parse(JSON.stringify(getProduct)); // JSONify the object is required for serialize
+
   return {
     props: {
-      urlQuery,
+      resultProduct,
     },
   };
 };
@@ -108,9 +122,19 @@ const useStyles = makeStyles((theme) => ({
       fontSize: '16px',
     },
   },
+  imgWrapper: {
+    border: '1px solid rgba(0,0,0,0.2)',
+    paddingTop: theme.spacing(1),
+    borderRadius: '5px',
+    width: '50%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
-const EditProduct = ({ urlQuery }) => {
+const EditProduct = ({ resultProduct }) => {
   const classes = useStyles();
   const [name, setName] = useState('');
   const [errorName, setErrorName] = useState(false);
@@ -126,8 +150,108 @@ const EditProduct = ({ urlQuery }) => {
   const [snackbar, setSnackbar] = useState(true);
   const [spinner, setSpinner] = useState(false);
 
+  useEffect(() => {
+    if (resultProduct) {
+      setName(resultProduct.name);
+      setPrice(resultProduct.price);
+      setDescription(resultProduct.description);
+      setQuantity(resultProduct.quantity);
+      setSwitchState(resultProduct.active);
+      setUploadedImages(resultProduct.image);
+    }
+  }, []);
+  useEffect(() => {
+    if (name.length > 1) setErrorName(false);
+    if (price.length > 1) setErrorPrice(false);
+    if (description.length > 1) setErrorDescription(false);
+  }, [name, price, description]);
+
   const handleChange = (event) => {
     setSwitchState(!switchState);
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbar(false);
+  };
+
+  const removeUploadedImageHandler = (e) => {
+    e.preventDefault();
+
+    const filteredImage = uploadedImages.filter(
+      (img) => img.asset_id !== e.currentTarget.dataset.id
+    );
+
+    setUploadedImages(filteredImage);
+  };
+
+  const editProductHandler = async (e) => {
+    e.preventDefault();
+
+    if (!name) {
+      setErrorName(true);
+    }
+    if (!price) {
+      setErrorPrice(true);
+    }
+    if (!description) {
+      setErrorDescription(true);
+    } else {
+      const updateProduct = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/products/`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            id: resultProduct._id,
+            name,
+            price,
+            description,
+            quantity,
+            active: switchState,
+            image: uploadedImages,
+          }),
+        }
+      );
+
+      const result = await updateProduct.json();
+      if (result) {
+        setSuccessProduct(true);
+      }
+
+      // @@@ TODO ROUTE TO THE SINGLE PRODUCT PAGE
+    }
+  };
+
+  const newImageUploadHandler = async (e) => {
+    e.preventDefault();
+    setSpinner(true);
+
+    const formData = new FormData();
+    formData.append('file', imageState);
+    formData.append(
+      'upload_preset',
+      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`
+    );
+
+    const submitData = await fetch(
+      ` https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const result = await submitData.json();
+    if (result) {
+      setSpinner(false);
+    }
+    setUploadedImages([...uploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
   };
 
   return (
@@ -165,7 +289,7 @@ const EditProduct = ({ urlQuery }) => {
                 </Typography>
               </Grid>
               <Grid container item md={12} xs={12}>
-                <form>
+                <form onSubmit={editProductHandler}>
                   <Grid container>
                     <Grid
                       item
@@ -296,6 +420,7 @@ const EditProduct = ({ urlQuery }) => {
                   </Typography>
                   <div className={classes.root}>
                     <form
+                      onSubmit={newImageUploadHandler}
                       style={{
                         display: 'flex',
                         justifyContent: 'space-between',
@@ -343,17 +468,30 @@ const EditProduct = ({ urlQuery }) => {
                     </form>
                   </div>
                 </Grid>
+                <Grid item md={6}></Grid>
                 <Grid item md={6} xs={12}>
                   {uploadedImages &&
                     uploadedImages.map((img) => (
-                      <Image
-                        src={img.secure_url}
-                        width={256}
-                        height={56}
-                        key={img.asset_id}
-                      />
+                      <div
+                        data-id={`${img.asset_id}`}
+                        className={classes.imgWrapper}
+                      >
+                        <Image
+                          src={img.secure_url}
+                          width={256}
+                          height={56}
+                          key={img.asset_id}
+                        />{' '}
+                        <IconButton
+                          data-id={`${img.asset_id}`}
+                          onClick={removeUploadedImageHandler}
+                        >
+                          <CancelIcon style={{ color: '#F44336' }} />
+                        </IconButton>
+                      </div>
                     ))}
                 </Grid>
+                <Grid item md={6}></Grid>
               </Grid>
             </Grid>
           </Grid>

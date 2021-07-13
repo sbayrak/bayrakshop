@@ -26,9 +26,19 @@ export default async (req, res) => {
   }
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
+    let queryId;
 
-    const getProducts = await db.collection('products').find().toArray();
-    res.status(201).json(getProducts);
+    if (!req.query.id) {
+      const getProducts = await db.collection('products').find().toArray();
+      res.status(201).json(getProducts);
+    } else if (req.query.id) {
+      queryId = req.query.id;
+
+      const getProduct = await db
+        .collection('products')
+        .findOne({ _id: ObjectId(queryId) });
+      res.status(201).json(getProduct);
+    }
   }
   if (req.method === 'DELETE') {
     const { db } = await connectToDatabase();
@@ -43,5 +53,29 @@ export default async (req, res) => {
     } else if (findProductToBeDeleted.deletedCount === 0) {
       res.status(201).json({ msg: 'fail' });
     }
+  }
+  if (req.method === 'PATCH') {
+    const { db } = await connectToDatabase();
+
+    const { id, name, price, description, quantity, active, image } = req.body;
+
+    const updatedProduct = await db.collection('products').updateOne(
+      {
+        _id: ObjectId(id),
+      },
+      {
+        $set: {
+          name,
+          price: Number(price),
+          description,
+          quantity: Number(quantity),
+          active,
+          image,
+        },
+      }
+    );
+
+    const result = await updatedProduct;
+    res.status(201).json(result);
   }
 };
