@@ -1,18 +1,12 @@
 // @@@ MATERIAL-UI @@@
 import {
   Box,
-  Container,
   Grid,
   Typography,
   AppBar,
-  Tabs,
-  Tab,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Divider,
-  Button,
-  IconButton,
   Toolbar,
   Fab,
   SwipeableDrawer,
@@ -27,7 +21,6 @@ import CloseIcon from '@material-ui/icons/Close';
 
 // @@@ nextjs @@@
 import Link from 'next/link';
-import Image from 'next/image';
 import { useState } from 'react';
 // @@@ nextjs @@@
 
@@ -115,6 +108,9 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     right: 0,
     margin: '0 auto',
+    border: '2px inset #5652de',
+    boxShadow: 0,
+    boxShadow: '1px 1px 15px 1px rgba(233,233,233,0.5)',
   },
   gridContainerMobile: {
     display: 'flex',
@@ -745,7 +741,11 @@ const DashboardLeft = () => {
               className={classes.fabButton}
               onClick={(e) => setOpenDrawer(!openDrawer)}
             >
-              {openDrawer ? <CloseIcon /> : <AddIcon />}
+              {openDrawer ? (
+                <CloseIcon style={{ color: '#5652de' }} />
+              ) : (
+                <AddIcon style={{ color: '#5652de' }} />
+              )}
             </Fab>
           </Toolbar>
         </AppBar>
