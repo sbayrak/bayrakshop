@@ -1,23 +1,13 @@
 // @@@ MATERIAL-UI @@@
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  Button,
-  IconButton,
-} from '@material-ui/core';
+import { Box, Grid, Typography, Button, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { DataGrid, GridToolbar } from '@material-ui/data-grid';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
 import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';
 import { connectToDatabase } from '../../../util/mongodb';
 // @@@ nextjs @@@
@@ -31,18 +21,6 @@ export const getStaticProps = async () => {
   return {
     props: { products },
   };
-};
-
-const deleteProductHandler = async (e) => {
-  // const deleteProduct = await fetch(`${NEXT_PUBLIC_URL}/api/products`, {
-  //   method: 'DELETE',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({}),
-  // });
-
-  console.log(e.currentTarget.dataset.id);
 };
 
 const columns = [

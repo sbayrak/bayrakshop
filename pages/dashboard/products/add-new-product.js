@@ -17,7 +17,6 @@ import CancelIcon from '@material-ui/icons/Cancel';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
-import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
