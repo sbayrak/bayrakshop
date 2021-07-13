@@ -57,7 +57,6 @@ export default async (req, res) => {
         email: email,
         password: hashedPassword,
         madeAt: compareVerificationRequest.madeAt,
-        commercejs_id: '',
       });
       const newUser = await JSON.parse(user);
     }
