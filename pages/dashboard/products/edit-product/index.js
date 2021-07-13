@@ -567,6 +567,7 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
                       edit.
                     </Typography>
                   </Box>
+                  <Box component='div' style={{ height: '30vh' }}></Box>
                 </Grid>
               ) : (
                 editProductContainer
