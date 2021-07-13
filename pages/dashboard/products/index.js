@@ -8,6 +8,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 // @@@ nextjs @@@
 import Link from 'next/link';
+import Image from 'next/image';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';
 import { connectToDatabase } from '../../../util/mongodb';
 // @@@ nextjs @@@
@@ -29,16 +30,16 @@ const columns = [
     field: 'product_id',
     headerName: 'Product_ID',
     type: 'number',
-    width: 150,
+    width: 180,
   },
   {
     field: 'image',
     headerName: 'Image',
     width: 120,
     renderCell: (params) => (
-      <div
-        style={{ height: '45px', width: '45px', backgroundColor: '#000' }}
-      ></div>
+      <div style={{ position: 'relative', height: '45px', width: '45px' }}>
+        <Image src={params.value[0].secure_url} layout='fill'></Image>
+      </div>
     ),
   },
   { field: 'name', headerName: 'Name', width: 150 },
@@ -61,7 +62,7 @@ const columns = [
   {
     field: 'quantity',
     headerName: 'Quantity',
-    width: 120,
+    width: 150,
     type: 'number',
   },
   {
@@ -78,20 +79,6 @@ const columns = [
       </Link>
     ),
   },
-  // {
-  //   field: 'delete',
-  //   headerName: 'Delete',
-  //   width: 120,
-  //   renderCell: (params) => (
-  //     <IconButton
-  //       data-id={params.value}
-  //       onClick={deleteProductHandler}
-  //       style={{ zIndex: 99 }}
-  //     >
-  //       <DeleteIcon style={{ color: '#F44336' }} />
-  //     </IconButton>
-  //   ),
-  // },
 ];
 
 const useStyles = makeStyles((theme) => ({
@@ -181,6 +168,7 @@ const Products = ({ products }) => {
         image: products[x].image,
         edit: products[x]._id,
       };
+      console.log(products[x].image);
       dataGridRows.push(newProductRow);
     }
   }
