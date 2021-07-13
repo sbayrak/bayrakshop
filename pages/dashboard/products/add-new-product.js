@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
       padding: theme.spacing(1),
       paddingTop: theme.spacing(4),
       paddingBottom: theme.spacing(4),
+      marginTop: theme.spacing(5),
     },
   },
   Typo1: {
