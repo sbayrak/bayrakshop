@@ -1,20 +1,9 @@
 // @@@ MATERIAL-UI @@@
-import {
-  Box,
-  Container,
-  Grid,
-  Typography,
-  AppBar,
-  Tabs,
-  Tab,
-} from '@material-ui/core';
+import { Box, Grid, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
-import Link from 'next/link';
-import Image from 'next/image';
-import { useState } from 'react';
 import DashboardLeft from '../../components/dashboard/DashboardLeft';
 // @@@ nextjs @@@
 
