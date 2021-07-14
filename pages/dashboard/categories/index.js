@@ -8,7 +8,6 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 // @@@ nextjs @@@
 import Link from 'next/link';
-import Image from 'next/image';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';
 import { connectToDatabase } from '../../../util/mongodb';
 // @@@ nextjs @@@
