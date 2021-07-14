@@ -4,16 +4,12 @@ import {
   Grid,
   Typography,
   TextField,
-  Switch,
   Button,
   Snackbar,
   CircularProgress,
-  IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import CancelIcon from '@material-ui/icons/Cancel';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -99,6 +95,7 @@ const AddNewProduct = () => {
 
   const newCategoryHandler = async (e) => {
     e.preventDefault();
+    setSpinner(true);
 
     let sliced = name.slice(1);
     let firstLetter = name[0].toUpperCase();
@@ -122,6 +119,7 @@ const AddNewProduct = () => {
     const result = await submitNewCategory.json();
 
     if (result) {
+      setSpinner(false);
       setSuccessCategory(true);
       setName('');
       setCategory_url('');
@@ -209,7 +207,11 @@ const AddNewProduct = () => {
                       color='primary'
                       type='submit'
                     >
-                      submit
+                      {spinner ? (
+                        <CircularProgress color='secondary' size='2em' />
+                      ) : (
+                        'submit'
+                      )}
                     </Button>
                   </Grid>
                   <Grid item md={12}>
