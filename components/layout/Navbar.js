@@ -42,7 +42,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 // @@@ NEXTJS @@@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/client';
+import { useSession, signOut } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 // @@@ NEXTJS @@@
 
@@ -309,12 +310,18 @@ const useStyles = makeStyles((theme) => ({
 
 const Navbar = () => {
   const classes = useStyles();
+  const router = useRouter();
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
   const [topGrid, setTopGrid] = useState('inline');
   const [session, loading] = useSession();
+
+  const logoutHandler = async () => {
+    const data = await signOut({ redirect: false, callbackUrl: '/' });
+    router.push(data.url);
+  };
 
   var winY;
   useEffect(() => {
@@ -492,21 +499,64 @@ const Navbar = () => {
                   </div>
                 </li>
                 <li className={classes.bottomMidLi}>
-                  <IconButton
-                    onClick={handleDesktopMenuClick}
-                    className={classes.mobileToolsProfile}
-                  >
-                    <PersonIcon fontSize='large' />
-                    <span style={{ textAlign: 'left', fontSize: '12px' }}>
-                      Login <br /> Register
-                    </span>
-                  </IconButton>
+                  {!session && (
+                    <IconButton
+                      onClick={handleDesktopMenuClick}
+                      className={classes.mobileToolsProfile}
+                    >
+                      <PersonIcon fontSize='large' />
+                      <span style={{ textAlign: 'left', fontSize: '12px' }}>
+                        Login <br /> Register
+                      </span>
+                    </IconButton>
+                  )}
+
                   {session ? (
-                    <Link href='/profile'>
-                      <a className={classes.mobileToolsProfile}>
-                        <PersonIcon />
-                      </a>
-                    </Link>
+                    <>
+                      <IconButton
+                        onClick={handleDesktopMenuClick}
+                        className={classes.mobileToolsProfile}
+                      >
+                        <span style={{ textAlign: 'left', fontSize: '12px' }}>
+                          <PersonIcon fontSize='large' />
+                        </span>
+                      </IconButton>
+
+                      <Menu
+                        anchorEl={openDesktopProfileMenu}
+                        keepMounted
+                        open={openDesktopProfileMenu}
+                        onClose={handleDesktopMenuClose}
+                        className={classes.menu}
+                      >
+                        <MenuItem
+                          onClick={handleClose}
+                          className={classes.menuItem}
+                        >
+                          <Link href='/auth/profile'>
+                            <a className={classes.mobileProductsLinks}>
+                              <ArrowRightIcon /> Profile
+                            </a>
+                          </Link>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={handleClose}
+                          className={classes.menuItem}
+                        >
+                          <Link href='/auth/profile/orders'>
+                            <a className={classes.mobileProductsLinks}>
+                              <ArrowRightIcon /> Orders
+                            </a>
+                          </Link>
+                        </MenuItem>
+                        <MenuItem
+                          onClick={handleClose}
+                          className={classes.menuItem}
+                        >
+                          <Button onClick={logoutHandler}>Logout</Button>
+                        </MenuItem>
+                      </Menu>
+                    </>
                   ) : (
                     <Menu
                       anchorEl={openDesktopProfileMenu}
@@ -719,7 +769,7 @@ const Navbar = () => {
               </li>
               {session ? (
                 <li className={classes.mobileProductsLi}>
-                  <Link href='/profile'>
+                  <Link href='/auth/profile'>
                     <a className={classes.mobileToolsProfile}>
                       <PersonIcon fontSize='large' />
                     </a>
@@ -772,13 +822,26 @@ const Navbar = () => {
               <div style={{ width: '100%' }}>
                 <ul className={classes.mobileProductsUl}>
                   {session ? (
-                    <li className={classes.mobileProductsLi}>
-                      <Link href='#!'>
-                        <a className={classes.mobileToolsProfile}>
-                          <PersonIcon fontSize='large' />
-                        </a>
-                      </Link>
-                    </li>
+                    <>
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='/auth/profile'>
+                          <a className={classes.mobileToolsProfile}>
+                            <PersonIcon fontSize='large' /> Profile
+                          </a>
+                        </Link>
+                      </li>
+
+                      <li className={classes.mobileProductsLi}>
+                        <Link href='/auth/profile/orders'>
+                          <a className={classes.mobileToolsProfile}>
+                            <PersonIcon fontSize='large' /> Orders
+                          </a>
+                        </Link>
+                      </li>
+                      <li className={classes.mobileProductsLi}>
+                        <Button onClick={logoutHandler}>Logout</Button>
+                      </li>
+                    </>
                   ) : (
                     <>
                       <li className={classes.mobileProductsLi}>
