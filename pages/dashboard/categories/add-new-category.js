@@ -188,7 +188,7 @@ const AddNewProduct = () => {
                   </Grid>
                   <Grid item md={6}></Grid>
                   <Grid item md={6} className={classes.gridFormItem}>
-                    <Typography variant='h6'>URL Link</Typography>
+                    <Typography variant='h6'>Category Url</Typography>
                     <TextField
                       variant='outlined'
                       fullWidth
