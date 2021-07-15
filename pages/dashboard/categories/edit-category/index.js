@@ -211,8 +211,10 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
     }
   }, []);
   useEffect(() => {
-    if (name.length > 1) setErrorName(false);
-    if (categoryUrl.length > 1) setErrorCategoryURL(false);
+    if (name.length > 1) {
+      setErrorName(false);
+      setErrorCategoryURL(false);
+    }
   }, [name, categoryUrl]);
 
   const handleSnackbarClose = (event, reason) => {
@@ -228,6 +230,9 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
 
     if (!name) {
       setErrorName(true);
+    }
+    if (!categoryUrl) {
+      setErrorCategoryURL(true);
     } else {
       const updateProduct = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/categories/`,
