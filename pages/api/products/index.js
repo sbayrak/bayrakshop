@@ -5,7 +5,15 @@ export default async (req, res) => {
   const { db } = await connectToDatabase();
 
   if (req.method === 'POST') {
-    const { name, description, price, active, quantity, image } = req.body;
+    const {
+      name,
+      description,
+      price,
+      active,
+      quantity,
+      category,
+      image,
+    } = req.body;
 
     if (!name || !description || !price) {
       res.status(201).json({ msg: 'missing' });
@@ -16,6 +24,7 @@ export default async (req, res) => {
         price,
         active,
         quantity: quantity ? quantity : 0,
+        category: category,
         image: image,
         date: new Date(),
       });

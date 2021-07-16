@@ -9,6 +9,9 @@ import {
   Snackbar,
   CircularProgress,
   IconButton,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
@@ -124,6 +127,8 @@ const AddNewProduct = () => {
   const [description, setDescription] = useState('');
   const [errorDescription, setErrorDescription] = useState(false);
   const [quantity, setQuantity] = useState('');
+  const [category, setCategory] = useState('');
+  const [errorCategory, setErrorCategory] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [imageState, setImageState] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -135,6 +140,7 @@ const AddNewProduct = () => {
     if (name.length > 1) setErrorName(false);
     if (price.length > 1) setErrorPrice(false);
     if (description.length > 1) setErrorDescription(false);
+    if (category.length > 1) setErrorCategory(false);
   }, [name, price, description]);
 
   const handleChange = (event) => {
@@ -186,6 +192,9 @@ const AddNewProduct = () => {
     }
     if (!description) {
       setErrorDescription(true);
+    }
+    if (!category) {
+      setErrorCategory(true);
     } else {
       const submitData = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/products`,
@@ -199,6 +208,7 @@ const AddNewProduct = () => {
             price: price,
             description: description,
             quantity: quantity,
+            category: category,
             active: switchState,
             image: uploadedImages,
           }),
@@ -211,14 +221,13 @@ const AddNewProduct = () => {
       setPrice('');
       setDescription('');
       setQuantity('');
+      setCategory('');
       setSwitchState(false);
       setImageState('');
       setUploadedImages([]);
 
       setTimeout(() => {
-        router.push(
-          `${process.env.NEXT_PUBLIC_URL}/dashboard/products/${result._id}`
-        );
+        router.push(`${process.env.NEXT_PUBLIC_URL}/dashboard/products/`);
       }, 2000);
     }
   };
@@ -324,6 +333,7 @@ const AddNewProduct = () => {
                         error={errorDescription}
                       ></TextField>
                     </Grid>
+
                     <Grid
                       item
                       md={6}
@@ -342,7 +352,29 @@ const AddNewProduct = () => {
                       ></TextField>
                     </Grid>
                     <Grid item md={6}></Grid>
-
+                    <Grid item md={6} xs={12} className={classes.gridFormItem}>
+                      <Typography variant='h6' className={classes.formItemTypo}>
+                        Category
+                      </Typography>
+                      <Select
+                        labelId='demo-simple-select-filled-label'
+                        id='demo-simple-select-filled'
+                        value={category}
+                        fullWidth
+                        onChange={(e) => setCategory(e.target.value)}
+                        error={errorCategory}
+                        variant='outlined'
+                      >
+                        <MenuItem value=''>
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={'Baklava'}>Baklava</MenuItem>
+                        <MenuItem value={'Lokum'}>Lokum</MenuItem>
+                        <MenuItem value={'Cakes'}>Cakes</MenuItem>
+                        <MenuItem value={'Appetizers'}>Appetizers</MenuItem>
+                      </Select>
+                    </Grid>
+                    <Grid item md={6}></Grid>
                     <Grid
                       item
                       md={6}

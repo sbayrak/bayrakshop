@@ -29,7 +29,6 @@ const columns = [
   {
     field: 'product_id',
     headerName: 'Product_ID',
-    type: 'number',
     width: 180,
   },
   {
@@ -51,8 +50,12 @@ const columns = [
   {
     field: 'price',
     headerName: 'Price',
-    type: 'number',
     width: 120,
+  },
+  {
+    field: 'category',
+    headerName: 'Category',
+    width: 150,
   },
   {
     field: 'active',
@@ -63,7 +66,6 @@ const columns = [
     field: 'quantity',
     headerName: 'Quantity',
     width: 150,
-    type: 'number',
   },
   {
     field: 'edit',
@@ -163,6 +165,7 @@ const Products = ({ products }) => {
         name: products[x].name,
         description: products[x].description,
         price: products[x].price,
+        category: products[x].category,
         active: products[x].active,
         quantity: products[x].quantity,
         image: products[x].image,
