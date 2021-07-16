@@ -30,7 +30,6 @@ const columns = [
   {
     field: 'category_id',
     headerName: 'Category_ID',
-    type: 'number',
     width: 220,
   },
   { field: 'name', headerName: 'Name', width: 200 },

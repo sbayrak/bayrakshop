@@ -13,7 +13,6 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';

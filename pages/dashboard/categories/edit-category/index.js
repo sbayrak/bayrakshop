@@ -4,10 +4,7 @@ import {
   Grid,
   Typography,
   TextField,
-  Switch,
   Button,
-  IconButton,
-  CircularProgress,
   Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
