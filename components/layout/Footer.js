@@ -292,12 +292,7 @@ const Footer = () => {
                   height: '50px',
                 }}
               >
-                <Image
-                  src={paypal}
-                  placeholder='blur'
-                  layout='fill'
-                  objectFit='cover'
-                ></Image>
+                <Image src={paypal} layout='fill' objectFit='cover'></Image>
               </div>
             </Grid>
           </Grid>
@@ -496,12 +491,7 @@ const Footer = () => {
                   height: '50px',
                 }}
               >
-                <Image
-                  src={paypal}
-                  placeholder='blur'
-                  layout='fill'
-                  objectFit='cover'
-                ></Image>
+                <Image src={paypal} layout='fill' objectFit='cover'></Image>
               </div>
             </Grid>
             <Grid item md={12}>
