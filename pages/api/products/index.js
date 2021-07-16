@@ -66,7 +66,16 @@ export default async (req, res) => {
   if (req.method === 'PATCH') {
     const { db } = await connectToDatabase();
 
-    const { id, name, price, description, quantity, active, image } = req.body;
+    const {
+      id,
+      name,
+      price,
+      description,
+      quantity,
+      category,
+      active,
+      image,
+    } = req.body;
 
     const updatedProduct = await db.collection('products').updateOne(
       {
@@ -78,6 +87,7 @@ export default async (req, res) => {
           price: Number(price),
           description,
           quantity: Number(quantity),
+          category: category,
           active,
           image,
         },

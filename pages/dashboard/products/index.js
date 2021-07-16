@@ -29,7 +29,7 @@ const columns = [
   {
     field: 'product_id',
     headerName: 'Product_ID',
-    width: 180,
+    width: 210,
   },
   {
     field: 'image',
@@ -171,7 +171,6 @@ const Products = ({ products }) => {
         image: products[x].image,
         edit: products[x]._id,
       };
-      console.log(products[x].image);
       dataGridRows.push(newProductRow);
     }
   }

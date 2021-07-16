@@ -9,7 +9,6 @@ import {
   Snackbar,
   CircularProgress,
   IconButton,
-  InputLabel,
   Select,
   MenuItem,
 } from '@material-ui/core';

@@ -9,6 +9,8 @@ import {
   IconButton,
   CircularProgress,
   Snackbar,
+  Select,
+  MenuItem,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import DashboardLeft from '../../../../components/dashboard/DashboardLeft';
@@ -197,6 +199,8 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
   const [description, setDescription] = useState('');
   const [errorDescription, setErrorDescription] = useState(false);
   const [quantity, setQuantity] = useState('');
+  const [category, setCategory] = useState('');
+  const [errorCategory, setErrorCategory] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [imageState, setImageState] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -214,6 +218,7 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
       setPrice(resultProduct.price);
       setDescription(resultProduct.description);
       setQuantity(resultProduct.quantity);
+      setCategory(resultProduct.category);
       setSwitchState(resultProduct.active);
       setUploadedImages(resultProduct.image);
     }
@@ -257,6 +262,9 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
     }
     if (!description) {
       setErrorDescription(true);
+    }
+    if (!category) {
+      setErrorCategory(true);
     } else {
       const updateProduct = await fetch(
         `${process.env.NEXT_PUBLIC_URL}/api/products/`,
@@ -271,6 +279,7 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
             price,
             description,
             quantity,
+            category: category,
             active: switchState,
             image: uploadedImages,
           }),
@@ -280,6 +289,9 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
       const result = await updateProduct.json();
       if (result) {
         setSuccessProduct(true);
+        setTimeout(() => {
+          router.push(`${process.env.NEXT_PUBLIC_URL}/dashboard/products`);
+        }, 2000);
       }
 
       // @@@ TODO ROUTE TO THE SINGLE PRODUCT PAGE
@@ -384,6 +396,33 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
             ></TextField>
           </Grid>
           <Grid item md={6}></Grid>
+          <Grid
+            item
+            md={6}
+            className={`${classes.gridFormItem} ${classes.gridFormItemTopLeft}`}
+          >
+            <Typography variant='h6' className={classes.formItemTypo}>
+              Category
+            </Typography>
+            <Select
+              labelId='demo-simple-select-filled-label'
+              id='demo-simple-select-filled'
+              value={category}
+              fullWidth
+              onChange={(e) => setCategory(e.target.value)}
+              error={errorCategory}
+              variant='outlined'
+            >
+              <MenuItem value=''>
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={'Baklava'}>Baklava</MenuItem>
+              <MenuItem value={'Lokum'}>Lokum</MenuItem>
+              <MenuItem value={'Cakes'}>Cakes</MenuItem>
+              <MenuItem value={'Appetizers'}>Appetizers</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item md={6}></Grid>
 
           <Grid
             item
@@ -426,6 +465,7 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
               variant='contained'
               color='primary'
               fullWidth
+              disableElevation
               disabled={uploadedImages.length > 0 ? false : true}
               type='submit'
             >
