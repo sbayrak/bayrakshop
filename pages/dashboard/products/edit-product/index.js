@@ -35,6 +35,7 @@ export const getServerSideProps = async (context) => {
   const { db } = await connectToDatabase();
   let resultProduct;
   let noProduct = false;
+  let categoryResult;
 
   if (!urlQuery.id) {
     resultProduct = {
@@ -55,6 +56,9 @@ export const getServerSideProps = async (context) => {
     };
     noProduct = true;
   } else {
+    const getCategories = await db.collection('categories').find({}).toArray();
+
+    categoryResult = await JSON.parse(JSON.stringify(getCategories));
     const getProduct = await db
       .collection('products')
       .findOne({ _id: ObjectId(urlQuery.id) });
@@ -76,6 +80,7 @@ export const getServerSideProps = async (context) => {
       noProduct,
       urlQuery,
       resultProduct,
+      categoryResult,
     },
   };
 };
@@ -189,7 +194,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
+const EditProduct = ({
+  resultProduct,
+  urlQuery,
+  noProduct,
+  categoryResult,
+}) => {
   const classes = useStyles();
   const router = useRouter();
   const [name, setName] = useState('');
@@ -213,6 +223,7 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
     if (!urlQuery.id || noProduct) {
       setProductError(true);
     }
+
     if (resultProduct) {
       setName(resultProduct.name);
       setPrice(resultProduct.price);
@@ -416,10 +427,12 @@ const EditProduct = ({ resultProduct, urlQuery, noProduct }) => {
               <MenuItem value=''>
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={'Baklava'}>Baklava</MenuItem>
-              <MenuItem value={'Lokum'}>Lokum</MenuItem>
-              <MenuItem value={'Cakes'}>Cakes</MenuItem>
-              <MenuItem value={'Appetizers'}>Appetizers</MenuItem>
+              {categoryResult &&
+                categoryResult.map((categoryItem) => (
+                  <MenuItem key={categoryItem._id} value={categoryItem.name}>
+                    {categoryItem.name}
+                  </MenuItem>
+                ))}
             </Select>
           </Grid>
           <Grid item md={6}></Grid>

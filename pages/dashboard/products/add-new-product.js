@@ -23,7 +23,22 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import DashboardLeft from '../../../components/dashboard/DashboardLeft';
+import { connectToDatabase } from '../../../util/mongodb';
 // @@@ nextjs @@@
+
+export const getStaticProps = async () => {
+  const { db } = await connectToDatabase();
+
+  const getCategories = await db.collection('categories').find({}).toArray();
+
+  const categoryResult = await JSON.parse(JSON.stringify(getCategories));
+
+  return {
+    props: {
+      categoryResult,
+    },
+  };
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddNewProduct = () => {
+const AddNewProduct = ({ categoryResult }) => {
   const classes = useStyles();
   const router = useRouter();
   const [name, setName] = useState('');
@@ -126,7 +141,7 @@ const AddNewProduct = () => {
   const [description, setDescription] = useState('');
   const [errorDescription, setErrorDescription] = useState(false);
   const [quantity, setQuantity] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState([]);
   const [errorCategory, setErrorCategory] = useState(false);
   const [switchState, setSwitchState] = useState(false);
   const [imageState, setImageState] = useState('');
@@ -134,6 +149,8 @@ const AddNewProduct = () => {
   const [successProduct, setSuccessProduct] = useState(false);
   const [snackbar, setSnackbar] = useState(true);
   const [spinner, setSpinner] = useState(false);
+
+  console.log(category);
 
   useEffect(() => {
     if (name.length > 1) setErrorName(false);
@@ -367,10 +384,15 @@ const AddNewProduct = () => {
                         <MenuItem value=''>
                           <em>None</em>
                         </MenuItem>
-                        <MenuItem value={'Baklava'}>Baklava</MenuItem>
-                        <MenuItem value={'Lokum'}>Lokum</MenuItem>
-                        <MenuItem value={'Cakes'}>Cakes</MenuItem>
-                        <MenuItem value={'Appetizers'}>Appetizers</MenuItem>
+                        {categoryResult &&
+                          categoryResult.map((categoryItem) => (
+                            <MenuItem
+                              key={categoryItem._id}
+                              value={categoryItem.name}
+                            >
+                              {categoryItem.name}
+                            </MenuItem>
+                          ))}
                       </Select>
                     </Grid>
                     <Grid item md={6}></Grid>
