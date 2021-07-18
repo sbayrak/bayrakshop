@@ -41,6 +41,8 @@ import { useState, useEffect } from 'react';
 const useStyles = makeStyles((theme) => ({
   root: {
     maxWidth: 345,
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   addToCartBtn: {
     textDecoration: 'none',

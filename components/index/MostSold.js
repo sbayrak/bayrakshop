@@ -131,6 +131,20 @@ const MostSold = () => {
                   <MostSoldCard />
                 </Grid>
               </Grid>
+              <Grid container spacing={3}>
+                <Grid item md={3} xs={6}>
+                  <MostSoldCard />
+                </Grid>
+                <Grid item md={3} xs={6}>
+                  <MostSoldCard />
+                </Grid>
+                <Grid item md={3} xs={6}>
+                  <MostSoldCard />
+                </Grid>
+                <Grid item md={3} xs={6}>
+                  <MostSoldCard />
+                </Grid>
+              </Grid>
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Grid container spacing={3}>
