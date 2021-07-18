@@ -13,7 +13,7 @@ import baklava from '../../public/baklava.jpg';
 // @@@ nextjs @@@@
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  AboutRoot: {
     marginTop: theme.spacing(25),
     marginBottom: theme.spacing(25),
     backgroundColor: '#fafafa',
@@ -24,49 +24,49 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(10),
     },
   },
-  rootLeftGrid: {
+  AboutRootLeftGrid: {
     padding: theme.spacing(1),
     paddingRight: theme.spacing(3),
     paddingLeft: theme.spacing(3),
     borderLeft: '2px solid rgba(86,82,222,0.1)',
     borderTop: '2px solid rgba(86,82,222,0.1)',
   },
-  rootRightGrid: {},
-  leftGridItem: {
+  AboutRootRightGrid: {},
+  AboutLeftGridItem: {
     padding: theme.spacing(0.5),
     paddingBottom: theme.spacing(1),
   },
-  title1: {
+  AboutTitle1: {
     paddingBottom: 0,
   },
-  koslowshop: {
+  AboutKoslowShop: {
     color: '#5652de',
     fontWeight: theme.typography.fontWeightLight,
   },
-  koslowshop2: {
+  AboutKoslowShop2: {
     fontWeight: theme.typography.fontWeightMedium,
   },
-  welcomeTo: {
+  AboutWelcomeTo: {
     color: theme.palette.grey[800],
     [theme.breakpoints.down('xs')]: {
       fontSize: '24px',
     },
   },
-  subTitle1: {
+  AboutSubTitle1: {
     fontWeight: theme.typography.fontWeightMedium,
     color: theme.palette.grey[800],
     [theme.breakpoints.down('xs')]: {
       fontSize: '14px',
     },
   },
-  subTitle2: {
+  AboutSubTitle2: {
     fontSize: '14px',
     marginBottom: theme.spacing(3),
     [theme.breakpoints.down('xs')]: {
       fontSize: '12px',
     },
   },
-  readMore: {
+  AboutReadMore: {
     textDecoration: 'none',
     padding: theme.spacing(1),
     paddingLeft: theme.spacing(2),
@@ -83,7 +83,7 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#6788f5',
     },
   },
-  imgWrapper: {
+  AboutImgWrapper: {
     width: '100%',
     position: 'relative',
     padding: theme.spacing(1),
@@ -93,21 +93,21 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down('xs')]: {},
   },
-  img: {
+  AboutImg: {
     borderRadius: '5px',
   },
   // MOBILE
-  welcomerTitle: {
+  AboutWelcomerTitle: {
     [theme.breakpoints.down('xs')]: {
       fontSize: '12px',
     },
   },
-  desktop: {
+  AboutDesktop: {
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
   },
-  mobile: {
+  AboutMobile: {
     display: 'none',
     [theme.breakpoints.down('xs')]: {
       display: 'inline',
@@ -118,42 +118,45 @@ const useStyles = makeStyles((theme) => ({
 const About = () => {
   const classes = useStyles();
 
-  const desktop = (
-    <div className={classes.desktop}>
-      <Box component='div' className={classes.root}>
+  const AboutDesktop = (
+    <div className={classes.AboutDesktop}>
+      <Box component='div' className={classes.AboutRoot}>
         <Container>
           <Grid container>
-            <Grid item md={6} className={classes.rootLeftGrid}>
+            <Grid item md={6} className={classes.AboutRootLeftGrid}>
               <Grid
                 item
                 md={12}
-                className={`${classes.leftGridItem} ${classes.title1}`}
+                className={`${classes.AboutLeftGridItem} ${classes.AboutTitle1}`}
               >
                 <Typography
                   variant='subtitle2'
                   color='textSecondary'
-                  className={classes.welcomeTo}
+                  className={classes.AboutWelcomeTo}
                 >
                   Baklava, Lokum and more...
                 </Typography>
               </Grid>
-              <Grid item md={12} className={classes.leftGridItem}>
+              <Grid item md={12} className={classes.AboutLeftGridItem}>
                 <Typography
                   variant='h4'
                   gutterBottom
-                  className={classes.welcomeTo}
+                  className={classes.AboutWelcomeTo}
                 >
                   Welcome to{' '}
-                  <span className={classes.koslowshop}>
-                    <span className={classes.koslowshop2}>Koslow</span>Shop
+                  <span className={classes.AboutKoslowShop}>
+                    <span className={classes.AboutKoslowShop2}>Koslow</span>Shop
                   </span>
                 </Typography>
               </Grid>
-              <Grid item md={12} className={classes.leftGridItem}>
-                <Typography variant='subtitle1' className={classes.subTitle1}>
+              <Grid item md={12} className={classes.AboutLeftGridItem}>
+                <Typography
+                  variant='subtitle1'
+                  className={classes.AboutSubTitle1}
+                >
                   Who are we ?
                 </Typography>
-                <Typography variant='body2' className={classes.subTitle2}>
+                <Typography variant='body2' className={classes.AboutSubTitle2}>
                   Our business comes from family. Since 1975 we make our
                   products just like we started doing back then. Our business
                   comes from family. Since 1975 we make our products just like
@@ -162,11 +165,14 @@ const About = () => {
                   back then.
                 </Typography>
               </Grid>
-              <Grid item md={12} className={classes.leftGridItem}>
-                <Typography variant='subtitle1' className={classes.subTitle1}>
+              <Grid item md={12} className={classes.AboutLeftGridItem}>
+                <Typography
+                  variant='subtitle1'
+                  className={classes.AboutSubTitle1}
+                >
                   How we do it ?
                 </Typography>
-                <Typography variant='body2' className={classes.subTitle2}>
+                <Typography variant='body2' className={classes.AboutSubTitle2}>
                   We buy natural products from the village. Then our master
                   chefs prepare dough and all other sweet things. All of our
                   products are handmade, and fresh. We buy natural products from
@@ -177,13 +183,16 @@ const About = () => {
                   are handmade, and fresh.
                 </Typography>
               </Grid>
-              <Grid item md={12} className={classes.leftGridItem}>
-                <Typography variant='subtitle1' className={classes.subTitle1}>
+              <Grid item md={12} className={classes.AboutLeftGridItem}>
+                <Typography
+                  variant='subtitle1'
+                  className={classes.AboutSubTitle1}
+                >
                   How can I order ?
                 </Typography>
                 <Typography
                   variant='body2'
-                  className={classes.subTitle2}
+                  className={classes.AboutSubTitle2}
                   gutterBottom
                   paragraph
                 >
@@ -195,46 +204,46 @@ const About = () => {
                   from our shop.
                 </Typography>
               </Grid>
-              <Grid item md={12} className={classes.leftGridItem}>
+              <Grid item md={12} className={classes.AboutLeftGridItem}>
                 <Link href='#!'>
                   <a
                     target='_blank'
                     rel='noreferrer noopener'
-                    className={classes.readMore}
+                    className={classes.AboutReadMore}
                   >
                     Read More
                   </a>
                 </Link>
               </Grid>
             </Grid>
-            <Grid item md={6} className={classes.rootRightGrid}>
+            <Grid item md={6} className={classes.AboutRootRightGrid}>
               <Grid item md={12}>
-                <div className={classes.imgWrapper}>
+                <div className={classes.AboutImgWrapper}>
                   <Image
                     src={chefs}
                     layout='responsive'
                     placeholder='blur'
-                    className={classes.img}
+                    className={classes.AboutImg}
                   />
                 </div>
               </Grid>
               <Grid container item md={12}>
                 <Grid item md={6}>
-                  <div className={classes.imgWrapper}>
+                  <div className={classes.AboutImgWrapper}>
                     <Image
                       src={baklava}
                       layout='responsive'
                       placeholder='blur'
-                      className={classes.img}
+                      className={classes.AboutImg}
                     />
                   </div>
                 </Grid>
                 <Grid item md={6}>
-                  <div className={classes.imgWrapper}>
+                  <div className={classes.AboutImgWrapper}>
                     <Image
                       src={shop}
                       layout='responsive'
-                      className={classes.img}
+                      className={classes.AboutImg}
                       placeholder='blur'
                     />
                   </div>
@@ -246,64 +255,73 @@ const About = () => {
       </Box>
     </div>
   );
-  const mobile = (
-    <div className={classes.mobile}>
-      <Box component='div' className={classes.root}>
+  const AboutMobile = (
+    <div className={classes.AboutMobile}>
+      <Box component='div' className={classes.AboutRoot}>
         <Container>
           <Grid container>
-            <Grid item md={6} className={classes.rootLeftGrid}>
+            <Grid item md={6} className={classes.AboutRootLeftGrid}>
               <Grid
                 item
                 md={12}
                 xs={12}
-                className={`${classes.leftGridItem} ${classes.title1}`}
+                className={`${classes.AboutLeftGridItem} ${classes.AboutTitle1}`}
               >
                 <Typography
                   variant='subtitle2'
                   color='textSecondary'
-                  className={`${classes.welcomeTo} ${classes.welcomerTitle}`}
+                  className={`${classes.AboutWelcomeTo} ${classes.AboutWelcomerTitle}`}
                 >
                   Baklava, Lokum and more...
                 </Typography>
               </Grid>
-              <Grid item md={12} xs={12} className={classes.leftGridItem}>
+              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
                 <Typography
                   variant='h4'
                   gutterBottom
-                  className={classes.welcomeTo}
+                  className={classes.AboutWelcomeTo}
                 >
                   Welcome to{' '}
-                  <span className={classes.koslowshop}>
-                    <span className={classes.koslowshop2}>Koslow</span>Shop
+                  <span className={classes.AboutKoslowShop}>
+                    <span className={classes.AboutKoslowShop2}>Koslow</span>Shop
                   </span>
                 </Typography>
               </Grid>
-              <Grid item md={12} xs={12} className={classes.leftGridItem}>
-                <Typography variant='subtitle1' className={classes.subTitle1}>
+              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
+                <Typography
+                  variant='subtitle1'
+                  className={classes.AboutSubTitle1}
+                >
                   Who are we ?
                 </Typography>
-                <Typography variant='body2' className={classes.subTitle2}>
+                <Typography variant='body2' className={classes.AboutSubTitle2}>
                   Our business comes from family. Since 1975 we make our
                   products just like we started doing back then.
                 </Typography>
               </Grid>
-              <Grid item md={12} xs={12} className={classes.leftGridItem}>
-                <Typography variant='subtitle1' className={classes.subTitle1}>
+              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
+                <Typography
+                  variant='subtitle1'
+                  className={classes.AboutSubTitle1}
+                >
                   How we do it ?
                 </Typography>
-                <Typography variant='body2' className={classes.subTitle2}>
+                <Typography variant='body2' className={classes.AboutSubTitle2}>
                   We buy natural products from the village. Then our master
                   chefs prepare dough and all other sweet things. All of our
                   products are handmade, and fresh.
                 </Typography>
               </Grid>
-              <Grid item md={12} xs={12} className={classes.leftGridItem}>
-                <Typography variant='subtitle1' className={classes.subTitle1}>
+              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
+                <Typography
+                  variant='subtitle1'
+                  className={classes.AboutSubTitle1}
+                >
                   How can I order ?
                 </Typography>
                 <Typography
                   variant='body2'
-                  className={classes.subTitle2}
+                  className={classes.AboutSubTitle2}
                   gutterBottom
                   paragraph
                 >
@@ -311,12 +329,12 @@ const About = () => {
                   your door. Or you can grab it from our shop.
                 </Typography>
               </Grid>
-              <Grid item md={12} xs={12} className={classes.leftGridItem}>
+              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
                 <Link href='#!'>
                   <a
                     target='_blank'
                     rel='noreferrer noopener'
-                    className={classes.readMore}
+                    className={classes.AboutReadMore}
                   >
                     Read More
                   </a>
@@ -325,32 +343,32 @@ const About = () => {
             </Grid>
             <Grid container item md={6} xs={12}>
               <Grid item md={12} xs={4}>
-                <div className={classes.imgWrapper}>
+                <div className={classes.AboutImgWrapper}>
                   <Image
                     src={chefs}
                     layout='responsive'
                     placeholder='blur'
-                    className={classes.img}
+                    className={classes.AboutImg}
                   />
                 </div>
               </Grid>
 
               <Grid item md={6} xs={4}>
-                <div className={classes.imgWrapper}>
+                <div className={classes.AboutImgWrapper}>
                   <Image
                     src={baklava}
                     layout='responsive'
                     placeholder='blur'
-                    className={classes.img}
+                    className={classes.AboutImg}
                   />
                 </div>
               </Grid>
               <Grid item md={6} xs={4}>
-                <div className={classes.imgWrapper}>
+                <div className={classes.AboutImgWrapper}>
                   <Image
                     src={shop}
                     layout='responsive'
-                    className={classes.img}
+                    className={classes.AboutImg}
                     placeholder='blur'
                   />
                 </div>
@@ -364,8 +382,8 @@ const About = () => {
 
   return (
     <>
-      {desktop}
-      {mobile}
+      {AboutDesktop}
+      {AboutMobile}
     </>
   );
 };

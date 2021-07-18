@@ -1,8 +1,7 @@
 // @@@ MATERIAL-UI @@@
-import { Typography, Button, Box, Container } from '@material-ui/core';
+import { Typography, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
-import hero from '../../public/hero.png';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -120,13 +119,13 @@ const Hero = ({ getHeroContent }) => {
   const router = useRouter();
   console.log(getHeroContent);
 
-  const customSignOut = async () => {
-    const data = await signOut({
-      redirect: false,
-      callbackUrl: `${window.location.origin}/`,
-    });
-    router.push(data.url);
-  };
+  // const customSignOut = async () => {
+  //   const data = await signOut({
+  //     redirect: false,
+  //     callbackUrl: `${window.location.origin}/`,
+  //   });
+  //   router.push(data.url);
+  // };
 
   console.log(heroTitle);
   return (

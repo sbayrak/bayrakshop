@@ -39,12 +39,12 @@ import { useState, useEffect } from 'react';
 // @@@ nextjs @@@
 
 const useStyles = makeStyles((theme) => ({
-  root: {
+  MostSoldCardRoot: {
     maxWidth: 345,
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
   },
-  addToCartBtn: {
+  MostSoldAddToCartForm: {
     textDecoration: 'none',
     padding: theme.spacing(1),
     borderRadius: '5px',
@@ -59,32 +59,32 @@ const useStyles = makeStyles((theme) => ({
       backgroundColor: '#6788f5',
     },
   },
-  cardLink: {
+  MostSoldCardLink: {
     textDecoration: 'none',
   },
-  quantityWrapper: {
+  MostSoldQuantityWrapper: {
     // border: '1px solid red',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
-  quantityGrid: {},
-  quantityBtn: {
+  MostSoldQuantityGrid: {},
+  MostSoldQuantityBtn: {
     marginRight: theme.spacing(2),
     marginLeft: theme.spacing(2),
   },
-  descMobile: {
+  MostSoldCardDescription: {
     [theme.breakpoints.down('sm')]: {
       display: 'none',
     },
   },
-  quantityBtnMobile: {
+  MostSoldQuantityBtnMobile: {
     [theme.breakpoints.down('xs')]: {
       marginRight: theme.spacing(0),
       marginLeft: theme.spacing(0),
     },
   },
-  quantityWrapperMobile: {
+  MostSoldQuantityWrapperMobile: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -92,24 +92,24 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
     },
   },
-  Typo1Mobile: {
+  MostSoldCardTypo1Mobile: {
     [theme.breakpoints.down('xs')]: {
       fontSize: '16px',
       fontWeight: theme.typography.fontWeightMedium,
     },
   },
-  Typo2Mobile: {
+  MostSoldCardTypo2Mobile: {
     [theme.breakpoints.down('xs')]: {
       fontSize: '14px',
     },
   },
-  mobile: {
+  MostSoldCardMoBile: {
     display: 'none',
     [theme.breakpoints.down('xs')]: {
       display: 'inline',
     },
   },
-  desktop: {
+  MostSoldCardDesktop: {
     [theme.breakpoints.down('xs')]: {
       display: 'none',
     },
@@ -124,15 +124,15 @@ const MostSoldCard = () => {
     if (quantity <= 1) setQuantity(1);
   }, [quantity]);
 
-  const desktop = (
-    <div className={classes.desktop}>
-      <Card className={classes.root} elevation={1}>
+  const MostSoldCardDesktop = (
+    <div className={classes.MostSoldCardDesktop}>
+      <Card className={classes.MostSoldCardRoot} elevation={1}>
         <CardActionArea>
           <Link href='#!'>
             <a
               target='_blank'
               rel='noreferrer noopener'
-              className={classes.cardLink}
+              className={classes.MostSoldCardLink}
             >
               <Image
                 src={baklava}
@@ -169,17 +169,17 @@ const MostSoldCard = () => {
             </a>
           </Link>
         </CardActionArea>
-        <CardContent className={classes.quantityWrapper}>
-          <Grid item md={12} className={classes.quantityGrid}>
+        <CardContent className={classes.MostSoldQuantityWrapper}>
+          <Grid item md={12} className={classes.MostSoldQuantityGrid}>
             <IconButton
-              className={classes.quantityBtn}
+              className={classes.MostSoldQuantityBtn}
               onClick={() => setQuantity(quantity - 1)}
             >
               <RemoveIcon fontSize='small' color='primary' />
             </IconButton>
             <span>{quantity}</span>
             <IconButton
-              className={classes.quantityBtn}
+              className={classes.MostSoldQuantityBtn}
               onClick={() => setQuantity(quantity + 1)}
             >
               <AddIcon fontSize='small' color='primary' />
@@ -192,7 +192,7 @@ const MostSoldCard = () => {
               size='small'
               variant='contained'
               fullWidth
-              className={classes.addToCartBtn}
+              className={classes.MostSoldAddToCartForm}
             >
               ADD TO CART
             </Button>
@@ -202,14 +202,14 @@ const MostSoldCard = () => {
     </div>
   );
   const mobile = (
-    <div className={classes.mobile}>
-      <Card className={classes.root} elevation={1}>
+    <div className={classes.MostSoldCardMoBile}>
+      <Card className={classes.MostSoldCardRoot} elevation={1}>
         <CardActionArea>
           <Link href='#!'>
             <a
               target='_blank'
               rel='noreferrer noopener'
-              className={classes.cardLink}
+              className={classes.MostSoldCardLink}
             >
               <Image
                 src={baklava}
@@ -225,7 +225,7 @@ const MostSoldCard = () => {
                   color='textPrimary'
                   gutterBottom
                   paragraph
-                  className={classes.Typo1Mobile}
+                  className={classes.MostSoldCardTypo1Mobile}
                 >
                   Baklava - 1 kg
                 </Typography>
@@ -234,7 +234,7 @@ const MostSoldCard = () => {
                   color='textSecondary'
                   component='p'
                   gutterBottom
-                  className={classes.descMobile}
+                  className={classes.MostSoldCardDescription}
                 >
                   Delicious handmade baklava. Thinly rolled dough, pine nuts,
                   butter and sherbet.
@@ -243,7 +243,7 @@ const MostSoldCard = () => {
                   variant='subtitle1'
                   color='textPrimary'
                   component='p'
-                  className={classes.Typo2Mobile}
+                  className={classes.MostSoldCardTypo2Mobile}
                 >
                   €39.00
                 </Typography>
@@ -251,17 +251,17 @@ const MostSoldCard = () => {
             </a>
           </Link>
         </CardActionArea>
-        <CardContent className={classes.quantityWrapperMobile}>
-          <Grid item md={12} className={classes.quantityGrid}>
+        <CardContent className={classes.MostSoldQuantityWrapperMobile}>
+          <Grid item md={12} className={classes.MostSoldQuantityGrid}>
             <IconButton
-              className={classes.quantityBtnMobile}
+              className={classes.MostSoldQuantityBtnMobile}
               onClick={() => setQuantity(quantity - 1)}
             >
               <RemoveIcon fontSize='small' color='primary' />
             </IconButton>
             <span>{quantity}</span>
             <IconButton
-              className={classes.quantityBtnMobile}
+              className={classes.MostSoldQuantityBtnMobile}
               onClick={() => setQuantity(quantity + 1)}
             >
               <AddIcon fontSize='small' color='primary' />
@@ -274,7 +274,7 @@ const MostSoldCard = () => {
               size='small'
               variant='contained'
               fullWidth
-              className={classes.addToCartBtn}
+              className={classes.MostSoldAddToCartForm}
             >
               ADD TO CART
             </Button>
@@ -286,7 +286,7 @@ const MostSoldCard = () => {
 
   return (
     <>
-      {desktop}
+      {MostSoldCardDesktop}
       {mobile}
     </>
   );
