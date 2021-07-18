@@ -246,7 +246,11 @@ const Dashboard = ({ heroContent }) => {
                   Edit Pages
                 </Typography>
               </Grid>
-              <Grid item md={12} className={`${classes.gridFormItem}  `}>
+              <Grid
+                item
+                md={12}
+                className={`${classes.gridFormItem} ${classes.heroSection} `}
+              >
                 <Typography variant='h5' gutterBottom>
                   Hero Section
                 </Typography>{' '}
@@ -264,9 +268,10 @@ const Dashboard = ({ heroContent }) => {
                       >
                         <Image
                           src={img.secure_url}
-                          width={256}
-                          height={56}
+                          width={350}
+                          height={150}
                           key={img.asset_id}
+                          alt={`${process.env.NEXT_PUBLIC_URL} image`}
                         />{' '}
                         <IconButton
                           data-id={`${img.asset_id}`}

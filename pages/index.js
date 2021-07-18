@@ -1,8 +1,7 @@
 // @@@ nextjs @@@
-import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { signIn, signOut, useSession } from 'next-auth/client';
+import { signOut, useSession } from 'next-auth/client';
+import { connectToDatabase } from '../util/mongodb';
 // @@@ nextjs @@@
 
 // @@@ COMPONENT IMPORTS @@@
@@ -14,7 +13,23 @@ import Contact from '../components/index/Contact';
 import MoreProducts from '../components/index/MoreProducts';
 // @@@ COMPONENT IMPORTS @@@
 
-export default function Home() {
+export const getStaticProps = async () => {
+  const { db } = await connectToDatabase();
+
+  const getPagesFromDB = await db.collection('pages').find({}).toArray();
+  const getPages = await JSON.parse(JSON.stringify(getPagesFromDB));
+
+  const getHeroContent = getPages.filter((data) => data.section === 'hero');
+
+  return {
+    props: {
+      getHeroContent,
+    },
+    revalidate: 1,
+  };
+};
+
+export default function Home({ getHeroContent }) {
   const [session, loading] = useSession();
   const router = useRouter();
 
@@ -25,10 +40,9 @@ export default function Home() {
     });
     router.push(data.url);
   };
-  console.log(session);
   return (
     <>
-      <Hero></Hero>
+      <Hero getHeroContent={getHeroContent}></Hero>
       <MostSold></MostSold>
       <InformativeBanner></InformativeBanner>
       <About></About>

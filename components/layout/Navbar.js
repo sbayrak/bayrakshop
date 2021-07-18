@@ -549,6 +549,18 @@ const Navbar = () => {
                             </a>
                           </Link>
                         </MenuItem>
+                        {session.user.isAdmin && (
+                          <MenuItem
+                            onClick={handleClose}
+                            className={classes.menuItem}
+                          >
+                            <Link href='/dashboard'>
+                              <a className={classes.mobileProductsLinks}>
+                                <ArrowRightIcon /> Dashboard
+                              </a>
+                            </Link>
+                          </MenuItem>
+                        )}
                         <MenuItem
                           onClick={handleClose}
                           className={classes.menuItem}

@@ -7,9 +7,10 @@ import hero from '../../public/hero.png';
 
 // @@@ nextjs @@@
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { signIn, signOut, useSession } from 'next-auth/client';
+import { signOut, useSession } from 'next-auth/client';
 // @@@ nextjs @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -111,10 +112,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Hero = () => {
+const Hero = ({ getHeroContent }) => {
   const classes = useStyles();
   const [session, loading] = useSession();
+  const [heroTitle, setHeroTitle] = useState(getHeroContent[0].title);
+  const [heroImg, setHeroImg] = useState(getHeroContent[0].image[0].secure_url);
   const router = useRouter();
+  console.log(getHeroContent);
 
   const customSignOut = async () => {
     const data = await signOut({
@@ -123,23 +127,23 @@ const Hero = () => {
     });
     router.push(data.url);
   };
-  console.log(session);
+
+  console.log(heroTitle);
   return (
     <Box component='div' className={classes.root}>
       <div className={classes.hero}>
         <div className={classes.imgWrapper}>
           <Image
-            src={hero}
+            src={heroImg}
             className={classes.img}
             alt='koslowshop'
             layout='fill'
-            placeholder='blur'
             objectFit='cover'
           ></Image>
         </div>
         <div className={classes.heroTypos}>
           <Typography variant='h2' className={classes.Typo1}>
-            Handmade desserts.
+            {heroTitle}
           </Typography>
           <Typography variant='h5' className={classes.Typo2}>
             <Link href='#!'>
