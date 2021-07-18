@@ -415,7 +415,7 @@ const DashboardLeft = () => {
                   <li className={classes.accordionLi}>
                     <ArrowRightIcon color='secondary' />
                     &nbsp;
-                    <Link href='/dashboard/pages/home'>
+                    <Link href='/dashboard/pages'>
                       <a
                         rel='noreferrer noopener'
                         className={classes.accordionLiLink}
@@ -691,7 +691,7 @@ const DashboardLeft = () => {
               <li className={classes.accordionLi}>
                 <ArrowRightIcon color='secondary' />
                 &nbsp;
-                <Link href='/dashboard/pages/home'>
+                <Link href='/dashboard/pages'>
                   <a
                     rel='noreferrer noopener'
                     className={classes.accordionLiLink}

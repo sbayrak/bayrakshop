@@ -150,8 +150,6 @@ const AddNewProduct = ({ categoryResult }) => {
   const [snackbar, setSnackbar] = useState(true);
   const [spinner, setSpinner] = useState(false);
 
-  console.log(category);
-
   useEffect(() => {
     if (name.length > 1) setErrorName(false);
     if (price.length > 1) setErrorPrice(false);

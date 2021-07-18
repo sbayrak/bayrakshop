@@ -182,6 +182,25 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
   },
+  deleteBtn: {
+    color: 'rgba(244,67,54,0.85)',
+    backgroundColor: '#f6f6f6',
+    '&:hover': {
+      color: '#f6f6f6',
+      backgroundColor: 'rgba(244,67,54,0.85)',
+    },
+  },
+  categoryErrorWrapper: {
+    border: '1px solid red',
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(3),
+    borderRadius: '5px',
+    backgroundColor: 'rgba(244,67,54,0.85)',
+  },
+  productErrorTypo: {
+    marginLeft: theme.spacing(1),
+  },
 }));
 
 const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
@@ -190,6 +209,7 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
   const [name, setName] = useState('');
   const [categoryUrl, setCategoryUrl] = useState('');
   const [errorCategoryURL, setErrorCategoryURL] = useState(false);
+  const [categoryDelete, setCategoryDelete] = useState(false);
   const [errorName, setErrorName] = useState(false);
   const [successProduct, setSuccessProduct] = useState(false);
   const [snackbar, setSnackbar] = useState(true);
@@ -310,6 +330,53 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
               submit
             </Button>
           </Grid>
+          <Grid item md={6}></Grid>
+        </Grid>
+      </form>
+      <Grid
+        item
+        md={6}
+        xs={12}
+        className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
+      >
+        <Button
+          variant='contained'
+          onClick={(e) => setCategoryDelete(!categoryDelete)}
+          className={classes.deleteBtn}
+          fullWidth
+        >
+          DELETE CATEGORY
+        </Button>
+      </Grid>
+      <Grid item md={6}></Grid>
+      <form className={classes.form}>
+        <Grid
+          item
+          md={6}
+          xs={12}
+          className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
+          style={{ display: `${categoryDelete && 'inline'}` }}
+        >
+          <Button variant='contained' className={classes.deleteBtn}>
+            DELETE
+          </Button>
+          <Button variant='contained' className={classes.deleteBtn}>
+            CANCEL
+          </Button>
+        </Grid>
+        <Grid item md={6}></Grid>
+        <Grid item md={6}>
+          <Box component='div' className={classes.categoryErrorWrapper}>
+            <ErrorOutlineIcon color='secondary' />
+            <Typography
+              variant='body2'
+              color='secondary'
+              className={classes.productErrorTypo}
+            >
+              *Are you sure to delete this category ? Don't worry, the products
+              of this category will not be deleted.
+            </Typography>
+          </Box>
         </Grid>
       </form>
     </Grid>

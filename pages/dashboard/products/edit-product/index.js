@@ -35,6 +35,7 @@ export const getServerSideProps = async (context) => {
   const { db } = await connectToDatabase();
   let resultProduct;
   let noProduct = false;
+  let noCategory = false;
   let categoryResult;
 
   if (!urlQuery.id) {
@@ -45,6 +46,11 @@ export const getServerSideProps = async (context) => {
       quantity: '',
       image: [],
     };
+    categoryResult = {
+      name: '',
+      _id: '',
+    };
+    noCategory = false;
     noProduct = true;
   } else if (urlQuery.id.length < 24) {
     resultProduct = {
@@ -54,6 +60,11 @@ export const getServerSideProps = async (context) => {
       quantity: '',
       image: [],
     };
+    categoryResult = {
+      name: '',
+      _id: '',
+    };
+    noCategory = false;
     noProduct = true;
   } else {
     const getCategories = await db.collection('categories').find({}).toArray();
@@ -73,11 +84,17 @@ export const getServerSideProps = async (context) => {
       quantity: '',
       image: [],
     };
+    categoryResult = {
+      name: '',
+      _id: '',
+    };
+    noCategory = false;
     noProduct = true;
   }
   return {
     props: {
       noProduct,
+      noCategory,
       urlQuery,
       resultProduct,
       categoryResult,
@@ -198,6 +215,7 @@ const EditProduct = ({
   resultProduct,
   urlQuery,
   noProduct,
+  noCategory,
   categoryResult,
 }) => {
   const classes = useStyles();
@@ -220,7 +238,7 @@ const EditProduct = ({
   const [productError, setProductError] = useState(false);
 
   useEffect(() => {
-    if (!urlQuery.id || noProduct) {
+    if (!urlQuery.id || noProduct || noCategory) {
       setProductError(true);
     }
 
@@ -427,7 +445,7 @@ const EditProduct = ({
               <MenuItem value=''>
                 <em>None</em>
               </MenuItem>
-              {categoryResult &&
+              {categoryResult.name !== '' &&
                 categoryResult.map((categoryItem) => (
                   <MenuItem key={categoryItem._id} value={categoryItem.name}>
                     {categoryItem.name}
