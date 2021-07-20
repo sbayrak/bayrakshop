@@ -117,7 +117,6 @@ const Hero = ({ getHeroContent }) => {
   const [heroTitle, setHeroTitle] = useState(getHeroContent[0].title);
   const [heroImg, setHeroImg] = useState(getHeroContent[0].image[0].secure_url);
   const router = useRouter();
-  console.log(getHeroContent);
 
   // const customSignOut = async () => {
   //   const data = await signOut({
@@ -127,7 +126,6 @@ const Hero = ({ getHeroContent }) => {
   //   router.push(data.url);
   // };
 
-  console.log(heroTitle);
   return (
     <Box component='div' className={classes.root}>
       <div className={classes.hero}>

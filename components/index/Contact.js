@@ -141,7 +141,7 @@ const Contact = () => {
                     </a>
                   </Link>
                 </Grid>
-                <Grid md={12} className={classes.contactLeftGridItem}>
+                <Grid item md={12} className={classes.contactLeftGridItem}>
                   <div className={classes.contactLeftGridItemWrapper}>
                     <div className={classes.contactIconWrapper}>
                       <LocationOnIcon color='secondary' fontSize='small' />

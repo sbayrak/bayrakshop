@@ -483,7 +483,7 @@ const Footer = () => {
                 </li>
               </ul>
             </Grid>
-            <Grid xs={12}>
+            <Grid item xs={12}>
               <div
                 style={{
                   position: 'relative',

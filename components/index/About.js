@@ -9,7 +9,9 @@ import Image from 'next/image';
 import Link from 'next/link';
 import shop from '../../public/shop.jpg';
 import chefs from '../../public/chefs.jpg';
+import chefdeneme from '../../public/about_top_SIZE.jpg';
 import baklava from '../../public/baklava.jpg';
+import { useState, useEffect } from 'react';
 // @@@ nextjs @@@@
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +33,9 @@ const useStyles = makeStyles((theme) => ({
     borderLeft: '2px solid rgba(86,82,222,0.1)',
     borderTop: '2px solid rgba(86,82,222,0.1)',
   },
-  AboutRootRightGrid: {},
+  AboutRootRightGrid: {
+    marginTop: theme.spacing(5),
+  },
   AboutLeftGridItem: {
     padding: theme.spacing(0.5),
     paddingBottom: theme.spacing(1),
@@ -85,13 +89,21 @@ const useStyles = makeStyles((theme) => ({
   },
   AboutImgWrapper: {
     width: '100%',
+    height: '100%',
     position: 'relative',
     padding: theme.spacing(1),
+    marginBottom: theme.spacing(2),
     transition: '0.5s ease',
     '&:hover': {
       transform: 'scale(1.01)',
     },
-    [theme.breakpoints.down('xs')]: {},
+    [theme.breakpoints.down('xs')]: {
+      height: '75px',
+    },
+  },
+  aboutBottomImgWrapperGrid: {
+    // paddingLeft: theme.spacing(1),
+    // paddingRight: theme.spacing(1),
   },
   AboutImg: {
     borderRadius: '5px',
@@ -115,8 +127,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const About = () => {
+const About = ({ getAboutContent }) => {
   const classes = useStyles();
+  const [paragraph, setParagraph] = useState(getAboutContent[0].paragraph);
+  const [image, setImage] = useState(getAboutContent[0].image);
 
   const AboutDesktop = (
     <div className={classes.AboutDesktop}>
@@ -157,12 +171,7 @@ const About = () => {
                   Who are we ?
                 </Typography>
                 <Typography variant='body2' className={classes.AboutSubTitle2}>
-                  Our business comes from family. Since 1975 we make our
-                  products just like we started doing back then. Our business
-                  comes from family. Since 1975 we make our products just like
-                  we started doing back then. Our business comes from family.
-                  Since 1975 we make our products just like we started doing
-                  back then.
+                  {paragraph.parag1}
                 </Typography>
               </Grid>
               <Grid item md={12} className={classes.AboutLeftGridItem}>
@@ -173,14 +182,7 @@ const About = () => {
                   How we do it ?
                 </Typography>
                 <Typography variant='body2' className={classes.AboutSubTitle2}>
-                  We buy natural products from the village. Then our master
-                  chefs prepare dough and all other sweet things. All of our
-                  products are handmade, and fresh. We buy natural products from
-                  the village. Then our master chefs prepare dough and all other
-                  sweet things. All of our products are handmade, and fresh. We
-                  buy natural products from the village. Then our master chefs
-                  prepare dough and all other sweet things. All of our products
-                  are handmade, and fresh.
+                  {paragraph.parag2}
                 </Typography>
               </Grid>
               <Grid item md={12} className={classes.AboutLeftGridItem}>
@@ -196,12 +198,7 @@ const About = () => {
                   gutterBottom
                   paragraph
                 >
-                  Now, you can order and pay online! We deliver your order to
-                  your door. Or you can grab it from our shop. Now, you can
-                  order and pay online! We deliver your order to your door. Or
-                  you can grab it from our shop. Now, you can order and pay
-                  online! We deliver your order to your door. Or you can grab it
-                  from our shop.
+                  {paragraph.parag3}
                 </Typography>
               </Grid>
               <Grid item md={12} className={classes.AboutLeftGridItem}>
@@ -218,33 +215,66 @@ const About = () => {
             </Grid>
             <Grid item md={6} className={classes.AboutRootRightGrid}>
               <Grid item md={12}>
-                <div className={classes.AboutImgWrapper}>
+                <div
+                  className={classes.AboutImgWrapper}
+                  style={{ height: `${image[0].height + 50}px` }}
+                >
                   <Image
-                    src={chefs}
-                    layout='responsive'
+                    src={image[0].secure_url}
                     placeholder='blur'
+                    blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+                    layout='fill'
+                    objectFit='cover'
                     className={classes.AboutImg}
                   />
                 </div>
               </Grid>
               <Grid container item md={12}>
-                <Grid item md={6}>
-                  <div className={classes.AboutImgWrapper}>
+                <Grid
+                  item
+                  md={6}
+                  className={classes.aboutBottomImgWrapperGrid}
+                  style={{
+                    paddingRight: '10px',
+                  }}
+                >
+                  <div
+                    className={classes.AboutImgWrapper}
+                    style={{
+                      height: image[0].height,
+                    }}
+                  >
                     <Image
-                      src={baklava}
-                      layout='responsive'
+                      src={image[1].secure_url}
                       placeholder='blur'
+                      blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+                      layout='fill'
+                      objectFit='cover'
                       className={classes.AboutImg}
                     />
                   </div>
                 </Grid>
-                <Grid item md={6}>
-                  <div className={classes.AboutImgWrapper}>
+                <Grid
+                  item
+                  md={6}
+                  className={classes.aboutBottomImgWrapperGrid}
+                  style={{
+                    paddingLeft: '10px',
+                  }}
+                >
+                  <div
+                    className={classes.AboutImgWrapper}
+                    style={{
+                      height: image[0].height,
+                    }}
+                  >
                     <Image
-                      src={shop}
-                      layout='responsive'
-                      className={classes.AboutImg}
+                      src={image[2].secure_url}
                       placeholder='blur'
+                      blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+                      layout='fill'
+                      objectFit='cover'
+                      className={classes.AboutImg}
                     />
                   </div>
                 </Grid>
@@ -295,8 +325,7 @@ const About = () => {
                   Who are we ?
                 </Typography>
                 <Typography variant='body2' className={classes.AboutSubTitle2}>
-                  Our business comes from family. Since 1975 we make our
-                  products just like we started doing back then.
+                  {paragraph.parag1}
                 </Typography>
               </Grid>
               <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
@@ -307,9 +336,7 @@ const About = () => {
                   How we do it ?
                 </Typography>
                 <Typography variant='body2' className={classes.AboutSubTitle2}>
-                  We buy natural products from the village. Then our master
-                  chefs prepare dough and all other sweet things. All of our
-                  products are handmade, and fresh.
+                  {paragraph.parag2}
                 </Typography>
               </Grid>
               <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
@@ -325,8 +352,7 @@ const About = () => {
                   gutterBottom
                   paragraph
                 >
-                  Now, you can order and pay online! We deliver your order to
-                  your door. Or you can grab it from our shop.
+                  {paragraph.parag3}
                 </Typography>
               </Grid>
               <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
@@ -341,35 +367,37 @@ const About = () => {
                 </Link>
               </Grid>
             </Grid>
-            <Grid container item md={6} xs={12}>
-              <Grid item md={12} xs={4}>
+            <Grid container item md={6} xs={12} spacing={2}>
+              <Grid item md={12} xs={12}>
                 <div className={classes.AboutImgWrapper}>
                   <Image
-                    src={chefs}
-                    layout='responsive'
+                    src={image[0].secure_url}
                     placeholder='blur'
+                    blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+                    layout='fill'
+                    objectFit='cover'
                     className={classes.AboutImg}
                   />
                 </div>
               </Grid>
 
-              <Grid item md={6} xs={4}>
+              <Grid item md={6} xs={6}>
                 <div className={classes.AboutImgWrapper}>
                   <Image
-                    src={baklava}
-                    layout='responsive'
-                    placeholder='blur'
+                    src={image[1].secure_url}
+                    layout='fill'
+                    objectFit='cover'
                     className={classes.AboutImg}
                   />
                 </div>
               </Grid>
-              <Grid item md={6} xs={4}>
+              <Grid item md={6} xs={6}>
                 <div className={classes.AboutImgWrapper}>
                   <Image
-                    src={shop}
-                    layout='responsive'
+                    src={image[2].secure_url}
+                    layout='fill'
+                    objectFit='cover'
                     className={classes.AboutImg}
-                    placeholder='blur'
                   />
                 </div>
               </Grid>
