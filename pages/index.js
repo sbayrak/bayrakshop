@@ -33,21 +33,37 @@ import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
 import { makeStyles } from '@material-ui/core/styles';
 import About from '../components/index/About';
+import MostSoldCard from '../components/index/MostSoldCard';
 // @@@ MATERIAL-UI @@@
 
 export const getStaticProps = async () => {
   const { db } = await connectToDatabase();
 
+  // @@@ PAGES @@@
   const getPagesFromDB = await db.collection('pages').find({}).toArray();
   const getPages = await JSON.parse(JSON.stringify(getPagesFromDB));
 
   const getHeroContent = getPages.filter((data) => data.section === 'hero');
   const getAboutContent = getPages.filter((data) => data.section === 'about');
+  // @@@ PAGES @@@
+
+  // @@@ PRODUCTS @@@
+  const getMostLovedProductsFromDB = await db
+    .collection('products')
+    .find({})
+    .limit(8)
+    .toArray();
+  const getMostLovedProductsContent = await JSON.parse(
+    JSON.stringify(getMostLovedProductsFromDB)
+  );
+
+  // @@@ PRODUCTS @@@
 
   return {
     props: {
       getHeroContent,
       getAboutContent,
+      getMostLovedProductsContent,
     },
     revalidate: 1,
   };
@@ -75,8 +91,12 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: theme.typography.fontWeightRegular,
     padding: theme.spacing(1),
     marginBottom: theme.spacing(3),
+    paddingLeft: theme.spacing(2),
     borderLeft: '5px solid #5652de',
     borderRight: '5px solid #5652de',
+  },
+  MostSoldTypo2: {
+    color: '#5652de',
   },
   MostSoldSeperator: {
     height: '50px',
@@ -160,7 +180,11 @@ const useStyles = makeStyles((theme) => ({
   // @@@ MOSTSOLD SECTION @@@
 }));
 
-export default function Home({ getHeroContent, getAboutContent }) {
+export default function Home({
+  getHeroContent,
+  getAboutContent,
+  getMostLovedProductsContent,
+}) {
   const classes = useStyles();
   const [session, loading] = useSession();
   const router = useRouter();
@@ -177,210 +201,44 @@ export default function Home({ getHeroContent, getAboutContent }) {
     router.push(data.url);
   };
 
-  // @@@ SECTIONS @@@
-
-  const mostSoldCardDesktop = (
-    <div className={classes.MostSoldCardDesktop}>
-      <Card className={classes.MostSoldCardRoot} elevation={1}>
-        <CardActionArea>
-          <Link href='#!'>
-            <a
-              target='_blank'
-              rel='noreferrer noopener'
-              className={classes.MostSoldCardLink}
-            >
-              <Image
-                src={baklava}
-                layout='responsive'
-                alt='koslowshop-baklava'
-                title='KoslowShop Baklava'
-              ></Image>
-              <CardContent style={{ paddingBottom: 0, marginBottom: 0 }}>
-                <Typography
-                  gutterBottom
-                  variant='h5'
-                  component='h2'
-                  color='textPrimary'
-                >
-                  Baklava - 1 kg
-                </Typography>
-                <Typography
-                  variant='body2'
-                  color='textSecondary'
-                  component='p'
-                  gutterBottom
-                >
-                  Delicious handmade baklava. Thinly rolled dough, pine nuts,
-                  butter and sherbet.
-                </Typography>
-                <Typography
-                  variant='subtitle1'
-                  color='textPrimary'
-                  component='p'
-                >
-                  €39.00
-                </Typography>
-              </CardContent>
-            </a>
-          </Link>
-        </CardActionArea>
-        <CardContent className={classes.MostSoldQuantityWrapper}>
-          <Grid item md={12} className={classes.MostSoldQuantityGrid}>
-            <IconButton
-              className={classes.MostSoldQuantityBtn}
-              onClick={() => setQuantity(quantity - 1)}
-            >
-              <RemoveIcon fontSize='small' color='primary' />
-            </IconButton>
-            <span>{quantity}</span>
-            <IconButton
-              className={classes.MostSoldQuantityBtn}
-              onClick={() => setQuantity(quantity + 1)}
-            >
-              <AddIcon fontSize='small' color='primary' />
-            </IconButton>
-          </Grid>
-        </CardContent>
-        <CardActions>
-          <form style={{ width: '100%' }}>
-            <Button
-              size='small'
-              variant='contained'
-              fullWidth
-              className={classes.MostSoldAddToCartForm}
-            >
-              ADD TO CART
-            </Button>
-          </form>
-        </CardActions>
-      </Card>
-    </div>
-  );
-  const mostSoldCardMobile = (
-    <div className={classes.MostSoldCardMoBile}>
-      <Card className={classes.MostSoldCardRoot} elevation={1}>
-        <CardActionArea>
-          <Link href='#!'>
-            <a
-              target='_blank'
-              rel='noreferrer noopener'
-              className={classes.MostSoldCardLink}
-            >
-              <Image
-                src={baklava}
-                layout='responsive'
-                alt='koslowshop-baklava'
-                title='KoslowShop Baklava'
-              ></Image>
-              <CardContent style={{}}>
-                <Typography
-                  gutterBottom
-                  variant='h5'
-                  component='h2'
-                  color='textPrimary'
-                  gutterBottom
-                  paragraph
-                  className={classes.MostSoldCardTypo1Mobile}
-                >
-                  Baklava - 1 kg
-                </Typography>
-                <Typography
-                  variant='body2'
-                  color='textSecondary'
-                  component='p'
-                  gutterBottom
-                  className={classes.MostSoldCardDescription}
-                >
-                  Delicious handmade baklava. Thinly rolled dough, pine nuts,
-                  butter and sherbet.
-                </Typography>
-                <Typography
-                  variant='subtitle1'
-                  color='textPrimary'
-                  component='p'
-                  className={classes.MostSoldCardTypo2Mobile}
-                >
-                  €39.00
-                </Typography>
-              </CardContent>
-            </a>
-          </Link>
-        </CardActionArea>
-        <CardContent className={classes.MostSoldQuantityWrapperMobile}>
-          <Grid item md={12} className={classes.MostSoldQuantityGrid}>
-            <IconButton
-              className={classes.MostSoldQuantityBtnMobile}
-              onClick={() => setQuantity(quantity - 1)}
-            >
-              <RemoveIcon fontSize='small' color='primary' />
-            </IconButton>
-            <span>{quantity}</span>
-            <IconButton
-              className={classes.MostSoldQuantityBtnMobile}
-              onClick={() => setQuantity(quantity + 1)}
-            >
-              <AddIcon fontSize='small' color='primary' />
-            </IconButton>
-          </Grid>
-        </CardContent>
-        <CardActions>
-          <form style={{ width: '100%' }}>
-            <Button
-              size='small'
-              variant='contained'
-              fullWidth
-              className={classes.MostSoldAddToCartForm}
-            >
-              ADD TO CART
-            </Button>
-          </form>
-        </CardActions>
-      </Card>
-    </div>
-  );
   const mostSold = (
     <Box component='div' className={classes.MostSoldRoot}>
       <Container className={classes.MostSoldRootContainer}>
         <Typography variant='h5' className={classes.MostSoldTypo1}>
-          Most Wanted Desserts
+          Most Wanted <span className={classes.MostSoldTypo2}>Desserts</span>
         </Typography>
         <div className={classes.MostSoldSeperator}></div>
         <div className={classes.MostSoldTabRoot}>
           <Grid container spacing={3}>
-            <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+            {/* <Grid item md={3} xs={6}>
+              <MostSoldCard></MostSoldCard>
             </Grid>
             <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+              <MostSoldCard></MostSoldCard>
             </Grid>
             <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+              <MostSoldCard></MostSoldCard>
             </Grid>
             <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
-            </Grid>
-          </Grid>
-          <Grid container spacing={3}>
-            <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+              <MostSoldCard></MostSoldCard>
             </Grid>
             <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+              <MostSoldCard></MostSoldCard>
             </Grid>
             <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+              <MostSoldCard></MostSoldCard>
             </Grid>
             <Grid item md={3} xs={6}>
-              {mostSoldCardDesktop}
-              {mostSoldCardMobile}
+              <MostSoldCard></MostSoldCard>
             </Grid>
+            <Grid item md={3} xs={6}>
+              <MostSoldCard></MostSoldCard>
+            </Grid> */}
+            {getMostLovedProductsContent.map((item) => (
+              <Grid item md={3} xs={6} key={item._id}>
+                <MostSoldCard item={item} key={item._id} />
+              </Grid>
+            ))}
           </Grid>
         </div>
       </Container>

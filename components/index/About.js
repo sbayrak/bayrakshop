@@ -221,10 +221,10 @@ const About = ({ getAboutContent }) => {
                 >
                   <Image
                     src={image[0].secure_url}
-                    placeholder='blur'
                     blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
                     layout='fill'
                     objectFit='cover'
+                    alt='koslowshop-baklava'
                     className={classes.AboutImg}
                   />
                 </div>
@@ -246,10 +246,10 @@ const About = ({ getAboutContent }) => {
                   >
                     <Image
                       src={image[1].secure_url}
-                      placeholder='blur'
                       blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
                       layout='fill'
                       objectFit='cover'
+                      alt='koslowshop-baklava'
                       className={classes.AboutImg}
                     />
                   </div>
@@ -270,10 +270,10 @@ const About = ({ getAboutContent }) => {
                   >
                     <Image
                       src={image[2].secure_url}
-                      placeholder='blur'
                       blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
                       layout='fill'
                       objectFit='cover'
+                      alt='koslowshop-baklava'
                       className={classes.AboutImg}
                     />
                   </div>
@@ -372,10 +372,10 @@ const About = ({ getAboutContent }) => {
                 <div className={classes.AboutImgWrapper}>
                   <Image
                     src={image[0].secure_url}
-                    placeholder='blur'
                     blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
                     layout='fill'
                     objectFit='cover'
+                    alt='koslowshop-baklava'
                     className={classes.AboutImg}
                   />
                 </div>
@@ -387,6 +387,7 @@ const About = ({ getAboutContent }) => {
                     src={image[1].secure_url}
                     layout='fill'
                     objectFit='cover'
+                    alt='koslowshop-baklava'
                     className={classes.AboutImg}
                   />
                 </div>
@@ -397,6 +398,7 @@ const About = ({ getAboutContent }) => {
                     src={image[2].secure_url}
                     layout='fill'
                     objectFit='cover'
+                    alt='koslowshop-baklava'
                     className={classes.AboutImg}
                   />
                 </div>

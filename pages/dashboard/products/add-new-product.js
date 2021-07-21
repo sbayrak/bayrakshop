@@ -157,6 +157,12 @@ const AddNewProduct = ({ categoryResult }) => {
     if (category.length > 1) setErrorCategory(false);
   }, [name, price, description]);
 
+  useEffect(() => {
+    if (price < 0) {
+      setPrice(0);
+    }
+  }, [price]);
+
   const handleChange = (event) => {
     setSwitchState(!switchState);
   };
@@ -204,7 +210,7 @@ const AddNewProduct = ({ categoryResult }) => {
     if (!price) {
       setErrorPrice(true);
     }
-    if (!description) {
+    if (!description || !description.length < 59) {
       setErrorDescription(true);
     }
     if (!category) {
@@ -326,6 +332,7 @@ const AddNewProduct = ({ categoryResult }) => {
                         fullWidth
                         helperText='*Please enter price of the product'
                         color='primary'
+                        type='number'
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         error={errorPrice}
@@ -341,7 +348,7 @@ const AddNewProduct = ({ categoryResult }) => {
                         fullWidth
                         color='primary'
                         rows={4}
-                        helperText='*Please enter a relavant description of the product'
+                        helperText='*Please enter description at least length of 60 characters.'
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         error={errorDescription}
@@ -506,7 +513,13 @@ const AddNewProduct = ({ categoryResult }) => {
                     </form>
                   </div>
                 </Grid>
-                <Grid item md={6} xs={12}>
+                <Grid item md={6}></Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                  style={{ display: 'flex', flexDirection: 'row' }}
+                >
                   {uploadedImages &&
                     uploadedImages.map((img) => (
                       <div
@@ -515,10 +528,9 @@ const AddNewProduct = ({ categoryResult }) => {
                       >
                         <Image
                           src={img.secure_url}
-                          width={256}
-                          height={56}
-                          key={img.asset_id}
-                        />{' '}
+                          width={img.width}
+                          height={img.height}
+                        />
                         <IconButton
                           data-id={`${img.asset_id}`}
                           onClick={removeUploadedImageHandler}

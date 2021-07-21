@@ -43,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 345,
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
+    border: '1px inset rgba(86,82,222,0.2)',
   },
   MostSoldAddToCartForm: {
     textDecoration: 'none',
@@ -50,7 +51,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: '5px',
     marginBottom: theme.spacing(1),
     backgroundColor: '#5652de',
-    border: '1px solid #5652de',
     color: '#f6f6f6',
     textAlign: 'center',
     fontWeight: theme.typography.fontWeightMedium,
@@ -114,11 +114,27 @@ const useStyles = makeStyles((theme) => ({
       display: 'none',
     },
   },
+  imgWrapper: {
+    width: '100%',
+    height: '200px',
+    position: 'relative',
+    padding: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    transition: '0.5s ease',
+    '&:hover': {
+      transform: 'scale(1.01)',
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: '75px',
+    },
+  },
 }));
 
-const MostSoldCard = () => {
+const MostSoldCard = ({ item }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
+
+  console.log(item.name);
 
   useEffect(() => {
     if (quantity <= 1) setQuantity(1);
@@ -134,12 +150,20 @@ const MostSoldCard = () => {
               rel='noreferrer noopener'
               className={classes.MostSoldCardLink}
             >
-              <Image
-                src={baklava}
-                layout='responsive'
-                alt='koslowshop-baklava'
-                title='KoslowShop Baklava'
-              ></Image>
+              <div
+                className={classes.imgWrapper}
+                // style={{ height: `${item.image[0].height}px` }}
+              >
+                <Image
+                  src={item.image[0].secure_url}
+                  blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+                  layout='fill'
+                  objectFit='cover'
+                  alt={`KoslowShop ${item.name}`}
+                  className={classes.AboutImg}
+                />
+              </div>
+
               <CardContent style={{ paddingBottom: 0, marginBottom: 0 }}>
                 <Typography
                   gutterBottom
@@ -147,7 +171,7 @@ const MostSoldCard = () => {
                   component='h2'
                   color='textPrimary'
                 >
-                  Baklava - 1 kg
+                  {item.name}
                 </Typography>
                 <Typography
                   variant='body2'
@@ -155,15 +179,14 @@ const MostSoldCard = () => {
                   component='p'
                   gutterBottom
                 >
-                  Delicious handmade baklava. Thinly rolled dough, pine nuts,
-                  butter and sherbet.
+                  {item.description}
                 </Typography>
                 <Typography
                   variant='subtitle1'
                   color='textPrimary'
                   component='p'
                 >
-                  €39.00
+                  €{item.price}.00
                 </Typography>
               </CardContent>
             </a>
@@ -212,12 +235,12 @@ const MostSoldCard = () => {
               className={classes.MostSoldCardLink}
             >
               <Image
-                src={baklava}
-                layout='responsive'
-                alt='koslowshop-baklava'
-                title='KoslowShop Baklava'
+                src={item.image[0].secure_url}
+                layout='fill'
+                alt={`KoslowShop - ${item.name}`}
+                title={`KoslowShop - ${item.name}`}
               ></Image>
-              <CardContent style={{}}>
+              <CardContent>
                 <Typography
                   gutterBottom
                   variant='h5'
@@ -227,7 +250,7 @@ const MostSoldCard = () => {
                   paragraph
                   className={classes.MostSoldCardTypo1Mobile}
                 >
-                  Baklava - 1 kg
+                  {item.name}
                 </Typography>
                 <Typography
                   variant='body2'
@@ -236,8 +259,7 @@ const MostSoldCard = () => {
                   gutterBottom
                   className={classes.MostSoldCardDescription}
                 >
-                  Delicious handmade baklava. Thinly rolled dough, pine nuts,
-                  butter and sherbet.
+                  {item.description}
                 </Typography>
                 <Typography
                   variant='subtitle1'
@@ -245,7 +267,7 @@ const MostSoldCard = () => {
                   component='p'
                   className={classes.MostSoldCardTypo2Mobile}
                 >
-                  €39.00
+                  €{item.price}
                 </Typography>
               </CardContent>
             </a>

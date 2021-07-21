@@ -107,7 +107,7 @@ const Contact = () => {
                     <span className={classes.contactTypo2}>us ?</span>
                   </Typography>
                 </Grid>
-                <Grid md={12} className={classes.contactLeftGridItem}>
+                <Grid item md={12} className={classes.contactLeftGridItem}>
                   <Link href='tel:+491112223344'>
                     <a className={classes.contactLeftGridItemLink}>
                       <div className={classes.contactLeftGridItemWrapper}>
@@ -124,7 +124,7 @@ const Contact = () => {
                     </a>
                   </Link>
                 </Grid>
-                <Grid md={12} className={classes.contactLeftGridItem}>
+                <Grid item md={12} className={classes.contactLeftGridItem}>
                   <Link href='mailto:info@koslowshop.com'>
                     <a className={classes.contactLeftGridItemLink}>
                       <div className={classes.contactLeftGridItemWrapper}>
