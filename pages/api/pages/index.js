@@ -23,7 +23,7 @@ export default async (req, res) => {
         }
       );
 
-      res.status(201).json(updateHeroSection);
+      res.status(200).json(updateHeroSection);
     } else if (req.query.section === 'about') {
       const { paragraph, image } = req.body;
 
@@ -43,7 +43,33 @@ export default async (req, res) => {
         }
       );
 
-      res.status(201).json(updateAboutSection);
+      res.status(200).json(updateAboutSection);
+    } else if (req.query.section === 'contact') {
+      const { tel, email, address } = req.body;
+      let maps = '';
+      if (req.body.maps) {
+        maps = req.body.maps;
+      }
+
+      const findSection = await db
+        .collection('pages')
+        .findOne({ section: req.query.section });
+
+      const updateContactSection = await db.collection('pages').updateOne(
+        {
+          _id: findSection._id,
+        },
+        {
+          $set: {
+            tel: tel,
+            email: email,
+            address: address,
+            maps: maps,
+          },
+        }
+      );
+
+      res.status(200).json(updateContactSection);
     }
   }
 };

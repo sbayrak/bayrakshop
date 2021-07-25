@@ -35,14 +35,20 @@ export const getStaticProps = async () => {
   const fillAboutContent = getPages.filter(
     (pageItem) => pageItem.section === 'about'
   );
+  const fillContactContent = getPages.filter(
+    (pageItem) => pageItem.section === 'contact'
+  );
+
   const heroContent = fillHeroContent[0];
   const aboutContent = fillAboutContent[0];
+  const contactContent = fillContactContent[0];
   // @@@ HERO CONTENT @@@
 
   return {
     props: {
       heroContent,
       aboutContent,
+      contactContent,
     },
   };
 };
@@ -115,9 +121,15 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     overflow: 'hidden',
   },
+  heroSection: {
+    marginBottom: theme.spacing(20),
+  },
+  contactItem: {
+    marginBottom: theme.spacing(2),
+  },
 }));
 
-const Dashboard = ({ heroContent, aboutContent }) => {
+const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
   const classes = useStyles();
   const [imageState, setImageState] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -140,6 +152,16 @@ const Dashboard = ({ heroContent, aboutContent }) => {
   const [successHero, setSuccessHero] = useState(false);
   const [snackbar, setSnackbar] = useState(true);
 
+  const [contactTel, setContactTel] = useState('');
+  const [errorContactTel, setErrorContactTel] = useState(false);
+  const [contactEmail, setContactEmail] = useState('');
+  const [errorContactEmail, setErrorContactEmail] = useState(false);
+  const [contactAddress, setContactAddress] = useState('');
+  const [errorContactAddress, setErrorContactAddress] = useState(false);
+  const [contactMaps, setContactMaps] = useState('');
+
+  console.log(contactContent);
+
   useEffect(() => {
     if (heroContent) {
       setHeroTitle(heroContent.title);
@@ -150,6 +172,12 @@ const Dashboard = ({ heroContent, aboutContent }) => {
       setParag1(aboutContent.paragraph.parag1);
       setParag2(aboutContent.paragraph.parag2);
       setParag3(aboutContent.paragraph.parag3);
+    }
+    if (contactContent) {
+      setContactTel(contactContent.tel);
+      setContactEmail(contactContent.email);
+      setContactAddress(contactContent.address);
+      setContactMaps(contactContent.maps);
     }
   }, []);
 
@@ -187,7 +215,35 @@ const Dashboard = ({ heroContent, aboutContent }) => {
     if (parag3.length >= 1) {
       setErrorParag3(false);
     }
-  }, [uploadedImages, heroTitle, aboutUploadedImages, parag1, parag2, parag3]);
+    if (!contactTel) {
+      setErrorContactTel(true);
+    }
+    if (!contactEmail) {
+      setErrorContactEmail(true);
+    }
+    if (!contactAddress) {
+      setErrorContactAddress(true);
+    }
+    if (contactTel.length > 1) {
+      setErrorContactTel(false);
+    }
+    if (contactEmail.length > 1) {
+      setErrorContactEmail(false);
+    }
+    if (contactAddress.length > 1) {
+      setErrorContactAddress(false);
+    }
+  }, [
+    uploadedImages,
+    heroTitle,
+    aboutUploadedImages,
+    parag1,
+    parag2,
+    parag3,
+    contactTel,
+    contactAddress,
+    contactEmail,
+  ]);
 
   const removeUploadedImageHandler = (e) => {
     e.preventDefault();
@@ -336,13 +392,49 @@ const Dashboard = ({ heroContent, aboutContent }) => {
     }
   };
 
+  const contactSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    if (!contactTel) {
+      setContactTel(true);
+    }
+    if (!contactEmail) {
+      setContactEmail(true);
+    }
+    if (!contactAddress) {
+      setContactAddress(true);
+    } else {
+      const submitData = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/pages?section=contact`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            tel: contactTel,
+            email: contactEmail,
+            address: contactAddress,
+            maps: contactMaps,
+          }),
+        }
+      );
+
+      const result = await submitData.json();
+
+      if (result.result) {
+        setSuccessHero(true);
+      }
+    }
+  };
+
   const heroSection = (
     <Grid
       item
       md={12}
       className={`${classes.gridFormItem} ${classes.heroSection} `}
     >
-      <Typography variant='h5' gutterBottom>
+      <Typography variant='h4' gutterBottom>
         Hero Section
       </Typography>{' '}
       <Grid item md={6}></Grid>
@@ -474,6 +566,172 @@ const Dashboard = ({ heroContent, aboutContent }) => {
       <Grid item md={6}></Grid>
     </Grid>
   );
+  const aboutSection = (
+    <Grid
+      item
+      md={12}
+      className={`${classes.gridFormItem} ${classes.heroSection} `}
+    >
+      <Typography variant='h4' gutterBottom>
+        About Section
+      </Typography>
+      <Grid item md={6}></Grid>
+      <Grid item md={6} xs={12} className={classes.gridFormItem}>
+        <Typography variant='h6' className={classes.activeTypo}>
+          Image Section
+        </Typography>
+        <div style={{ display: 'flex' }}>
+          {aboutUploadedImages &&
+            aboutUploadedImages.map((img) => (
+              <div
+                data-id={`${img.asset_id}`}
+                className={`${classes.imgWrapper} ${classes.aboutImgWrapper}  `}
+                key={img.asset_id}
+              >
+                <Image
+                  src={img.secure_url}
+                  width={350}
+                  height={200}
+                  key={img.asset_id}
+                  alt={`${process.env.NEXT_PUBLIC_URL} image`}
+                />
+                <IconButton
+                  data-id={`${img.asset_id}`}
+                  onClick={aboutRemoveUploadedImageHandler}
+                >
+                  <CancelIcon style={{ color: '#F44336' }} />
+                </IconButton>
+              </div>
+            ))}
+        </div>
+      </Grid>
+      <Grid
+        item
+        md={6}
+        xs={12}
+        className={`${classes.gridFormItem} ${classes.imageWrapper}`}
+        style={{
+          border: `${
+            errorAboutUploadedImages
+              ? `1px solid rgba(222,0,0,1)`
+              : `1px solid rgba(0,0,0,0.2)`
+          }`,
+        }}
+      >
+        <Typography variant='h6' className={classes.activeTypo}>
+          Image
+        </Typography>
+        <div className={classes.root}>
+          <form
+            onSubmit={aboutNewImageUploadHandler}
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <div style={{ marginRight: '20px' }}>
+              <input
+                accept='image/*'
+                className={classes.input}
+                id='contained-button-file22'
+                multiple
+                type='file'
+                onChange={(e) => setAboutImageState(e.target.files[0])}
+              />
+              <label htmlFor='contained-button-file22'>
+                <Button
+                  variant='contained'
+                  color='primary'
+                  component='span'
+                  disableElevation
+                  onChange={(e) => setAboutImageState(e.target.files[0])}
+                  disabled={aboutUploadedImages.length > 2 ? true : false}
+                >
+                  Select
+                </Button>
+              </label>
+            </div>
+            <Button
+              variant='contained'
+              color='primary'
+              fullWidth
+              type='submit'
+              disableElevation
+              startIcon={<CloudUploadIcon />}
+              disabled={aboutUploadedImages.length > 2 ? true : false}
+            >
+              {spinner ? (
+                <CircularProgress color='secondary' fontSize='small' />
+              ) : (
+                'Upload'
+              )}
+            </Button>
+          </form>
+          {aboutUploadedImages.length > 2 && (
+            <Typography variant='caption'>
+              *You can only upload 3 photo.
+            </Typography>
+          )}
+        </div>
+      </Grid>
+      <form onSubmit={aboutSubmitHandler}>
+        <Grid item md={6} className={classes.gridFormItem}>
+          <Typography variant='h6'>Paragraphs</Typography>
+          <TextField
+            variant='outlined'
+            fullWidth
+            value={parag1}
+            onChange={(e) => setParag1(e.target.value)}
+            error={errorParag1}
+            className={classes.aboutParagTxt}
+            multiline
+            rows={4}
+            placeholder='Please type relative answer of question of "Who are we ?" '
+          ></TextField>
+          <TextField
+            variant='outlined'
+            fullWidth
+            value={parag2}
+            onChange={(e) => setParag2(e.target.value)}
+            error={errorParag2}
+            className={classes.aboutParagTxt}
+            multiline
+            rows={4}
+            placeholder='Please type relative answer of question of "How we do it ?" '
+          ></TextField>
+          <TextField
+            variant='outlined'
+            fullWidth
+            value={parag3}
+            onChange={(e) => setParag3(e.target.value)}
+            error={errorParag3}
+            className={classes.aboutParagTxt}
+            multiline
+            rows={4}
+            placeholder='Please type relative answer of question of "How can I order ?" '
+          ></TextField>
+        </Grid>
+        <Grid item md={6}>
+          <Button
+            type='submit'
+            variant='contained'
+            fullWidth
+            color='primary'
+            disabled={uploadedImages.length <= 0 || !heroTitle ? true : false}
+          >
+            update
+          </Button>
+          {uploadedImages.length <= 0 && (
+            <Typography variant='caption'>
+              *Please upload at least 1 photo.
+            </Typography>
+          )}
+        </Grid>
+      </form>
+      <Grid item md={6}></Grid>
+    </Grid>
+  );
 
   return (
     <>
@@ -499,171 +757,81 @@ const Dashboard = ({ heroContent, aboutContent }) => {
                     color='secondary'
                     style={{ marginRight: '10px' }}
                   />
-                  Success! The page has been saved.
+                  Success! The page has been updated.
                 </Typography>
               </Snackbar>
             )}
             <Grid container item xs={12} className={classes.gridContainer}>
               <Grid item md={12} className={`${classes.gridFormItem}  `}>
-                <Typography variant='h4' gutterBottom paragraph>
+                <Typography variant='h3' gutterBottom paragraph>
                   Edit Pages
                 </Typography>
               </Grid>
               {heroSection}
+              {aboutSection}
 
               <Grid
                 item
                 md={12}
                 className={`${classes.gridFormItem} ${classes.heroSection} `}
               >
-                <Typography variant='h5' gutterBottom>
-                  About Section
+                <Typography variant='h4' gutterBottom paragraph>
+                  Contact Section
                 </Typography>
                 <Grid item md={6}></Grid>
-                <Grid item md={6} xs={12} className={classes.gridFormItem}>
-                  <Typography variant='h6' className={classes.activeTypo}>
-                    Image Section
-                  </Typography>
-                  <div style={{ display: 'flex' }}>
-                    {aboutUploadedImages &&
-                      aboutUploadedImages.map((img) => (
-                        <div
-                          data-id={`${img.asset_id}`}
-                          className={`${classes.imgWrapper} ${classes.aboutImgWrapper}  `}
-                          key={img.asset_id}
-                        >
-                          <Image
-                            src={img.secure_url}
-                            width={350}
-                            height={150}
-                            key={img.asset_id}
-                            alt={`${process.env.NEXT_PUBLIC_URL} image`}
-                          />
-                          <IconButton
-                            data-id={`${img.asset_id}`}
-                            onClick={aboutRemoveUploadedImageHandler}
-                          >
-                            <CancelIcon style={{ color: '#F44336' }} />
-                          </IconButton>
-                        </div>
-                      ))}
-                  </div>
-                </Grid>
-                <Grid
-                  item
-                  md={6}
-                  xs={12}
-                  className={`${classes.gridFormItem} ${classes.imageWrapper}`}
-                  style={{
-                    border: `${
-                      errorAboutUploadedImages
-                        ? `1px solid rgba(222,0,0,1)`
-                        : `1px solid rgba(0,0,0,0.2)`
-                    }`,
-                  }}
-                >
-                  <Typography variant='h6' className={classes.activeTypo}>
-                    Image
-                  </Typography>
-                  <div className={classes.root}>
-                    <form
-                      onSubmit={aboutNewImageUploadHandler}
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                      }}
-                    >
-                      <div style={{ marginRight: '20px' }}>
-                        <input
-                          accept='image/*'
-                          className={classes.input}
-                          id='contained-button-file22'
-                          multiple
-                          type='file'
-                          onChange={(e) =>
-                            setAboutImageState(e.target.files[0])
-                          }
-                        />
-                        <label htmlFor='contained-button-file22'>
-                          <Button
-                            variant='contained'
-                            color='primary'
-                            component='span'
-                            disableElevation
-                            onChange={(e) =>
-                              setAboutImageState(e.target.files[0])
-                            }
-                            disabled={
-                              aboutUploadedImages.length > 2 ? true : false
-                            }
-                          >
-                            Select
-                          </Button>
-                        </label>
-                      </div>
-                      <Button
-                        variant='contained'
-                        color='primary'
-                        fullWidth
-                        type='submit'
-                        disableElevation
-                        startIcon={<CloudUploadIcon />}
-                        disabled={aboutUploadedImages.length > 2 ? true : false}
-                      >
-                        {spinner ? (
-                          <CircularProgress
-                            color='secondary'
-                            fontSize='small'
-                          />
-                        ) : (
-                          'Upload'
-                        )}
-                      </Button>
-                    </form>
-                    {aboutUploadedImages.length > 2 && (
-                      <Typography variant='caption'>
-                        *You can only upload 3 photo.
-                      </Typography>
-                    )}
-                  </div>
-                </Grid>
-                <form onSubmit={aboutSubmitHandler}>
+
+                <form onSubmit={contactSubmitHandler}>
                   <Grid item md={6} className={classes.gridFormItem}>
-                    <Typography variant='h6'>Paragraphs</Typography>
-                    <TextField
-                      variant='outlined'
-                      fullWidth
-                      value={parag1}
-                      onChange={(e) => setParag1(e.target.value)}
-                      error={errorParag1}
-                      className={classes.aboutParagTxt}
-                      multiline
-                      rows={4}
-                      placeholder='Please type relative answer of question of "Who are we ?" '
-                    ></TextField>
-                    <TextField
-                      variant='outlined'
-                      fullWidth
-                      value={parag2}
-                      onChange={(e) => setParag2(e.target.value)}
-                      error={errorParag2}
-                      className={classes.aboutParagTxt}
-                      multiline
-                      rows={4}
-                      placeholder='Please type relative answer of question of "How we do it ?" '
-                    ></TextField>
-                    <TextField
-                      variant='outlined'
-                      fullWidth
-                      value={parag3}
-                      onChange={(e) => setParag3(e.target.value)}
-                      error={errorParag3}
-                      className={classes.aboutParagTxt}
-                      multiline
-                      rows={4}
-                      placeholder='Please type relative answer of question of "How can I order ?" '
-                    ></TextField>
+                    <div className={classes.contactItem}>
+                      <Typography variant='h6'>Telephone Number</Typography>
+                      <TextField
+                        variant='outlined'
+                        fullWidth
+                        value={contactTel}
+                        onChange={(e) => setContactTel(e.target.value)}
+                        error={errorContactTel}
+                        className={classes.aboutParagTxt}
+                        placeholder='Please type telephone number of your shop.'
+                        helperText='e.g. 491112223344'
+                      ></TextField>
+                    </div>
+
+                    <div className={classes.contactItem}>
+                      <Typography variant='h6'>E-Mail</Typography>
+                      <TextField
+                        variant='outlined'
+                        fullWidth
+                        value={contactEmail}
+                        onChange={(e) => setContactEmail(e.target.value)}
+                        error={errorContactEmail}
+                        className={classes.aboutParagTxt}
+                        placeholder='Please type e-mail of your shop.'
+                      ></TextField>
+                    </div>
+
+                    <div className={classes.contactItem}>
+                      <Typography variant='h6'>Address</Typography>
+                      <TextField
+                        variant='outlined'
+                        fullWidth
+                        value={contactAddress}
+                        onChange={(e) => setContactAddress(e.target.value)}
+                        error={errorContactAddress}
+                        className={classes.aboutParagTxt}
+                        placeholder='Please type address of your shop.'
+                      ></TextField>
+                    </div>
+                    <div className={classes.contactItem}>
+                      <Typography variant='h6'>Google Maps</Typography>
+                      <TextField
+                        variant='outlined'
+                        fullWidth
+                        value={contactMaps}
+                        onChange={(e) => setContactMaps(e.target.value)}
+                        className={classes.aboutParagTxt}
+                        placeholder='Please type link of Google Maps of your shop.'
+                      ></TextField>
+                    </div>
                   </Grid>
                   <Grid item md={6}>
                     <Button
@@ -672,14 +840,16 @@ const Dashboard = ({ heroContent, aboutContent }) => {
                       fullWidth
                       color='primary'
                       disabled={
-                        uploadedImages.length <= 0 || !heroTitle ? true : false
+                        !contactTel || !contactEmail || !contactAddress
+                          ? true
+                          : false
                       }
                     >
                       update
                     </Button>
-                    {uploadedImages.length <= 0 && (
+                    {(!contactTel || !contactEmail || !contactAddress) && (
                       <Typography variant='caption'>
-                        *Please upload at least 1 photo.
+                        *Please fill all fields.
                       </Typography>
                     )}
                   </Grid>

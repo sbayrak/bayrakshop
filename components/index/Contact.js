@@ -7,8 +7,8 @@ import LocationOnIcon from '@material-ui/icons/LocationOn';
 // @@@ MATERIAL-UI @@@@
 
 // @@@ nextjs @@@@
-import Image from 'next/image';
 import Link from 'next/link';
+import { useState } from 'react';
 // @@@ nextjs @@@@
 
 const useStyles = makeStyles((theme) => ({
@@ -82,8 +82,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Contact = () => {
+const Contact = ({ getContactContent }) => {
   const classes = useStyles();
+  const [tel, setTel] = useState(getContactContent[0].tel);
+  const [email, setEmail] = useState(getContactContent[0].email);
+  const [address, setAddress] = useState(getContactContent[0].address);
+  const [maps, setMaps] = useState(getContactContent[0].maps);
+
   return (
     <>
       <Box component='div' className={classes.rootContact}>
@@ -108,7 +113,7 @@ const Contact = () => {
                   </Typography>
                 </Grid>
                 <Grid item md={12} className={classes.contactLeftGridItem}>
-                  <Link href='tel:+491112223344'>
+                  <Link href={`tel:+${tel}`}>
                     <a className={classes.contactLeftGridItemLink}>
                       <div className={classes.contactLeftGridItemWrapper}>
                         <div className={classes.contactIconWrapper}>
@@ -118,14 +123,15 @@ const Contact = () => {
                           variant='subtitle1'
                           className={classes.contactLeftGridItemTypo}
                         >
-                          +49 111 222 33 44
+                          +{tel.slice(0, 2)} {tel.slice(2, 5)} {tel.slice(5, 8)}{' '}
+                          {tel.slice(8, 10)} {tel.slice(10, 12)}
                         </Typography>
                       </div>
                     </a>
                   </Link>
                 </Grid>
                 <Grid item md={12} className={classes.contactLeftGridItem}>
-                  <Link href='mailto:info@koslowshop.com'>
+                  <Link href={`mailto:${email}`}>
                     <a className={classes.contactLeftGridItemLink}>
                       <div className={classes.contactLeftGridItemWrapper}>
                         <div className={classes.contactIconWrapper}>
@@ -135,7 +141,7 @@ const Contact = () => {
                           variant='subtitle1'
                           className={classes.contactLeftGridItemTypo}
                         >
-                          info@koslowshop.com
+                          {email}
                         </Typography>
                       </div>
                     </a>
@@ -150,7 +156,7 @@ const Contact = () => {
                       variant='subtitle1'
                       className={classes.contactLeftGridItemTypo}
                     >
-                      12345 Copperhead st. Berlin, Germany, DE 12345
+                      {address}
                     </Typography>
                   </div>
                 </Grid>

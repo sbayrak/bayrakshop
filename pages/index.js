@@ -45,6 +45,9 @@ export const getStaticProps = async () => {
 
   const getHeroContent = getPages.filter((data) => data.section === 'hero');
   const getAboutContent = getPages.filter((data) => data.section === 'about');
+  const getContactContent = getPages.filter(
+    (data) => data.section === 'contact'
+  );
   // @@@ PAGES @@@
 
   // @@@ PRODUCTS @@@
@@ -64,6 +67,7 @@ export const getStaticProps = async () => {
       getHeroContent,
       getAboutContent,
       getMostLovedProductsContent,
+      getContactContent,
     },
     revalidate: 1,
   };
@@ -183,6 +187,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Home({
   getHeroContent,
   getAboutContent,
+  getContactContent,
   getMostLovedProductsContent,
 }) {
   const classes = useStyles();
@@ -210,30 +215,6 @@ export default function Home({
         <div className={classes.MostSoldSeperator}></div>
         <div className={classes.MostSoldTabRoot}>
           <Grid container spacing={3}>
-            {/* <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid>
-            <Grid item md={3} xs={6}>
-              <MostSoldCard></MostSoldCard>
-            </Grid> */}
             {getMostLovedProductsContent.map((item) => (
               <Grid item md={3} xs={6} key={item._id}>
                 <MostSoldCard item={item} key={item._id} />
@@ -254,7 +235,7 @@ export default function Home({
       <InformativeBanner></InformativeBanner>
       <About getAboutContent={getAboutContent}></About>
       <MoreProducts></MoreProducts>
-      <Contact></Contact>
+      <Contact getContactContent={getContactContent}></Contact>
     </>
   );
 }
