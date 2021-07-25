@@ -11,12 +11,14 @@ import {
   Snackbar,
   Select,
   MenuItem,
+  Modal,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import DashboardLeft from '../../../../components/dashboard/DashboardLeft';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import CancelIcon from '@material-ui/icons/Cancel';
+import DeleteIcon from '@material-ui/icons/Delete';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 // @@@ MATERIAL-UI @@@
 
@@ -24,7 +26,7 @@ import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connectToDatabase } from '../../../../util/mongodb';
 import { ObjectId } from 'mongodb';
 
@@ -209,6 +211,66 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: '1px',
     borderBottom: '1px solid #f6f6f6',
   },
+  modalBox: {
+    position: 'fixed',
+    width: '100%',
+    height: '100vh',
+    backgroundColor: 'rgba(33,33,33,0.3)',
+    zIndex: 99,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalWrapper: {
+    backgroundColor: '#fafafa',
+    borderRadius: '5px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+    boxShadow: '2px 2px 10px 1px rgba(0,0,0,0.5)',
+  },
+  modalItemContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+  },
+  modalGridItem: {
+    padding: theme.spacing(1),
+    marginBottom: theme.spacing(3),
+  },
+  modalBtnWrapper: {
+    display: 'flex',
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  },
+  modalBtn: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  modalCancel: {
+    marginRight: theme.spacing(3),
+  },
+  modalDelete: {
+    backgroundColor: '#F44336',
+    color: '#f6f6f6',
+    '&:hover': {
+      backgroundColor: '#F11336',
+      color: '#f6f6f6',
+    },
+  },
+  modalRoot: {
+    marginTop: theme.spacing(10),
+  },
 }));
 
 const EditProduct = ({
@@ -236,6 +298,9 @@ const EditProduct = ({
   const [snackbar, setSnackbar] = useState(true);
   const [spinner, setSpinner] = useState(false);
   const [productError, setProductError] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
+  const [deleteSpinner, setDeleteSpinner] = useState(false);
+  const rootRef = useRef(null);
 
   useEffect(() => {
     if (!urlQuery.id || noProduct || noCategory) {
@@ -351,6 +416,31 @@ const EditProduct = ({
       setSpinner(false);
     }
     setUploadedImages([...uploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
+  };
+
+  const deleteProductHandler = async (e) => {
+    e.preventDefault();
+    setDeleteSpinner(true);
+
+    console.log(e.currentTarget.dataset.id);
+    const deleteProduct = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/products`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: resultProduct._id }),
+      }
+    );
+
+    const result = await deleteProduct.json();
+    if (result.msg === 'ok') {
+      setTimeout(() => {
+        setDeleteSpinner(false);
+        router.push(`${process.env.NEXT_PUBLIC_URL}/dashboard/products`);
+      }, 1000);
+    }
   };
 
   const editProductContainer = (
@@ -569,7 +659,7 @@ const EditProduct = ({
               <Image
                 src={img.secure_url}
                 width={256}
-                height={56}
+                height={100}
                 key={img.asset_id}
               />{' '}
               <IconButton
@@ -582,6 +672,85 @@ const EditProduct = ({
           ))}
       </Grid>
       <Grid item md={6}></Grid>
+      <Grid item md={6}>
+        <div ref={rootRef} className={classes.modalRoot}>
+          <Modal
+            disablePortal
+            disableEnforceFocus
+            disableAutoFocus
+            open={openModal}
+            aria-labelledby='server-modal-title'
+            aria-describedby='server-modal-description'
+            className={classes.modal}
+            container={() => rootRef.current}
+          >
+            <Box component='div' className={classes.modalBox}>
+              <Box component='div' className={classes.modalWrapper}>
+                <div className={classes.modalItemContainer}>
+                  <Grid item md={12} className={classes.modalGridItem}>
+                    <DeleteIcon
+                      fontSize='large'
+                      style={{ color: '#F44336', fontSize: '60px' }}
+                    />
+                  </Grid>
+                  <Grid item md={12} className={classes.modalGridItem}>
+                    <Typography variant='h5' color='textPrimary'>
+                      You are about to delete this product
+                    </Typography>
+                  </Grid>
+                  <Grid item md={12} className={classes.modalGridItem}>
+                    <Typography
+                      variant='body2'
+                      color='textSecondary'
+                      align='center'
+                    >
+                      Do you really would like to delete this product ? <br />{' '}
+                      This cannot be undone.
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    md={12}
+                    className={`${classes.modalGridItem} ${classes.modalBtnWrapper}`}
+                  >
+                    <Button
+                      disableElevation
+                      variant='contained'
+                      className={`${classes.modalBtn} ${classes.modalCancel}`}
+                      onClick={(e) => setOpenModal(false)}
+                    >
+                      CANCEL
+                    </Button>
+                    <form onSubmit={deleteProductHandler}>
+                      <Button
+                        disableElevation
+                        variant='contained'
+                        type='submit'
+                        className={`${classes.modalBtn} ${classes.modalDelete}`}
+                        data-id={`${resultProduct._id}`}
+                      >
+                        {deleteSpinner ? (
+                          <CircularProgress color='secondary' size='2em' />
+                        ) : (
+                          'DELETE'
+                        )}
+                      </Button>
+                    </form>
+                  </Grid>
+                </div>
+              </Box>
+            </Box>
+          </Modal>
+        </div>
+        <Button
+          variant='contained'
+          fullWidth
+          onClick={(e) => setOpenModal(!openModal)}
+          style={{ color: '#f6f6f6', backgroundColor: '#f44336' }}
+        >
+          DELETE PRODUCT
+        </Button>
+      </Grid>
     </Grid>
   );
 

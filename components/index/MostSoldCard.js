@@ -134,8 +134,6 @@ const MostSoldCard = ({ item }) => {
   const classes = useStyles();
   const [quantity, setQuantity] = useState(1);
 
-  console.log(item.name);
-
   useEffect(() => {
     if (quantity <= 1) setQuantity(1);
   }, [quantity]);
