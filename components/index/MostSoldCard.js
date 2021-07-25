@@ -128,6 +128,12 @@ const useStyles = makeStyles((theme) => ({
       height: '75px',
     },
   },
+  itemDesc: {
+    maxHeight: '25px',
+    minHeight: '25px',
+    // height: '25px',
+    marginBottom: theme.spacing(6),
+  },
 }));
 
 const MostSoldCard = ({ item }) => {
@@ -148,10 +154,7 @@ const MostSoldCard = ({ item }) => {
               rel='noreferrer noopener'
               className={classes.MostSoldCardLink}
             >
-              <div
-                className={classes.imgWrapper}
-                // style={{ height: `${item.image[0].height}px` }}
-              >
+              <div className={classes.imgWrapper}>
                 <Image
                   src={item.image[0].secure_url}
                   blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
@@ -162,7 +165,12 @@ const MostSoldCard = ({ item }) => {
                 />
               </div>
 
-              <CardContent style={{ paddingBottom: 0, marginBottom: 0 }}>
+              <CardContent
+                style={{
+                  paddingBottom: 0,
+                  marginBottom: 0,
+                }}
+              >
                 <Typography
                   gutterBottom
                   variant='h5'
@@ -176,6 +184,8 @@ const MostSoldCard = ({ item }) => {
                   color='textSecondary'
                   component='p'
                   gutterBottom
+                  paragraph
+                  className={classes.itemDesc}
                 >
                   {item.description}
                 </Typography>
