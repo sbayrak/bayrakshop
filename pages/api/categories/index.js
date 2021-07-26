@@ -37,4 +37,19 @@ export default async (req, res) => {
 
     res.status(201).json(result);
   }
+  if (req.method === 'DELETE') {
+    const { db } = await connectToDatabase();
+
+    const findCategoryToBeDeleted = await db
+      .collection('categories')
+      .deleteOne({
+        _id: ObjectId(req.body.id),
+      });
+
+    if (findCategoryToBeDeleted.deletedCount === 1) {
+      res.status(201).json({ msg: 'ok' });
+    } else if (findCategoryToBeDeleted.deletedCount === 0) {
+      res.status(201).json({ msg: 'fail' });
+    }
+  }
 };

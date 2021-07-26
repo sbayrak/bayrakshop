@@ -6,17 +6,20 @@ import {
   TextField,
   Button,
   Snackbar,
+  CircularProgress,
+  Modal,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import DashboardLeft from '../../../../components/dashboard/DashboardLeft';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import DeleteIcon from '@material-ui/icons/Delete';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { connectToDatabase } from '../../../../util/mongodb';
 import { ObjectId } from 'mongodb';
 
@@ -201,6 +204,66 @@ const useStyles = makeStyles((theme) => ({
   productErrorTypo: {
     marginLeft: theme.spacing(1),
   },
+  modalBox: {
+    position: 'fixed',
+    width: '100%',
+    height: '100vh',
+    backgroundColor: 'rgba(33,33,33,0.3)',
+    zIndex: 99,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalWrapper: {
+    backgroundColor: '#fafafa',
+    borderRadius: '5px',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+    boxShadow: '2px 2px 10px 1px rgba(0,0,0,0.5)',
+  },
+  modalItemContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+  },
+  modalGridItem: {
+    padding: theme.spacing(1),
+    marginBottom: theme.spacing(3),
+  },
+  modalBtnWrapper: {
+    display: 'flex',
+    paddingLeft: theme.spacing(3),
+    paddingRight: theme.spacing(3),
+  },
+  modalBtn: {
+    paddingLeft: theme.spacing(4),
+    paddingRight: theme.spacing(4),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+  },
+  modalCancel: {
+    marginRight: theme.spacing(3),
+  },
+  modalDelete: {
+    backgroundColor: '#F44336',
+    color: '#f6f6f6',
+    '&:hover': {
+      backgroundColor: '#F11336',
+      color: '#f6f6f6',
+    },
+  },
+  modalRoot: {
+    marginTop: theme.spacing(10),
+  },
 }));
 
 const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
@@ -215,6 +278,10 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
   const [snackbar, setSnackbar] = useState(true);
   const [spinner, setSpinner] = useState(false);
   const [productError, setProductError] = useState(false);
+
+  const [openModal, setOpenModal] = useState(false);
+  const [deleteSpinner, setDeleteSpinner] = useState(false);
+  const rootRef = useRef(null);
 
   useEffect(() => {
     if (!urlQuery.id || noCategory) {
@@ -275,6 +342,29 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
       }
     }
   };
+  const deleteCategoryHandler = async (e) => {
+    e.preventDefault();
+    setDeleteSpinner(true);
+
+    const deleteCategory = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/categories`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ id: resultCategory._id }),
+      }
+    );
+
+    const result = await deleteCategory.json();
+    if (result.msg === 'ok') {
+      setTimeout(() => {
+        setDeleteSpinner(false);
+        router.push(`${process.env.NEXT_PUBLIC_URL}/dashboard/categories`);
+      }, 1000);
+    }
+  };
 
   const editCategoryContainer = (
     <Grid container item md={12} xs={12}>
@@ -313,7 +403,7 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
               variant='outlined'
               fullWidth
               color='primary'
-              helperText='*Please enter new Url or leave as it is.'
+              helperText='*Please enter new Url or leave as it is. e.g. www.yourdomain.com/baklavas'
               value={categoryUrl}
               onChange={(e) => setCategoryUrl(e.target.value)}
               error={errorCategoryURL}
@@ -333,52 +423,86 @@ const EditCategory = ({ resultCategory, urlQuery, noCategory }) => {
           <Grid item md={6}></Grid>
         </Grid>
       </form>
-      <Grid
-        item
-        md={6}
-        xs={12}
-        className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
-      >
+
+      <Grid item md={6}>
+        <div ref={rootRef} className={classes.modalRoot}>
+          <Modal
+            disablePortal
+            disableEnforceFocus
+            disableAutoFocus
+            open={openModal}
+            aria-labelledby='server-modal-title'
+            aria-describedby='server-modal-description'
+            className={classes.modal}
+            container={() => rootRef.current}
+          >
+            <Box component='div' className={classes.modalBox}>
+              <Box component='div' className={classes.modalWrapper}>
+                <div className={classes.modalItemContainer}>
+                  <Grid item md={12} className={classes.modalGridItem}>
+                    <DeleteIcon
+                      fontSize='large'
+                      style={{ color: '#F44336', fontSize: '60px' }}
+                    />
+                  </Grid>
+                  <Grid item md={12} className={classes.modalGridItem}>
+                    <Typography variant='h5' color='textPrimary'>
+                      You are about to delete this category
+                    </Typography>
+                  </Grid>
+                  <Grid item md={12} className={classes.modalGridItem}>
+                    <Typography
+                      variant='body2'
+                      color='textSecondary'
+                      align='center'
+                    >
+                      Do you really would like to delete this category ? <br />{' '}
+                      This cannot be undone.
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    item
+                    md={12}
+                    className={`${classes.modalGridItem} ${classes.modalBtnWrapper}`}
+                  >
+                    <Button
+                      disableElevation
+                      variant='contained'
+                      className={`${classes.modalBtn} ${classes.modalCancel}`}
+                      onClick={(e) => setOpenModal(false)}
+                    >
+                      CANCEL
+                    </Button>
+                    <form onSubmit={deleteCategoryHandler}>
+                      <Button
+                        disableElevation
+                        variant='contained'
+                        type='submit'
+                        className={`${classes.modalBtn} ${classes.modalDelete}`}
+                        data-id={`${resultCategory._id}`}
+                      >
+                        {deleteSpinner ? (
+                          <CircularProgress color='secondary' size='2em' />
+                        ) : (
+                          'DELETE'
+                        )}
+                      </Button>
+                    </form>
+                  </Grid>
+                </div>
+              </Box>
+            </Box>
+          </Modal>
+        </div>
         <Button
           variant='contained'
-          onClick={(e) => setCategoryDelete(!categoryDelete)}
-          className={classes.deleteBtn}
           fullWidth
+          onClick={(e) => setOpenModal(!openModal)}
+          style={{ color: '#f6f6f6', backgroundColor: '#f44336' }}
         >
           DELETE CATEGORY
         </Button>
       </Grid>
-      <Grid item md={6}></Grid>
-      <form className={classes.form}>
-        <Grid
-          item
-          md={6}
-          xs={12}
-          className={`${classes.gridFormItem} ${classes.submitBtnWrapper}`}
-          style={{ display: `${categoryDelete && 'inline'}` }}
-        >
-          <Button variant='contained' className={classes.deleteBtn}>
-            DELETE
-          </Button>
-          <Button variant='contained' className={classes.deleteBtn}>
-            CANCEL
-          </Button>
-        </Grid>
-        <Grid item md={6}></Grid>
-        <Grid item md={6}>
-          <Box component='div' className={classes.categoryErrorWrapper}>
-            <ErrorOutlineIcon color='secondary' />
-            <Typography
-              variant='body2'
-              color='secondary'
-              className={classes.productErrorTypo}
-            >
-              *Are you sure to delete this category ? Don't worry, the products
-              of this category will not be deleted.
-            </Typography>
-          </Box>
-        </Grid>
-      </form>
     </Grid>
   );
 
