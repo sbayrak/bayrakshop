@@ -28,6 +28,13 @@ export const getStaticProps = async () => {
   const getPagesFromDB = await db.collection('pages').find({}).toArray();
   const getPages = await JSON.parse(JSON.stringify(getPagesFromDB));
 
+  const getCategoriesFromDB = await db
+    .collection('categories')
+    .find({})
+    .limit(4)
+    .toArray();
+  const getCategories = await JSON.parse(JSON.stringify(getCategoriesFromDB));
+
   // @@@ HERO CONTENT @@@
   const fillHeroContent = getPages.filter(
     (pageItem) => pageItem.section === 'hero'
@@ -35,12 +42,16 @@ export const getStaticProps = async () => {
   const fillAboutContent = getPages.filter(
     (pageItem) => pageItem.section === 'about'
   );
+  const fillDiscoverContent = getPages.filter(
+    (item) => item.section === 'discover'
+  );
   const fillContactContent = getPages.filter(
     (pageItem) => pageItem.section === 'contact'
   );
 
   const heroContent = fillHeroContent[0];
   const aboutContent = fillAboutContent[0];
+  const discoverContent = fillDiscoverContent[0];
   const contactContent = fillContactContent[0];
   // @@@ HERO CONTENT @@@
 
@@ -48,7 +59,9 @@ export const getStaticProps = async () => {
     props: {
       heroContent,
       aboutContent,
+      discoverContent,
       contactContent,
+      getCategories,
     },
   };
 };
@@ -127,9 +140,26 @@ const useStyles = makeStyles((theme) => ({
   contactItem: {
     marginBottom: theme.spacing(2),
   },
+  discoverImgWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  discoverImg: {
+    marginRight: theme.spacing(1),
+  },
+  discoverTypo: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+  },
 }));
 
-const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
+const Dashboard = ({
+  heroContent,
+  aboutContent,
+  discoverContent,
+  contactContent,
+  getCategories,
+}) => {
   const classes = useStyles();
   const [imageState, setImageState] = useState('');
   const [uploadedImages, setUploadedImages] = useState([]);
@@ -160,7 +190,13 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
   const [errorContactAddress, setErrorContactAddress] = useState(false);
   const [contactMaps, setContactMaps] = useState('');
 
-  console.log(contactContent);
+  const [discoverImageState, setDiscoverImageState] = useState('');
+  const [discoverUploadedImages, setDiscoverUploadedImages] = useState([]);
+  const [
+    errorDiscoverUploadedImages,
+    setErrorDiscoverUploadedImages,
+  ] = useState(false);
+  const [discoverCategories, setDiscoverCategories] = useState('');
 
   useEffect(() => {
     if (heroContent) {
@@ -173,11 +209,17 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
       setParag2(aboutContent.paragraph.parag2);
       setParag3(aboutContent.paragraph.parag3);
     }
+    if (discoverContent) {
+      setDiscoverUploadedImages(discoverContent.image);
+    }
     if (contactContent) {
       setContactTel(contactContent.tel);
       setContactEmail(contactContent.email);
       setContactAddress(contactContent.address);
       setContactMaps(contactContent.maps);
+    }
+    if (getCategories) {
+      setDiscoverCategories(getCategories);
     }
   }, []);
 
@@ -237,6 +279,7 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
     uploadedImages,
     heroTitle,
     aboutUploadedImages,
+    discoverUploadedImages,
     parag1,
     parag2,
     parag3,
@@ -262,6 +305,15 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
     );
 
     setAboutUploadedImages(filteredImage);
+  };
+  const discoverRemoveUploadedImageHandler = (e) => {
+    e.preventDefault();
+
+    const filteredImage = discoverUploadedImages.filter(
+      (img) => img.asset_id !== e.currentTarget.dataset.id
+    );
+
+    setDiscoverUploadedImages(filteredImage);
   };
 
   const handleSnackbarClose = (event, reason) => {
@@ -321,6 +373,31 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
       setSpinner(false);
     }
     setAboutUploadedImages([...aboutUploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
+  };
+  const discoverNewImageUploadHandler = async (e) => {
+    e.preventDefault();
+    setSpinner(true);
+
+    const formData = new FormData();
+    formData.append('file', discoverImageState);
+    formData.append(
+      'upload_preset',
+      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`
+    );
+
+    const submitData = await fetch(
+      ` https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const result = await submitData.json();
+    if (result) {
+      setSpinner(false);
+    }
+    setDiscoverUploadedImages([...discoverUploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
   };
 
   const heroSubmitHandler = async (e) => {
@@ -386,6 +463,32 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
       );
 
       const result = await submitData.json();
+      if (result.result.n === 1) {
+        setSuccessHero(true);
+      }
+    }
+  };
+
+  const discoverSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    if (discoverUploadedImages.length < 1) {
+      setErrorDiscoverUploadedImages(true);
+    } else {
+      const submitHero = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/pages?section=discover`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            image: discoverUploadedImages,
+          }),
+        }
+      );
+
+      const result = await submitHero.json();
       if (result.result.n === 1) {
         setSuccessHero(true);
       }
@@ -733,6 +836,91 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
     </Grid>
   );
 
+  const contactSection = (
+    <Grid
+      item
+      md={12}
+      className={`${classes.gridFormItem} ${classes.heroSection} `}
+    >
+      <Typography variant='h4' gutterBottom paragraph>
+        Contact Section
+      </Typography>
+      <Grid item md={6}></Grid>
+
+      <form onSubmit={contactSubmitHandler}>
+        <Grid item md={6} className={classes.gridFormItem}>
+          <div className={classes.contactItem}>
+            <Typography variant='h6'>Telephone Number</Typography>
+            <TextField
+              variant='outlined'
+              fullWidth
+              value={contactTel}
+              onChange={(e) => setContactTel(e.target.value)}
+              error={errorContactTel}
+              className={classes.aboutParagTxt}
+              placeholder='Please type telephone number of your shop.'
+              helperText='e.g. 491112223344'
+            ></TextField>
+          </div>
+
+          <div className={classes.contactItem}>
+            <Typography variant='h6'>E-Mail</Typography>
+            <TextField
+              variant='outlined'
+              fullWidth
+              value={contactEmail}
+              onChange={(e) => setContactEmail(e.target.value)}
+              error={errorContactEmail}
+              className={classes.aboutParagTxt}
+              placeholder='Please type e-mail of your shop.'
+            ></TextField>
+          </div>
+
+          <div className={classes.contactItem}>
+            <Typography variant='h6'>Address</Typography>
+            <TextField
+              variant='outlined'
+              fullWidth
+              value={contactAddress}
+              onChange={(e) => setContactAddress(e.target.value)}
+              error={errorContactAddress}
+              className={classes.aboutParagTxt}
+              placeholder='Please type address of your shop.'
+            ></TextField>
+          </div>
+          <div className={classes.contactItem}>
+            <Typography variant='h6'>Google Maps</Typography>
+            <TextField
+              variant='outlined'
+              fullWidth
+              value={contactMaps}
+              onChange={(e) => setContactMaps(e.target.value)}
+              className={classes.aboutParagTxt}
+              placeholder='Please type link of Google Maps of your shop.'
+            ></TextField>
+          </div>
+        </Grid>
+        <Grid item md={6}>
+          <Button
+            type='submit'
+            variant='contained'
+            fullWidth
+            color='primary'
+            disabled={
+              !contactTel || !contactEmail || !contactAddress ? true : false
+            }
+          >
+            update
+          </Button>
+          {(!contactTel || !contactEmail || !contactAddress) && (
+            <Typography variant='caption'>*Please fill all fields.</Typography>
+          )}
+        </Grid>
+      </form>
+      <Grid item md={6}></Grid>
+    </Grid>
+  );
+
   return (
     <>
       <Box component='div'>
@@ -775,87 +963,150 @@ const Dashboard = ({ heroContent, aboutContent, contactContent }) => {
                 md={12}
                 className={`${classes.gridFormItem} ${classes.heroSection} `}
               >
-                <Typography variant='h4' gutterBottom paragraph>
-                  Contact Section
-                </Typography>
+                <Typography variant='h4' gutterBottom>
+                  Discover More Section
+                </Typography>{' '}
                 <Grid item md={6}></Grid>
-
-                <form onSubmit={contactSubmitHandler}>
-                  <Grid item md={6} className={classes.gridFormItem}>
-                    <div className={classes.contactItem}>
-                      <Typography variant='h6'>Telephone Number</Typography>
-                      <TextField
-                        variant='outlined'
-                        fullWidth
-                        value={contactTel}
-                        onChange={(e) => setContactTel(e.target.value)}
-                        error={errorContactTel}
-                        className={classes.aboutParagTxt}
-                        placeholder='Please type telephone number of your shop.'
-                        helperText='e.g. 491112223344'
-                      ></TextField>
-                    </div>
-
-                    <div className={classes.contactItem}>
-                      <Typography variant='h6'>E-Mail</Typography>
-                      <TextField
-                        variant='outlined'
-                        fullWidth
-                        value={contactEmail}
-                        onChange={(e) => setContactEmail(e.target.value)}
-                        error={errorContactEmail}
-                        className={classes.aboutParagTxt}
-                        placeholder='Please type e-mail of your shop.'
-                      ></TextField>
-                    </div>
-
-                    <div className={classes.contactItem}>
-                      <Typography variant='h6'>Address</Typography>
-                      <TextField
-                        variant='outlined'
-                        fullWidth
-                        value={contactAddress}
-                        onChange={(e) => setContactAddress(e.target.value)}
-                        error={errorContactAddress}
-                        className={classes.aboutParagTxt}
-                        placeholder='Please type address of your shop.'
-                      ></TextField>
-                    </div>
-                    <div className={classes.contactItem}>
-                      <Typography variant='h6'>Google Maps</Typography>
-                      <TextField
-                        variant='outlined'
-                        fullWidth
-                        value={contactMaps}
-                        onChange={(e) => setContactMaps(e.target.value)}
-                        className={classes.aboutParagTxt}
-                        placeholder='Please type link of Google Maps of your shop.'
-                      ></TextField>
-                    </div>
-                  </Grid>
-                  <Grid item md={6}>
-                    <Button
-                      type='submit'
-                      variant='contained'
-                      fullWidth
-                      color='primary'
-                      disabled={
-                        !contactTel || !contactEmail || !contactAddress
-                          ? true
-                          : false
-                      }
-                    >
-                      update
-                    </Button>
-                    {(!contactTel || !contactEmail || !contactAddress) && (
+                <Grid item md={12} xs={12} className={classes.gridFormItem}>
+                  <Typography variant='h6' className={classes.activeTypo}>
+                    Images
+                  </Typography>
+                  <div className={classes.discoverImgWrapper}>
+                    {discoverUploadedImages &&
+                      discoverUploadedImages.map((img) => (
+                        <div
+                          data-id={`${img.asset_id}`}
+                          className={`${classes.imgWrapper} ${classes.discoverImg}  `}
+                          key={img.asset_id}
+                        >
+                          <Image
+                            src={img.secure_url}
+                            width={350}
+                            height={200}
+                            key={img.asset_id}
+                            alt={`${process.env.NEXT_PUBLIC_URL} image`}
+                          />{' '}
+                          <IconButton
+                            data-id={`${img.asset_id}`}
+                            onClick={discoverRemoveUploadedImageHandler}
+                          >
+                            <CancelIcon style={{ color: '#F44336' }} />
+                          </IconButton>
+                        </div>
+                      ))}{' '}
+                  </div>
+                  {discoverUploadedImages.length > 0 && (
+                    <Grid item md={12}>
                       <Typography variant='caption'>
-                        *Please fill all fields.
+                        Note: Your discover section category order is as follows
+                        :{' '}
+                      </Typography>
+
+                      {discoverCategories.map((category) => (
+                        <Typography
+                          variant='caption'
+                          className={classes.discoverTypo}
+                        >
+                          {' '}
+                          {category.name} ,
+                        </Typography>
+                      ))}
+                    </Grid>
+                  )}
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                  className={`${classes.gridFormItem} ${classes.imageWrapper}`}
+                  style={{
+                    border: `${
+                      errorDiscoverUploadedImages
+                        ? `1px solid rgba(222,0,0,1)`
+                        : `1px solid rgba(0,0,0,0.2)`
+                    }`,
+                  }}
+                >
+                  <Typography variant='h6' className={classes.activeTypo}>
+                    Image
+                  </Typography>
+                  <div className={classes.root}>
+                    <form
+                      onSubmit={discoverNewImageUploadHandler}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div style={{ marginRight: '20px' }}>
+                        <input
+                          accept='image/*'
+                          className={classes.input}
+                          id='contained-button-file22223'
+                          multiple
+                          type='file'
+                          onChange={(e) =>
+                            setDiscoverImageState(e.target.files[0])
+                          }
+                        />
+                        <label htmlFor='contained-button-file22223'>
+                          <Button
+                            variant='contained'
+                            color='primary'
+                            component='span'
+                            disableElevation
+                            onChange={(e) =>
+                              setDiscoverImageState(e.target.files[0])
+                            }
+                            disabled={
+                              discoverUploadedImages.length === 4 ? true : false
+                            }
+                          >
+                            Select
+                          </Button>
+                        </label>
+                      </div>
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        fullWidth
+                        type='submit'
+                        disableElevation
+                        startIcon={<CloudUploadIcon />}
+                        disabled={
+                          discoverUploadedImages.length === 4 ? true : false
+                        }
+                      >
+                        {spinner ? (
+                          <CircularProgress color='secondary' size='2em' />
+                        ) : (
+                          'Upload'
+                        )}
+                      </Button>
+                    </form>
+                    {discoverUploadedImages.length >= 0 && (
+                      <Typography variant='caption'>
+                        *You must upload 4 photo.
                       </Typography>
                     )}
-                  </Grid>
-                </form>
+                  </div>
+                </Grid>
+                <Grid item md={6}>
+                  <form onSubmit={discoverSubmitHandler}>
+                    <Button
+                      variant='contained'
+                      type='submit'
+                      fullWidth
+                      color='primary'
+                    >
+                      submit
+                    </Button>
+                  </form>
+                </Grid>
                 <Grid item md={6}></Grid>
               </Grid>
+              {contactSection}
             </Grid>
           </Grid>
         </Grid>

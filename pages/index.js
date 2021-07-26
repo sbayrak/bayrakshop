@@ -17,20 +17,7 @@ import baklava from '../public/baklava.jpg';
 // @@@ COMPONENT IMPORTS @@@
 
 // @@@ MATERIAL-UI @@@
-import {
-  Typography,
-  Box,
-  Grid,
-  Button,
-  Container,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardActions,
-  IconButton,
-} from '@material-ui/core';
-import RemoveIcon from '@material-ui/icons/Remove';
-import AddIcon from '@material-ui/icons/Add';
+import { Typography, Box, Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import About from '../components/index/About';
 import MostSoldCard from '../components/index/MostSoldCard';
@@ -45,6 +32,9 @@ export const getStaticProps = async () => {
 
   const getHeroContent = getPages.filter((data) => data.section === 'hero');
   const getAboutContent = getPages.filter((data) => data.section === 'about');
+  const getDiscoverContent = getPages.filter(
+    (data) => data.section === 'discover'
+  );
   const getContactContent = getPages.filter(
     (data) => data.section === 'contact'
   );
@@ -62,12 +52,24 @@ export const getStaticProps = async () => {
 
   // @@@ PRODUCTS @@@
 
+  // @@@ CATEGORY @@@
+  const getCategoriesFromDB = await db
+    .collection('categories')
+    .find({})
+    .limit(4)
+    .toArray();
+  const getCategories = await JSON.parse(JSON.stringify(getCategoriesFromDB));
+
+  // @@@ CATEGORY @@@
+
   return {
     props: {
       getHeroContent,
       getAboutContent,
       getMostLovedProductsContent,
       getContactContent,
+      getCategories,
+      getDiscoverContent,
     },
     revalidate: 1,
   };
@@ -189,6 +191,8 @@ export default function Home({
   getAboutContent,
   getContactContent,
   getMostLovedProductsContent,
+  getCategories,
+  getDiscoverContent,
 }) {
   const classes = useStyles();
   const [session, loading] = useSession();
@@ -234,7 +238,10 @@ export default function Home({
       {mostSold}
       <InformativeBanner></InformativeBanner>
       <About getAboutContent={getAboutContent}></About>
-      <MoreProducts></MoreProducts>
+      <MoreProducts
+        getCategories={getCategories}
+        getDiscoverContent={getDiscoverContent}
+      ></MoreProducts>
       <Contact getContactContent={getContactContent}></Contact>
     </>
   );

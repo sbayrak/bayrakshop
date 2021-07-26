@@ -1,13 +1,13 @@
 // @@@ MATERIAL-UI @@@
 import { Typography, Button, Box, Container, Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
 import Image from 'next/image';
 import Link from 'next/link';
 import baklava from '../../public/baklava-about.jpg';
+import { useState } from 'react';
 // @@@ nextjs @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -64,10 +64,22 @@ const useStyles = makeStyles((theme) => ({
     color: '#5652de',
     fontWeight: theme.typography.fontWeightMedium,
   },
+  imgRoot: {
+    position: 'relative',
+    height: 350,
+    width: '100%',
+  },
 }));
 
-const MoreProducts = () => {
+const MoreProducts = ({ getCategories, getDiscoverContent }) => {
   const classes = useStyles();
+  const [categoryContent, setCategoryContent] = useState(getCategories);
+  const [discoverImageContent, setDiscoverContent] = useState(
+    getDiscoverContent[0].image
+  );
+
+  console.log(categoryContent);
+  console.log(discoverImageContent);
   return (
     <>
       <Box component='div'>
@@ -86,20 +98,26 @@ const MoreProducts = () => {
             <Grid container item md={12} xs={12}>
               <Grid item md={6} className={classes.gridItem} xs={6}>
                 <div className={classes.imgWrapper}>
-                  <Image
-                    src={baklava}
-                    layout='responsive'
-                    alt='koslowshop baklava'
-                    className={classes.img}
-                  ></Image>
-                  <Link href='#!'>
+                  <div className={classes.imgRoot}>
+                    <Image
+                      src={`${discoverImageContent[0].secure_url}`}
+                      layout='fill'
+                      objectFit='cover'
+                      alt='koslowshop baklava'
+                      className={classes.img}
+                    ></Image>
+                  </div>
+
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[0].category_url}`}
+                  >
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
                       className={classes.productLink}
                     >
                       <Typography variant='h4' className={classes.productTypo}>
-                        Baklava
+                        {categoryContent[0].name}
                       </Typography>
                     </a>
                   </Link>
@@ -107,20 +125,25 @@ const MoreProducts = () => {
               </Grid>
               <Grid item md={6} className={classes.gridItem} xs={6}>
                 <div className={classes.imgWrapper}>
-                  <Image
-                    src={baklava}
-                    layout='responsive'
-                    alt='koslowshop baklava'
-                    className={classes.img}
-                  ></Image>
-                  <Link href='#!'>
+                  <div className={classes.imgRoot}>
+                    <Image
+                      src={`${discoverImageContent[1].secure_url}`}
+                      layout='fill'
+                      objectFit='cover'
+                      alt='koslowshop baklava'
+                      className={classes.img}
+                    ></Image>
+                  </div>
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[1].category_url}`}
+                  >
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
                       className={classes.productLink}
                     >
                       <Typography variant='h4' className={classes.productTypo}>
-                        Baklava
+                        {categoryContent[1].name}
                       </Typography>
                     </a>
                   </Link>
@@ -130,20 +153,25 @@ const MoreProducts = () => {
             <Grid container item md={12} xs={12}>
               <Grid item md={6} className={classes.gridItem} xs={6}>
                 <div className={classes.imgWrapper}>
-                  <Image
-                    src={baklava}
-                    layout='responsive'
-                    alt='koslowshop baklava'
-                    className={classes.img}
-                  ></Image>
-                  <Link href='#!'>
+                  <div className={classes.imgRoot}>
+                    <Image
+                      src={`${discoverImageContent[2].secure_url}`}
+                      layout='fill'
+                      objectFit='cover'
+                      alt='koslowshop baklava'
+                      className={classes.img}
+                    ></Image>
+                  </div>
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[2].category_url}`}
+                  >
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
                       className={classes.productLink}
                     >
                       <Typography variant='h4' className={classes.productTypo}>
-                        Baklava
+                        {categoryContent[2].name}
                       </Typography>
                     </a>
                   </Link>
@@ -151,20 +179,25 @@ const MoreProducts = () => {
               </Grid>
               <Grid item md={6} className={classes.gridItem} xs={6}>
                 <div className={classes.imgWrapper}>
-                  <Image
-                    src={baklava}
-                    layout='responsive'
-                    alt='koslowshop baklava'
-                    className={classes.img}
-                  ></Image>
-                  <Link href='#!'>
+                  <div className={classes.imgRoot}>
+                    <Image
+                      src={`${discoverImageContent[3].secure_url}`}
+                      layout='fill'
+                      objectFit='cover'
+                      alt='koslowshop baklava'
+                      className={classes.img}
+                    ></Image>
+                  </div>
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[3].category_url}`}
+                  >
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
                       className={classes.productLink}
                     >
                       <Typography variant='h4' className={classes.productTypo}>
-                        Baklava
+                        {categoryContent[3].name}
                       </Typography>
                     </a>
                   </Link>

@@ -44,6 +44,24 @@ export default async (req, res) => {
       );
 
       res.status(200).json(updateAboutSection);
+    } else if (req.query.section === 'discover') {
+      const { image } = req.body;
+
+      const findSectionToBeUpdated = await db.collection('pages').findOne({
+        section: req.query.section,
+      });
+      const updateDiscoverSection = await db.collection('pages').updateOne(
+        {
+          _id: findSectionToBeUpdated._id,
+        },
+        {
+          $set: {
+            image: image,
+          },
+        }
+      );
+
+      res.status(200).json(updateDiscoverSection);
     } else if (req.query.section === 'contact') {
       const { tel, email, address } = req.body;
       let maps = '';
