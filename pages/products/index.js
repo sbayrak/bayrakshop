@@ -1,11 +1,5 @@
 // @@@ MATERIAL-UI @@@
-import {
-  Container,
-  Grid,
-  Typography,
-  Checkbox,
-  Button,
-} from '@material-ui/core';
+import { Grid, Typography, Checkbox, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
@@ -39,11 +33,21 @@ export const getStaticProps = async () => {
 };
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    width: '85%',
+    margin: '0 auto',
+    [theme.breakpoints.down('xs')]: {
+      width: '100%',
+    },
+  },
   gridContainer: {
     backgroundColor: '#fff',
-    border: '1px solid red',
     paddingBottom: theme.spacing(5),
     marginTop: theme.spacing(20),
+    [theme.breakpoints.down('xs')]: {
+      paddingRight: theme.spacing(1.5),
+      paddingLeft: theme.spacing(1.5),
+    },
   },
   filterGridContainer: {
     padding: theme.spacing(3),
@@ -51,12 +55,29 @@ const useStyles = makeStyles((theme) => ({
   },
   filterTitle: {
     marginBottom: theme.spacing(3),
-    [theme.breakpoints.down('sm')]: { marginBottom: theme.spacing(1) },
+    [theme.breakpoints.down('sm')]: {
+      marginBottom: theme.spacing(1),
+      fontSize: '16px',
+    },
+  },
+  filterTypo: {
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '14px',
+    },
   },
   filterCheckBoxWrapper: {
     display: 'flex',
     alignItems: 'center',
     marginBottom: theme.spacing(1),
+    [theme.breakpoints.down('sm')]: {
+      marginRight: theme.spacing(3),
+    },
+  },
+  filterMobileCheckBoxWrapper: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+    },
   },
   productCardWrapper: {
     position: 'relative',
@@ -68,14 +89,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: theme.spacing(2),
+    paddingBottom: theme.spacing(3),
     borderRadius: '5px',
-    boxShadow: theme.shadows[1],
+    boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.1)',
     backgroundColor: '#fff',
-    border: '1px solid rgba(86,82,222,0.3)',
+    border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',
     '&:hover': {
       filter: 'blur(15px)',
+    },
+    [theme.breakpoints.down('xs')]: {
+      paddingBottom: 0,
     },
   },
   productCardTypo: {
@@ -85,6 +109,8 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.grey[600],
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
+      marginTop: theme.spacing(0),
+      paddingTop: theme.spacing(0.5),
     },
   },
   productHoverWrapper: {
@@ -146,7 +172,6 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   productImageWrapper: {
-    border: '1px solid red',
     width: '100%',
   },
 }));
@@ -155,6 +180,7 @@ const Products = ({ getCategories, getProducts }) => {
   const classes = useStyles();
   const [products, setProducts] = useState(getProducts);
   const [categories, setCategories] = useState([]);
+  // @@@ TODO : Add infinite scroll.
 
   useEffect(() => {
     if (categories.length === 0) {
@@ -194,33 +220,35 @@ const Products = ({ getCategories, getProducts }) => {
   console.log(categories);
   return (
     <>
-      <div style={{ width: '85%', margin: '0 auto' }}>
+      <div className={classes.root}>
         <Grid container className={classes.gridContainer}>
-          <Grid
-            item
-            md={3}
-            style={{ border: '1px solid yellow' }}
-            className={classes.filterGridContainer}
-          >
+          <Grid item md={3} className={classes.filterGridContainer}>
             <div>
               <Typography variant='h6' className={classes.filterTitle}>
                 Filter By Category
               </Typography>
-              {getCategories.map((category) => (
-                <div
-                  className={classes.filterCheckBoxWrapper}
-                  data-category={category.name}
-                  key={category._id}
-                >
-                  <Checkbox
-                    color='primary'
+              <div className={classes.filterMobileCheckBoxWrapper}>
+                {getCategories.map((category) => (
+                  <div
+                    className={classes.filterCheckBoxWrapper}
                     data-category={category.name}
-                    onChange={(e) => isChecked(e)}
-                    onClick={(e) => addToFilter(e)}
-                  ></Checkbox>
-                  <Typography variant='subtitle1'>{category.name}</Typography>
-                </div>
-              ))}
+                    key={category._id}
+                  >
+                    <Checkbox
+                      color='primary'
+                      data-category={category.name}
+                      onChange={(e) => isChecked(e)}
+                      onClick={(e) => addToFilter(e)}
+                    ></Checkbox>
+                    <Typography
+                      variant='subtitle1'
+                      className={classes.filterTypo}
+                    >
+                      {category.name}
+                    </Typography>
+                  </div>
+                ))}
+              </div>
             </div>
           </Grid>
           <Grid
@@ -228,10 +256,9 @@ const Products = ({ getCategories, getProducts }) => {
             container
             md={9}
             spacing={3}
-            style={{ border: '1px solid yellow' }}
             className={classes.productsGridContainer}
           >
-            {getProducts.map((product) => (
+            {products.map((product) => (
               <Grid
                 item
                 md={3}
