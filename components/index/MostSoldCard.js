@@ -1,35 +1,17 @@
 // @@@ MATERIAL-UI @@@
 import {
-  Box,
-  Container,
   Grid,
   Typography,
-  AppBar,
-  Tabs,
-  Tab,
   Card,
   CardActionArea,
-  CardMedia,
   CardContent,
   CardActions,
   Button,
-  Select,
-  MenuItem,
-  InputLabel,
   IconButton,
-  Accordion,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import PhoneIcon from '@material-ui/icons/Phone';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import PersonPinIcon from '@material-ui/icons/PersonPin';
-import HelpIcon from '@material-ui/icons/Help';
-import ShoppingBasket from '@material-ui/icons/ShoppingBasket';
-import ThumbDown from '@material-ui/icons/ThumbDown';
-import ThumbUp from '@material-ui/icons/ThumbUp';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
-import baklava from '../../public/baklava.jpg';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@

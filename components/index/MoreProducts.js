@@ -78,8 +78,6 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
     getDiscoverContent[0].image
   );
 
-  console.log(categoryContent);
-  console.log(discoverImageContent);
   return (
     <>
       <Box component='div'>

@@ -134,6 +134,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     paddingRight: theme.spacing(1.5),
     paddingLeft: theme.spacing(1.5),
+    marginRight: theme.spacing(4),
     textDecoration: 'none',
     color: '#5652de',
     fontSize: '18px',
@@ -437,13 +438,13 @@ const Navbar = () => {
             <div>
               <ul className={classes.bottomMidUl}>
                 <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
+                  <Link href='/products'>
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
                       className={classes.bottomMidLinks}
                     >
-                      Baklava
+                      Products
                     </a>
                   </Link>
                 </li>
@@ -454,7 +455,7 @@ const Navbar = () => {
                       rel='noreferrer noopener'
                       className={classes.bottomMidLinks}
                     >
-                      Lokum
+                      About
                     </a>
                   </Link>
                 </li>
@@ -465,18 +466,7 @@ const Navbar = () => {
                       rel='noreferrer noopener'
                       className={classes.bottomMidLinks}
                     >
-                      Cakes
-                    </a>
-                  </Link>
-                </li>
-                <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
-                    <a
-                      target='_blank'
-                      rel='noreferrer noopener'
-                      className={classes.bottomMidLinks}
-                    >
-                      Appetizers
+                      Contact
                     </a>
                   </Link>
                 </li>
