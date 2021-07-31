@@ -216,104 +216,104 @@ const Products = ({ getCategories, getProducts }) => {
     }
   };
 
-  console.log(products);
-  console.log(categories);
+  const categorySection = (
+    <Grid item md={3} className={classes.filterGridContainer}>
+      <div>
+        <Typography variant='h6' className={classes.filterTitle}>
+          Filter By Category
+        </Typography>
+        <div className={classes.filterMobileCheckBoxWrapper}>
+          {getCategories.map((category) => (
+            <div
+              className={classes.filterCheckBoxWrapper}
+              data-category={category.name}
+              key={category._id}
+            >
+              <Checkbox
+                color='primary'
+                data-category={category.name}
+                onChange={(e) => isChecked(e)}
+                onClick={(e) => addToFilter(e)}
+              ></Checkbox>
+              <Typography variant='subtitle1' className={classes.filterTypo}>
+                {category.name}
+              </Typography>
+            </div>
+          ))}
+        </div>
+      </div>
+    </Grid>
+  );
+  const productSection = (
+    <Grid
+      item
+      container
+      md={9}
+      spacing={3}
+      className={classes.productsGridContainer}
+    >
+      {products.map((product) => (
+        <Grid
+          item
+          md={3}
+          xs={6}
+          className={classes.productCardWrapper}
+          key={product._id}
+        >
+          <div className={classes.productCard}>
+            <div className={classes.productImageWrapper}>
+              <Image
+                src={product.image[0].secure_url}
+                alt={`${process.env.NEXT_PUBLIC_URL} ${product.name}`}
+                height={300}
+                width={450}
+              />
+            </div>
+            <Typography className={classes.productCardTypo}>
+              {product.name}
+            </Typography>
+            <Typography variant='h6' className={classes.productCardTypo}>
+              €{product.price}
+            </Typography>
+          </div>
+          <div className={classes.productHoverWrapper}>
+            <div className={classes.productHoverItem}>
+              <Link
+                href={`${
+                  process.env.NEXT_PUBLIC_URL
+                }/products/${product.name.toLowerCase().replace(' ', '-')}`}
+              >
+                <a className={classes.productHoverLink}>
+                  <SearchIcon />
+                  &nbsp;&nbsp;<span>Read Details</span>
+                </a>
+              </Link>
+            </div>
+            <div className={classes.productHoverItem}>
+              <Button
+                fullWidth
+                className={classes.productAddToCart}
+                disableRipple
+                disableFocusRipple
+                disableElevation
+                disableTouchRipple
+              >
+                <AddShoppingCartIcon />
+                &nbsp;&nbsp;<span>Add to Cart</span>
+              </Button>
+            </div>
+          </div>
+        </Grid>
+      ))}
+    </Grid>
+  );
+
   return (
     <>
       <div className={classes.root}>
         <Grid container className={classes.gridContainer}>
-          <Grid item md={3} className={classes.filterGridContainer}>
-            <div>
-              <Typography variant='h6' className={classes.filterTitle}>
-                Filter By Category
-              </Typography>
-              <div className={classes.filterMobileCheckBoxWrapper}>
-                {getCategories.map((category) => (
-                  <div
-                    className={classes.filterCheckBoxWrapper}
-                    data-category={category.name}
-                    key={category._id}
-                  >
-                    <Checkbox
-                      color='primary'
-                      data-category={category.name}
-                      onChange={(e) => isChecked(e)}
-                      onClick={(e) => addToFilter(e)}
-                    ></Checkbox>
-                    <Typography
-                      variant='subtitle1'
-                      className={classes.filterTypo}
-                    >
-                      {category.name}
-                    </Typography>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Grid>
-          <Grid
-            item
-            container
-            md={9}
-            spacing={3}
-            className={classes.productsGridContainer}
-          >
-            {products.map((product) => (
-              <Grid
-                item
-                md={3}
-                xs={6}
-                className={classes.productCardWrapper}
-                key={product._id}
-              >
-                <div className={classes.productCard}>
-                  <div className={classes.productImageWrapper}>
-                    <Image
-                      src={product.image[0].secure_url}
-                      alt={`${process.env.NEXT_PUBLIC_URL} ${product.name}`}
-                      height={300}
-                      width={450}
-                    />
-                  </div>
-                  <Typography className={classes.productCardTypo}>
-                    {product.name}
-                  </Typography>
-                  <Typography variant='h6' className={classes.productCardTypo}>
-                    €{product.price}
-                  </Typography>
-                </div>
-                <div className={classes.productHoverWrapper}>
-                  <div className={classes.productHoverItem}>
-                    <Link
-                      href={`${
-                        process.env.NEXT_PUBLIC_URL
-                      }/products/${product.name
-                        .toLowerCase()
-                        .replace(' ', '-')}`}
-                    >
-                      <a className={classes.productHoverLink}>
-                        <SearchIcon />
-                        &nbsp;&nbsp;<span>Read Details</span>
-                      </a>
-                    </Link>
-                  </div>
-                  <div className={classes.productHoverItem}>
-                    <Button
-                      fullWidth
-                      className={classes.productAddToCart}
-                      disableRipple
-                      disableFocusRipple
-                      disableElevation
-                      disableTouchRipple
-                    >
-                      <AddShoppingCartIcon />
-                      &nbsp;&nbsp;<span>Add to Cart</span>
-                    </Button>
-                  </div>
-                </div>
-              </Grid>
-            ))}
-          </Grid>
+          {categorySection}
+          {productSection}
         </Grid>
       </div>
     </>
