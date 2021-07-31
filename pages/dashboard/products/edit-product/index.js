@@ -422,7 +422,6 @@ const EditProduct = ({
     e.preventDefault();
     setDeleteSpinner(true);
 
-    console.log(e.currentTarget.dataset.id);
     const deleteProduct = await fetch(
       `${process.env.NEXT_PUBLIC_URL}/api/products`,
       {

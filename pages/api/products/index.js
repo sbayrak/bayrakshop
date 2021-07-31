@@ -52,7 +52,6 @@ export default async (req, res) => {
   if (req.method === 'DELETE') {
     const { db } = await connectToDatabase();
     const product_Id_ToBe_Deleted = req.body;
-    console.log(req.body);
 
     const findProductToBeDeleted = await db
       .collection('products')

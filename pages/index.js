@@ -17,10 +17,11 @@ import baklava from '../public/baklava.jpg';
 // @@@ COMPONENT IMPORTS @@@
 
 // @@@ MATERIAL-UI @@@
-import { Typography, Box, Grid, Container } from '@material-ui/core';
+import { Typography, Box, Grid, Container, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import About from '../components/index/About';
 import MostSoldCard from '../components/index/MostSoldCard';
+import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 // @@@ MATERIAL-UI @@@
 
 export const getStaticProps = async () => {
@@ -85,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.paper,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    paddingBottom: theme.spacing(0.5),
     [theme.breakpoints.down('xs')]: {
       paddingLeft: theme.spacing(0),
       paddingRight: theme.spacing(0),
@@ -184,6 +186,33 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   // @@@ MOSTSOLD SECTION @@@
+  moreProductsRoot: {
+    marginTop: theme.spacing(8),
+    marginBottom: theme.spacing(5),
+  },
+  moreProductsBtn: {
+    padding: theme.spacing(1),
+    borderRadius: '5px',
+    backgroundColor: '#5652de',
+    color: '#f6f6f6',
+    textAlign: 'center',
+    fontWeight: theme.typography.fontWeightMedium,
+    transition: '0.3s ease',
+    '&:hover': {
+      backgroundColor: '#6788f5',
+    },
+  },
+  moreProductsLink: {
+    textDecoration: 'none',
+    color: '#f6f6f6',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: '18px',
+    textTransform: 'none',
+  },
 }));
 
 export default function Home({
@@ -224,6 +253,16 @@ export default function Home({
                 <MostSoldCard item={item} key={item._id} />
               </Grid>
             ))}
+          </Grid>
+          <Grid item md={12} className={classes.moreProductsRoot}>
+            <Button fullWidth className={classes.moreProductsBtn}>
+              <Link href={`${process.env.NEXT_PUBLIC_URL}/products`}>
+                <a className={classes.moreProductsLink}>
+                  <span>All Products</span>{' '}
+                  <ArrowDownwardIcon fontSize='small' />
+                </a>
+              </Link>
+            </Button>
           </Grid>
         </div>
       </Container>
