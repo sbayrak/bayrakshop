@@ -1,8 +1,9 @@
 // @@@ MATERIAL-UI @@@
-import { Grid, Typography, Checkbox, Button } from '@material-ui/core';
+import { Grid, Typography, Checkbox, Button, Box } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#fff',
     paddingBottom: theme.spacing(5),
     marginTop: theme.spacing(20),
+    minHeight: '100vh',
     [theme.breakpoints.down('xs')]: {
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(1.5),
@@ -52,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
   filterGridContainer: {
     padding: theme.spacing(3),
     marginTop: theme.spacing(3),
+    borderRight: '1px solid rgba(0,0,0,0.05)',
   },
   filterTitle: {
     marginBottom: theme.spacing(3),
@@ -84,28 +87,29 @@ const useStyles = makeStyles((theme) => ({
   },
   productsGridContainer: {
     marginTop: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
   },
   productCard: {
+    position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    marginTop: theme.spacing(7),
     paddingBottom: theme.spacing(3),
     borderRadius: '5px',
     boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.1)',
-    backgroundColor: '#fff',
+    backgroundColor: '#f6f6f6',
     border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',
-    '&:hover': {
-      filter: 'blur(15px)',
-    },
+
     [theme.breakpoints.down('xs')]: {
       paddingBottom: 0,
     },
   },
   productCardTypo: {
     marginTop: theme.spacing(2),
-    paddingTop: theme.spacing(1),
-    paddingBottom: theme.spacing(1),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     color: theme.palette.grey[600],
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
@@ -116,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
   productHoverWrapper: {
     backgroundColor: 'rgba(86,82,222,0.85)',
     borderRadius: '5px',
-    width: '95%',
+    width: '100%',
     height: '100%',
     position: 'absolute',
     top: 0,
@@ -217,7 +221,7 @@ const Products = ({ getCategories, getProducts }) => {
   };
 
   const categorySection = (
-    <Grid item md={3} className={classes.filterGridContainer}>
+    <Grid item md={2} className={classes.filterGridContainer}>
       <div>
         <Typography variant='h6' className={classes.filterTitle}>
           Filter By Category
@@ -248,7 +252,7 @@ const Products = ({ getCategories, getProducts }) => {
     <Grid
       item
       container
-      md={9}
+      md={10}
       spacing={3}
       className={classes.productsGridContainer}
     >
@@ -274,33 +278,43 @@ const Products = ({ getCategories, getProducts }) => {
             </Typography>
             <Typography variant='h6' className={classes.productCardTypo}>
               €{product.price}
-            </Typography>
-          </div>
-          <div className={classes.productHoverWrapper}>
-            <div className={classes.productHoverItem}>
-              <Link
-                href={`${
-                  process.env.NEXT_PUBLIC_URL
-                }/products/${product.name.toLowerCase().replace(' ', '-')}`}
-              >
-                <a className={classes.productHoverLink}>
-                  <SearchIcon />
-                  &nbsp;&nbsp;<span>Read Details</span>
-                </a>
-              </Link>
-            </div>
-            <div className={classes.productHoverItem}>
-              <Button
-                fullWidth
-                className={classes.productAddToCart}
-                disableRipple
-                disableFocusRipple
-                disableElevation
-                disableTouchRipple
-              >
-                <AddShoppingCartIcon />
-                &nbsp;&nbsp;<span>Add to Cart</span>
-              </Button>
+            </Typography>{' '}
+            <div className={classes.productHoverWrapper}>
+              <div className={classes.productHoverItem}>
+                <Link
+                  href={`${
+                    process.env.NEXT_PUBLIC_URL
+                  }/products/${product.name.toLowerCase().replace(' ', '-')}`}
+                >
+                  <a className={classes.productHoverLink}>
+                    <SearchIcon />
+                    &nbsp;&nbsp;<span>Read Details</span>
+                  </a>
+                </Link>
+              </div>
+              <div className={classes.productHoverItem}>
+                <Button
+                  fullWidth
+                  className={classes.productAddToCart}
+                  disableRipple
+                  disableFocusRipple
+                  disableElevation
+                  disableTouchRipple
+                  disabled={product.active ? false : true}
+                >
+                  {product.active ? (
+                    <>
+                      <AddShoppingCartIcon />
+                      &nbsp;&nbsp;<span>Add to Cart</span>
+                    </>
+                  ) : (
+                    <>
+                      <RemoveShoppingCartIcon /> &nbsp;&nbsp;
+                      <span>Out of Stock</span>
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
         </Grid>
@@ -310,7 +324,7 @@ const Products = ({ getCategories, getProducts }) => {
 
   return (
     <>
-      <div className={classes.root}>
+      <div className={classes.root} id='root'>
         <Grid container className={classes.gridContainer}>
           {categorySection}
           {productSection}
