@@ -9,28 +9,57 @@ import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 // @@@ nextjs @@@
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { connectToDatabase } from '../../util/mongodb';
 import { useState, useEffect } from 'react';
 
 // @@@ nextjs @@@
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async (context) => {
   const { db } = await connectToDatabase();
+
   const getCategoriesFromDB = await db
     .collection('categories')
     .find({})
     .toArray();
   const getCategories = await JSON.parse(JSON.stringify(getCategoriesFromDB));
 
-  const getProductsFromDB = await db.collection('products').find({}).toArray();
-  const getProducts = await JSON.parse(JSON.stringify(getProductsFromDB));
+  if (
+    !(
+      Object.keys(context.query).length === 0 &&
+      context.query.constructor === Object
+    )
+  ) {
+    console.log('if fired!');
+    const category = context.query.category;
 
-  return {
-    props: {
-      getCategories,
-      getProducts,
-    },
-  };
+    const getFilteredProducts = await db
+      .collection('products')
+      .find({
+        category: category,
+      })
+      .toArray();
+    const getProducts = await JSON.parse(JSON.stringify(getFilteredProducts));
+    return {
+      props: {
+        getCategories,
+        getProducts,
+      },
+    };
+  } else {
+    console.log('else fired!');
+    const getProductsFromDB = await db
+      .collection('products')
+      .find({})
+      .toArray();
+    const getProducts = await JSON.parse(JSON.stringify(getProductsFromDB));
+    return {
+      props: {
+        getCategories,
+        getProducts,
+      },
+    };
+  }
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -184,16 +213,24 @@ const Products = ({ getCategories, getProducts }) => {
   const classes = useStyles();
   const [products, setProducts] = useState(getProducts);
   const [categories, setCategories] = useState([]);
-  // @@@ TODO : Add infinite scroll.
+  const router = useRouter();
+  console.log(categories);
 
   useEffect(() => {
+    // if (categories.length === 0) {
+    //   setProducts(getProducts);
+    // } else if (categories.length > 0) {
+    //   let filteredProducts = getProducts.filter((product) =>
+    //     categories.includes(product.category)
+    //   );
+    //   setProducts(filteredProducts);
+    // }
     if (categories.length === 0) {
-      setProducts(getProducts);
-    } else if (categories.length > 0) {
-      let filteredProducts = getProducts.filter((product) =>
-        categories.includes(product.category)
+      router.push(`${process.env.NEXT_PUBLIC_URL}/products`);
+    } else if (categories.length === 1) {
+      router.push(
+        `${process.env.NEXT_PUBLIC_URL}/products?category=${categories[0]}`
       );
-      setProducts(filteredProducts);
     }
   }, [categories]);
 
@@ -210,6 +247,10 @@ const Products = ({ getCategories, getProducts }) => {
     } else if (!categories.includes(categoryName)) {
       setCategories([...categories, categoryName]);
     }
+
+    router.push(
+      `${process.env.NEXT_PUBLIC_URL}/products?category=${categoryName}`
+    );
   };
 
   const isChecked = (e) => {
@@ -256,7 +297,7 @@ const Products = ({ getCategories, getProducts }) => {
       spacing={3}
       className={classes.productsGridContainer}
     >
-      {products.map((product) => (
+      {getProducts.map((product) => (
         <Grid
           item
           md={3}
