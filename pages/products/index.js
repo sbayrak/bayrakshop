@@ -30,24 +30,55 @@ export const getServerSideProps = async (context) => {
       context.query.constructor === Object
     )
   ) {
-    console.log('if fired!');
     const category = context.query.category;
 
-    const getFilteredProducts = await db
-      .collection('products')
-      .find({
-        category: category,
-      })
-      .toArray();
-    const getProducts = await JSON.parse(JSON.stringify(getFilteredProducts));
-    return {
-      props: {
-        getCategories,
-        getProducts,
-      },
-    };
+    if (typeof context.query.category === 'string') {
+      const getFilteredProducts = await db
+        .collection('products')
+        .find({
+          category: category,
+        })
+        .toArray();
+      const getProducts = await JSON.parse(JSON.stringify(getFilteredProducts));
+      return {
+        props: {
+          getCategories,
+          getProducts,
+        },
+      };
+    } else if (
+      typeof context.query.category === 'object' &&
+      context.query.category.length > 1
+    ) {
+      let orArray = [];
+
+      for (let i = 0; i < context.query.category.length; i++) {
+        let categoryItem = {};
+        let element = context.query.category[i];
+        categoryItem = { category: element };
+
+        orArray.push(categoryItem);
+      }
+
+      const filteredProducts = await db
+        .collection('products')
+        .aggregate([
+          {
+            $match: {
+              $or: orArray,
+            },
+          },
+        ])
+        .toArray();
+      const getProducts = await JSON.parse(JSON.stringify(filteredProducts));
+      return {
+        props: {
+          getCategories,
+          getProducts,
+        },
+      };
+    }
   } else {
-    console.log('else fired!');
     const getProductsFromDB = await db
       .collection('products')
       .find({})
@@ -130,9 +161,9 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#f6f6f6',
     border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',
-
     [theme.breakpoints.down('xs')]: {
       paddingBottom: 0,
+      marginTop: theme.spacing(1),
     },
   },
   productCardTypo: {
@@ -214,23 +245,28 @@ const Products = ({ getCategories, getProducts }) => {
   const [products, setProducts] = useState(getProducts);
   const [categories, setCategories] = useState([]);
   const router = useRouter();
-  console.log(categories);
 
   useEffect(() => {
-    // if (categories.length === 0) {
-    //   setProducts(getProducts);
-    // } else if (categories.length > 0) {
-    //   let filteredProducts = getProducts.filter((product) =>
-    //     categories.includes(product.category)
-    //   );
-    //   setProducts(filteredProducts);
-    // }
     if (categories.length === 0) {
       router.push(`${process.env.NEXT_PUBLIC_URL}/products`);
     } else if (categories.length === 1) {
       router.push(
         `${process.env.NEXT_PUBLIC_URL}/products?category=${categories[0]}`
       );
+    } else if (categories.length > 1) {
+      let pushURL = `${process.env.NEXT_PUBLIC_URL}/products?`;
+      let queryString = [];
+
+      for (let i = 0; i < categories.length; i++) {
+        const category = categories[i];
+        if (i > 0) {
+          queryString.push(`&category=${category}`);
+        } else {
+          queryString.push(`category=${category}`);
+        }
+      }
+
+      router.push(`${pushURL}${queryString.join('')}`);
     }
   }, [categories]);
 
@@ -238,14 +274,14 @@ const Products = ({ getCategories, getProducts }) => {
     const categoryName = e.currentTarget.dataset.category;
 
     if (categories.length === 0) {
-      setCategories([...categories, categoryName]);
+      setCategories((categories) => [...categories, categoryName]);
     } else if (categories.includes(categoryName)) {
       let copyArray = [...categories];
       copyArray.splice(copyArray.indexOf(categoryName), 1);
 
       setCategories(copyArray);
     } else if (!categories.includes(categoryName)) {
-      setCategories([...categories, categoryName]);
+      setCategories((categories) => [...categories, categoryName]);
     }
 
     router.push(
