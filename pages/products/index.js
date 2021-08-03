@@ -149,7 +149,6 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
   },
   productsGridContainer: {
-    marginTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
   },
   productCard: {
@@ -157,7 +156,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: theme.spacing(7),
+    marginTop: theme.spacing(5),
     paddingBottom: theme.spacing(3),
     borderRadius: '5px',
     boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.2)',
