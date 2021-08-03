@@ -371,6 +371,9 @@ const Products = ({ getCategories, getProducts }) => {
               </div>
               <div className={classes.productHoverItem}>
                 <Button
+                  style={{
+                    backgroundColor: `${!product.active && '#f6f6f6'}`,
+                  }}
                   fullWidth
                   className={classes.productAddToCart}
                   disableRipple
