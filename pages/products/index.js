@@ -102,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   gridContainer: {
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
     paddingBottom: theme.spacing(5),
     marginTop: theme.spacing(20),
     minHeight: '100vh',
@@ -112,8 +112,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   filterGridContainer: {
+    backgroundColor: '#fff',
+    borderRadius: '5px',
     padding: theme.spacing(3),
     marginTop: theme.spacing(3),
+    marginRight: theme.spacing(2),
     borderRight: '1px solid rgba(0,0,0,0.05)',
   },
   filterTitle: {
@@ -157,8 +160,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(7),
     paddingBottom: theme.spacing(3),
     borderRadius: '5px',
-    boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.1)',
-    backgroundColor: '#f6f6f6',
+    boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.2)',
+    backgroundColor: '#fff',
     border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',
     [theme.breakpoints.down('xs')]: {
@@ -169,7 +172,6 @@ const useStyles = makeStyles((theme) => ({
   productCardTypo: {
     marginTop: theme.spacing(2),
     paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
     color: theme.palette.grey[600],
     [theme.breakpoints.down('sm')]: {
       fontSize: '12px',
@@ -177,62 +179,43 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: theme.spacing(0.5),
     },
   },
-  productHoverWrapper: {
-    backgroundColor: 'rgba(86,82,222,0.85)',
-    borderRadius: '5px',
-    width: '100%',
-    height: '100%',
-    position: 'absolute',
-    top: 0,
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
-    opacity: 0,
-    transition: '0.5s ease',
-    '&:hover': {
-      opacity: 1,
+  productCardTypo2: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
+    [theme.breakpoints.down('sm')]: {
+      fontSize: '14px',
+      marginTop: theme.spacing(1),
+      paddingTop: theme.spacing(0.5),
+      marginBottom: theme.spacing(2),
     },
   },
-  productHoverLink: {
-    color: '#f6f6f6',
+  productCardBtn: {
+    width: '100%',
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: theme.spacing(1),
+      marginTop: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+      paddingLeft: theme.spacing(1),
+    },
+  },
+  productLink: {
+    marginBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     textDecoration: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: theme.spacing(3),
-    fontSize: '18px',
-    width: '100%',
-    transition: '0.5s ease',
-    '&:hover': {
-      color: '#5652de',
-    },
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '12px',
+    [theme.breakpoints.down('xs')]: {
+      marginBottom: theme.spacing(1),
+      paddingBottom: theme.spacing(1),
     },
   },
-  productAddToCart: {
-    color: '#f6f6f6',
-    display: 'flex',
-    alignItems: 'center',
-    padding: theme.spacing(3),
-    fontSize: '16px',
-    textTransform: 'none',
-    transition: '0.5s ease',
-    '&:hover': {
-      color: '#5652de',
-    },
-    [theme.breakpoints.down('sm')]: {
-      fontSize: '12px',
-    },
-  },
-  productHoverItem: {
-    width: '100%',
-    display: 'flex',
-    justifyContent: 'center',
-    transition: '0.5s ease',
-    '&:hover': {
-      backgroundColor: '#f6f6f6',
+  productCardBtnWrapper: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '10px',
     },
   },
   productImageWrapper: {
@@ -242,7 +225,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Products = ({ getCategories, getProducts }) => {
   const classes = useStyles();
-  const [products, setProducts] = useState(getProducts);
+  const [quantity, setQuantity] = useState(1);
   const [categories, setCategories] = useState([]);
   const router = useRouter();
 
@@ -269,6 +252,9 @@ const Products = ({ getCategories, getProducts }) => {
       router.push(`${pushURL}${queryString.join('')}`);
     }
   }, [categories]);
+  // useEffect(() => {
+
+  // }, [quantity])
 
   const addToFilter = (e) => {
     const categoryName = e.currentTarget.dataset.category;
@@ -300,7 +286,11 @@ const Products = ({ getCategories, getProducts }) => {
   const categorySection = (
     <Grid item md={2} className={classes.filterGridContainer}>
       <div>
-        <Typography variant='h6' className={classes.filterTitle}>
+        <Typography
+          variant='h6'
+          color='primary'
+          className={classes.filterTitle}
+        >
           Filter By Category
         </Typography>
         <div className={classes.filterMobileCheckBoxWrapper}>
@@ -342,59 +332,66 @@ const Products = ({ getCategories, getProducts }) => {
           key={product._id}
         >
           <div className={classes.productCard}>
-            <div className={classes.productImageWrapper}>
-              <Image
-                src={product.image[0].secure_url}
-                alt={`${process.env.NEXT_PUBLIC_URL} ${product.name}`}
-                height={300}
-                width={450}
-              />
-            </div>
-            <Typography className={classes.productCardTypo}>
-              {product.name}
-            </Typography>
-            <Typography variant='h6' className={classes.productCardTypo}>
+            <Link
+              href={`${
+                process.env.NEXT_PUBLIC_URL
+              }/products/${product.name.toLowerCase().replace(' ', '-')}`}
+            >
+              <a className={classes.productLink}>
+                <div className={classes.productImageWrapper}>
+                  <Image
+                    src={product.image[0].secure_url}
+                    alt={`${process.env.NEXT_PUBLIC_URL} ${product.name}`}
+                    height={350}
+                    width={400}
+                  />
+                </div>
+                <Typography
+                  className={classes.productCardTypo}
+                  style={{ textAlign: 'center' }}
+                >
+                  {product.name}
+                </Typography>
+              </a>
+            </Link>
+            <Typography
+              variant='h6'
+              style={{ color: '#5652de' }}
+              className={classes.productCardTypo2}
+            >
               €{product.price}
-            </Typography>{' '}
-            <div className={classes.productHoverWrapper}>
-              <div className={classes.productHoverItem}>
-                <Link
-                  href={`${
-                    process.env.NEXT_PUBLIC_URL
-                  }/products/${product.name.toLowerCase().replace(' ', '-')}`}
-                >
-                  <a className={classes.productHoverLink}>
-                    <SearchIcon />
-                    &nbsp;&nbsp;<span>Read Details</span>
-                  </a>
-                </Link>
-              </div>
-              <div className={classes.productHoverItem}>
-                <Button
-                  style={{
-                    backgroundColor: `${!product.active && '#f6f6f6'}`,
-                  }}
-                  fullWidth
-                  className={classes.productAddToCart}
-                  disableRipple
-                  disableFocusRipple
-                  disableElevation
-                  disableTouchRipple
-                  disabled={product.active ? false : true}
-                >
-                  {product.active ? (
-                    <>
-                      <AddShoppingCartIcon />
-                      &nbsp;&nbsp;<span>Add to Cart</span>
-                    </>
-                  ) : (
-                    <>
-                      <RemoveShoppingCartIcon /> &nbsp;&nbsp;
-                      <span>Out of Stock</span>
-                    </>
-                  )}
-                </Button>
-              </div>
+            </Typography>
+            <div className={classes.productCardBtn}>
+              <Button
+                style={{
+                  backgroundColor: `${!product.active && '#f6f6f6'}`,
+                }}
+                fullWidth
+                color='primary'
+                variant='contained'
+                disableRipple
+                disableFocusRipple
+                disableElevation
+                disableTouchRipple
+                disabled={product.active ? false : true}
+              >
+                {product.active ? (
+                  <>
+                    <AddShoppingCartIcon fontSize='small' />
+                    &nbsp;&nbsp;
+                    <span className={classes.productCardBtnWrapper}>
+                      Add to Cart
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <RemoveShoppingCartIcon fontSize='small' /> &nbsp;&nbsp;
+                    <span className={classes.productCardBtnWrapper}>
+                      Out of Stock
+                    </span>
+                  </>
+                )}
+              </Button>
             </div>
           </div>
         </Grid>
