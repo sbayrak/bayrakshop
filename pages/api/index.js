@@ -4,23 +4,6 @@ export default async (req, res) => {
   if (req.method === 'GET') {
     const { db } = await connectToDatabase();
 
-    // const products = await db
-    //   .collection('products')
-    //   .aggregate([
-    //     {
-    //       $group: {
-    //         _id: '$category',
-    //         count: { $sum: 1 },
-    //       },
-    //     },
-    //   ])
-    //   .toArray();
-    // res.status(200).json(products); THIS GIVES TOTAL COUNT OF EACH CATEGORY
-
-    // const filteredProducts = await db.collection('products').aggregate([
-    //   { $match : {category : }}
-    // ])
-
     const filteredProducts = await db
       .collection('products')
       .aggregate([

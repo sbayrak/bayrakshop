@@ -17,7 +17,8 @@ import AddIcon from '@material-ui/icons/Add';
 // @@@ nextjs @@@
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import CartContext from '../../context/cart/CartContext';
 // @@@ nextjs @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -120,11 +121,24 @@ const useStyles = makeStyles((theme) => ({
 
 const MostSoldCard = ({ item }) => {
   const classes = useStyles();
+  const cartContext = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     if (quantity <= 1) setQuantity(1);
   }, [quantity]);
+
+  const addCart = () => {
+    const product = {
+      productId: item._id,
+      productName: item.name,
+      productPrice: item.price,
+      quantity: quantity,
+      total: item.price * quantity,
+    };
+
+    cartContext.addToCart(product);
+  };
 
   const MostSoldCardDesktop = (
     <div className={classes.MostSoldCardDesktop}>
@@ -200,16 +214,15 @@ const MostSoldCard = ({ item }) => {
           </Grid>
         </CardContent>
         <CardActions>
-          <form style={{ width: '100%' }}>
-            <Button
-              size='small'
-              variant='contained'
-              fullWidth
-              className={classes.MostSoldAddToCartForm}
-            >
-              ADD TO CART
-            </Button>
-          </form>
+          <Button
+            size='small'
+            variant='contained'
+            fullWidth
+            className={classes.MostSoldAddToCartForm}
+            onClick={addCart}
+          >
+            ADD TO CART
+          </Button>
         </CardActions>
       </Card>
     </div>

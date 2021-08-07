@@ -7,6 +7,7 @@ import theme from '../src/theme';
 import { Provider } from 'next-auth/client';
 import Navbar from '../components/layout/Navbar';
 import Layout from '../components/layout/Layout';
+import CartState from '../context/cart/CartState';
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -29,13 +30,13 @@ export default function MyApp(props) {
         />
       </Head>
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Provider session={pageProps.session}>
-          {/* <Navbar></Navbar> */}
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
+          <CartState>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </CartState>
         </Provider>
       </ThemeProvider>
     </React.Fragment>
