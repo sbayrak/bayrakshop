@@ -4,6 +4,7 @@ import {
   REMOVE_ITEM,
   SHOW_HIDE_CART,
   UPDATE_CART,
+  GET_CART,
 } from '../types';
 
 const CartReducer = (state, action) => {

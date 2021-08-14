@@ -41,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: '#6788f5',
     },
+    [theme.breakpoints.down('xs')]: {
+      padding: theme.spacing(0.5),
+      fontSize: '10px',
+    },
   },
   MostSoldCardLink: {
     textDecoration: 'none',
@@ -83,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
   },
   MostSoldCardTypo2Mobile: {
     [theme.breakpoints.down('xs')]: {
-      fontSize: '14px',
+      fontSize: '12px',
     },
   },
   MostSoldCardMoBile: {
@@ -108,7 +112,8 @@ const useStyles = makeStyles((theme) => ({
       transform: 'scale(1.01)',
     },
     [theme.breakpoints.down('xs')]: {
-      height: '75px',
+      height: '100px',
+      marginBottom: theme.spacing(1),
     },
   },
   itemDesc: {
@@ -123,18 +128,18 @@ const MostSoldCard = ({ item }) => {
   const classes = useStyles();
   const cartContext = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
+  console.log(cartContext);
 
   useEffect(() => {
     if (quantity <= 1) setQuantity(1);
   }, [quantity]);
 
-  const addCart = () => {
+  const addCart = (e) => {
     const product = {
       productId: item._id,
       productName: item.name,
       productPrice: item.price,
       quantity: quantity,
-      total: item.price * quantity,
     };
 
     cartContext.addToCart(product);
@@ -237,32 +242,26 @@ const MostSoldCard = ({ item }) => {
               rel='noreferrer noopener'
               className={classes.MostSoldCardLink}
             >
-              <Image
-                src={item.image[0].secure_url}
-                layout='fill'
-                alt={`KoslowShop - ${item.name}`}
-                title={`KoslowShop - ${item.name}`}
-              ></Image>
-              <CardContent>
+              <div className={classes.imgWrapper}>
+                <Image
+                  src={item.image[0].secure_url}
+                  blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+                  layout='fill'
+                  objectFit='cover'
+                  alt={`KoslowShop ${item.name}`}
+                  className={classes.AboutImg}
+                />
+              </div>
+              <CardContent style={{ paddingBottom: 10, paddingTop: 5 }}>
                 <Typography
                   gutterBottom
                   variant='h5'
                   component='h2'
                   color='textPrimary'
                   gutterBottom
-                  paragraph
                   className={classes.MostSoldCardTypo1Mobile}
                 >
                   {item.name}
-                </Typography>
-                <Typography
-                  variant='body2'
-                  color='textSecondary'
-                  component='p'
-                  gutterBottom
-                  className={classes.MostSoldCardDescription}
-                >
-                  {item.description}
                 </Typography>
                 <Typography
                   variant='subtitle1'
@@ -294,16 +293,14 @@ const MostSoldCard = ({ item }) => {
           </Grid>
         </CardContent>
         <CardActions>
-          <form style={{ width: '100%' }}>
-            <Button
-              size='small'
-              variant='contained'
-              fullWidth
-              className={classes.MostSoldAddToCartForm}
-            >
-              ADD TO CART
-            </Button>
-          </form>
+          <Button
+            size='small'
+            variant='contained'
+            fullWidth
+            className={classes.MostSoldAddToCartForm}
+          >
+            ADD TO CART
+          </Button>
         </CardActions>
       </Card>
     </div>
