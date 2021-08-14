@@ -1,4 +1,5 @@
 import { connectToDatabase } from '../../util/mongodb';
+import { ObjectId } from 'mongodb';
 
 export default async (req, res) => {
   if (req.method === 'GET') {
@@ -19,6 +20,10 @@ export default async (req, res) => {
 
     const { db } = await connectToDatabase();
 
-    const calcTotalFromDB = await db.collection('');
+    const getCart = await db.collection('cart').findOne({
+      _id: ObjectId('610e7179543909511488889d'),
+    });
+
+    res.status(200).json(getCart);
   }
 };

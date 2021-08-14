@@ -128,7 +128,6 @@ const MostSoldCard = ({ item }) => {
   const classes = useStyles();
   const cartContext = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
-  console.log(cartContext);
 
   useEffect(() => {
     if (quantity <= 1) setQuantity(1);

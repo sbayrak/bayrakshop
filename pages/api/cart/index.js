@@ -20,5 +20,14 @@ export default async (req, res) => {
 
     const result = await JSON.parse(saveCartToDB);
     res.status(200).json(result.ops[0]);
+  } else if (req.method === 'GET') {
+    const getCart = await db
+      .collection('cart')
+      .find({
+        customerId: ObjectId('60cf00e07b18ce43bce11880'),
+      })
+      .toArray();
+
+    res.status(200).json(getCart);
   }
 };

@@ -14,6 +14,12 @@ const CartReducer = (state, action) => {
         ...state,
         cartItem: [...state.cartItem, action.payload],
       };
+
+    case GET_CART:
+      return {
+        ...state,
+        cartItem: [action.payload],
+      };
   }
 };
 

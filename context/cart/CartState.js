@@ -20,11 +20,31 @@ const initialState = {
 const CartState = ({ children }) => {
   const [state, dispatch] = useReducer(CartReducer, initialState);
 
-  const addToCart = async (product) => {
-    dispatch({
-      type: ADD_TO_CART,
-      payload: product,
+  const getCart = async () => {
+    const getCart = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cart`, {
+      method: 'GET',
     });
+    const result = await getCart.json();
+    console.log(result);
+    dispatch({
+      type: GET_CART,
+      payload: result,
+    });
+  };
+
+  const addToCart = async (product) => {
+    const addToCartDB = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/cart/`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(product),
+      }
+    );
+
+    getCart();
   };
 
   return (
@@ -33,6 +53,7 @@ const CartState = ({ children }) => {
         showCart: state.showCart,
         cartItem: state.cartItem,
         addToCart,
+        getCart,
       }}
     >
       {children}

@@ -41,7 +41,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 // @@@ NEXTJS @@@
 import Link from 'next/link';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import CartContext from '../../context/cart/CartContext';
 import { useSession, signOut } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -312,12 +313,19 @@ const useStyles = makeStyles((theme) => ({
 const Navbar = () => {
   const classes = useStyles();
   const router = useRouter();
+  const cartContext = useContext(CartContext);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
   const [topGrid, setTopGrid] = useState('inline');
   const [session, loading] = useSession();
+
+  console.log(cartContext.cartItem);
+
+  useEffect(() => {
+    cartContext.getCart();
+  }, []);
 
   const logoutHandler = async () => {
     const data = await signOut({ redirect: false, callbackUrl: '/' });
