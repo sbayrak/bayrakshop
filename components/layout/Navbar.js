@@ -322,10 +322,14 @@ const Navbar = () => {
   const [session, loading] = useSession();
 
   console.log(cartContext.cartItem);
+  console.log(session);
+  console.log(loading);
 
   useEffect(() => {
-    cartContext.getCart();
-  }, []);
+    // if (!loading && session) {
+    //   cartContext.getCart(user._id);
+    // }
+  }, [loading]);
 
   const logoutHandler = async () => {
     const data = await signOut({ redirect: false, callbackUrl: '/' });

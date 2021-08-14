@@ -20,10 +20,13 @@ const initialState = {
 const CartState = ({ children }) => {
   const [state, dispatch] = useReducer(CartReducer, initialState);
 
-  const getCart = async () => {
-    const getCart = await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cart`, {
-      method: 'GET',
-    });
+  const getCart = async (id) => {
+    const getCart = await fetch(
+      `${process.env.NEXT_PUBLIC_URL}/api/cart?owner=${id}`,
+      {
+        method: 'GET',
+      }
+    );
     const result = await getCart.json();
     console.log(result);
     dispatch({

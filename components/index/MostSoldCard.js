@@ -19,6 +19,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect, useContext } from 'react';
 import CartContext from '../../context/cart/CartContext';
+import { useSession } from 'next-auth/client';
 // @@@ nextjs @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -126,6 +127,7 @@ const useStyles = makeStyles((theme) => ({
 
 const MostSoldCard = ({ item }) => {
   const classes = useStyles();
+  const [session, loading] = useSession();
   const cartContext = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
 
