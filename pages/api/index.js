@@ -20,10 +20,10 @@ export default async (req, res) => {
 
     const { db } = await connectToDatabase();
 
-    const getCart = await db.collection('cart').findOne({
-      _id: ObjectId('610e7179543909511488889d'),
+    const isCartExists = await db.collection('cart').findOne({
+      customerId: ObjectId('60cf00e07b18ce43bce11880'),
     });
 
-    res.status(200).json(getCart);
+    res.status(200).json(isCartExists);
   }
 };

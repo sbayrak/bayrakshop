@@ -27,27 +27,24 @@ const CartState = ({ children }) => {
         method: 'GET',
       }
     );
+
     const result = await getCart.json();
-    console.log(result);
     dispatch({
       type: GET_CART,
-      payload: result,
+      payload: result.cartItem,
     });
   };
 
   const addToCart = async (product) => {
-    const addToCartDB = await fetch(
-      `${process.env.NEXT_PUBLIC_URL}/api/cart/`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(product),
-      }
-    );
+    await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cart`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(product),
+    });
 
-    getCart();
+    getCart(product.customerId);
   };
 
   return (

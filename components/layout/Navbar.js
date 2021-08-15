@@ -314,6 +314,7 @@ const Navbar = () => {
   const classes = useStyles();
   const router = useRouter();
   const cartContext = useContext(CartContext);
+  const [cartItems, setCartItems] = useState('');
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -321,15 +322,11 @@ const Navbar = () => {
   const [topGrid, setTopGrid] = useState('inline');
   const [session, loading] = useSession();
 
-  console.log(cartContext.cartItem);
-  console.log(session);
-  console.log(loading);
-
   useEffect(() => {
-    // if (!loading && session) {
-    //   cartContext.getCart(user._id);
-    // }
-  }, [loading]);
+    if (loading === false && session.user) {
+      cartContext.getCart(session.user._id);
+    }
+  }, [session, loading]);
 
   const logoutHandler = async () => {
     const data = await signOut({ redirect: false, callbackUrl: '/' });
@@ -608,7 +605,14 @@ const Navbar = () => {
                       setOpenShoppingCartDrawer(!openShoppingCartDrawer)
                     }
                   >
-                    <Badge badgeContent={1} color='error'>
+                    <Badge
+                      badgeContent={
+                        !cartContext.cartItem
+                          ? '...'
+                          : cartContext.cartItem.length
+                      }
+                      color='error'
+                    >
                       <ShoppingCartIcon color='primary' fontSize='large' />
                     </Badge>
                   </IconButton>

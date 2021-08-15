@@ -141,6 +141,7 @@ const MostSoldCard = ({ item }) => {
       productName: item.name,
       productPrice: item.price,
       quantity: quantity,
+      customerId: session.user._id,
     };
 
     cartContext.addToCart(product);

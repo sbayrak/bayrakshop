@@ -18,7 +18,7 @@ const CartReducer = (state, action) => {
     case GET_CART:
       return {
         ...state,
-        cartItem: [action.payload],
+        cartItem: action.payload,
       };
   }
 };
