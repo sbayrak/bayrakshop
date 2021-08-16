@@ -140,6 +140,7 @@ const MostSoldCard = ({ item }) => {
       productId: item._id,
       productName: item.name,
       productPrice: item.price,
+      productImg: item.image[0].secure_url,
       quantity: quantity,
       customerId: session.user._id,
     };

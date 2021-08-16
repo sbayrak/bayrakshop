@@ -5,40 +5,77 @@ export default async (req, res) => {
   const { db } = await connectToDatabase();
 
   if (req.method === 'POST') {
-    const { productId, productName, productPrice, quantity } = req.body;
+    const {
+      productId,
+      productName,
+      productPrice,
+      productImg,
+      quantity,
+      customerId,
+    } = req.body;
+
     let product = {
       productId: ObjectId(productId),
       productName,
       productPrice,
-      quantity,
+      productImg,
+      quantity: Number(quantity),
+      customerId,
     };
 
-    const isCartExists = await db.collection('cart').findOne({
-      customerId: ObjectId('60cf00e07b18ce43bce11880'),
+    let isCartExists = await db.collection('cart').findOne({
+      customerId: ObjectId(customerId),
     });
 
     if (isCartExists) {
-      let currentCart = isCartExists.cartItem;
-      currentCart.push(product);
-
-      const updateCart = await db.collection('cart').updateOne(
-        {
-          customerId: ObjectId('60cf00e07b18ce43bce11880'),
-        },
-        {
-          $set: {
-            cartItem: currentCart,
-          },
+      let currentCart = [...isCartExists.cartItem];
+      let isItemExists = false;
+      currentCart.map((item) => {
+        if (
+          ObjectId(item.productId).toString() ===
+          ObjectId(product.productId).toString()
+        ) {
+          item.quantity = item.quantity + product.quantity;
+          isItemExists = true;
         }
-      );
-      const result = await JSON.parse(updateCart);
-      res.status(200).json(result.modifiedCount);
+      });
+
+      if (isItemExists) {
+        isCartExists.cartItem.length = 0;
+        isCartExists.cartItem = currentCart;
+        await db.collection('cart').updateOne(
+          {
+            customerId: ObjectId(customerId),
+          },
+          {
+            $set: {
+              cartItem: isCartExists.cartItem,
+            },
+          }
+        );
+
+        res.status(200).json({ msg: 'ok1' });
+      } else if (!isItemExists) {
+        isCartExists.cartItem.push(product);
+        await db.collection('cart').updateOne(
+          {
+            customerId: ObjectId(customerId),
+          },
+          {
+            $set: {
+              cartItem: isCartExists.cartItem,
+            },
+          }
+        );
+
+        res.status(200).json({ msg: 'ok2' });
+      }
     } else if (!isCartExists) {
       let cartItemToBeSaved = [];
       cartItemToBeSaved.push(product);
 
       const saveCartToDB = await db.collection('cart').insertOne({
-        customerId: ObjectId('60cf00e07b18ce43bce11880'),
+        customerId: ObjectId(customerId),
         cartItem: cartItemToBeSaved,
       });
 

@@ -24,6 +24,12 @@ export default async (req, res) => {
       customerId: ObjectId('60cf00e07b18ce43bce11880'),
     });
 
-    res.status(200).json(isCartExists);
+    let productName = 'Baklava';
+
+    const isItemExists = isCartExists.cartItem.filter(
+      (item) => item.productName === productName
+    );
+
+    res.status(200).json(isItemExists);
   }
 };
