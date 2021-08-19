@@ -23,7 +23,6 @@ import {
   Box,
   Divider,
   Button,
-  Paper,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -46,6 +45,7 @@ import CartContext from '../../context/cart/CartContext';
 import { useSession, signOut } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import SideShoppingCart from './SideShoppingCart';
 // @@@ NEXTJS @@@
 
 const useStyles = makeStyles((theme) => ({
@@ -270,7 +270,6 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(5),
   },
   shoppingCartItems: {
-    paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(1),
   },
   shoppingCartLinks: {
@@ -323,7 +322,7 @@ const Navbar = () => {
   const [session, loading] = useSession();
 
   useEffect(() => {
-    if (loading === false && session.user) {
+    if (loading === false && session) {
       cartContext.getCart(session.user._id);
     }
   }, [session, loading]);
@@ -358,6 +357,8 @@ const Navbar = () => {
   const handleDesktopMenuClose = () => {
     setOpenDesktopProfileMenu(false);
   };
+
+  console.log(cartContext.cartItem);
 
   const desktop = (
     <Container className={classes.root}>
@@ -641,7 +642,11 @@ const Navbar = () => {
                             paragraph
                             className={classes.shoppingCartTypo2}
                           >
-                            You have 1 item in your cart.
+                            You have{' '}
+                            {cartContext.cartItem
+                              ? cartContext.cartItem.length
+                              : '0'}{' '}
+                            item in your cart.
                           </Typography>
                           <Divider />
                         </Grid>
@@ -651,33 +656,25 @@ const Navbar = () => {
                           md={12}
                           className={classes.shoppingCartItems}
                         >
-                          <Grid item md={3}>
-                            <Image src={baklava} width={75} height={75} />
-                          </Grid>
-                          <Grid item md={8}>
-                            <Typography
-                              variant='subtitle1'
-                              className={classes.shoppingCartTypo1}
-                            >
-                              1 kg Baklava
-                            </Typography>
-                            <Typography
-                              variant='body2'
-                              className={classes.shoppingCartTypo2}
-                            >
-                              1 Piece - €39.00
-                            </Typography>
-                          </Grid>
-                          <Grid item md={1}>
-                            <IconButton>
-                              <DeleteIcon fontSize='small' />
-                            </IconButton>
-                          </Grid>
+                          {/* CART ITEMS STARTS */}
 
-                          <Grid item md={12}>
-                            <Divider />
-                          </Grid>
+                          <>
+                            {cartContext.cartItem ? (
+                              cartContext.cartItem.map((item) => (
+                                <SideShoppingCart
+                                  key={item.productId}
+                                  item={item}
+                                ></SideShoppingCart>
+                              ))
+                            ) : (
+                              <Grid item md={12}>
+                                <Typography>empty</Typography>
+                              </Grid>
+                            )}
+                          </>
+                          {/* CART ITEMS ENDS */}
                         </Grid>
+
                         <Divider></Divider>
                         <Grid item md={7}>
                           <Typography
@@ -691,7 +688,16 @@ const Navbar = () => {
                             gutterBottom
                             paragraph
                           >
-                            €39.00
+                            €
+                            {!cartContext.cartItem
+                              ? '0'
+                              : cartContext.cartItem.reduce(
+                                  (acc, currentVal) =>
+                                    acc +
+                                    currentVal.quantity *
+                                      currentVal.productPrice,
+                                  0
+                                )}
                           </Typography>
                         </Grid>
                         <Grid
@@ -705,8 +711,15 @@ const Navbar = () => {
                             </a>
                           </Link>
 
-                          <Link href='#!'>
-                            <a className={classes.shoppingCartLink2}>
+                          <Link href='/'>
+                            <a
+                              className={classes.shoppingCartLink2}
+                              onClick={(e) =>
+                                setOpenShoppingCartDrawer(
+                                  !openShoppingCartDrawer
+                                )
+                              }
+                            >
                               CONTINUE TO SHOPPING
                             </a>
                           </Link>
