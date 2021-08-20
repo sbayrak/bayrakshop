@@ -47,6 +47,18 @@ const CartState = ({ children }) => {
     getCart(product.customerId);
   };
 
+  const deleteItemFromCart = async (customerId, productId) => {
+    await fetch(`${process.env.NEXT_PUBLIC_URL}/api/cart?delete=${productId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(customerId),
+    });
+
+    getCart(customerId);
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -54,6 +66,7 @@ const CartState = ({ children }) => {
         cartItem: state.cartItem,
         addToCart,
         getCart,
+        deleteItemFromCart,
       }}
     >
       {children}

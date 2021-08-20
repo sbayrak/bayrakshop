@@ -4,6 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import Image from 'next/image';
+import CartContext from '../../context/cart/CartContext';
+import { useContext } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   shoppingCartTypo1: {
@@ -20,6 +22,13 @@ const useStyles = makeStyles((theme) => ({
 
 const SideShoppingCart = ({ item }) => {
   const classes = useStyles();
+  const cartContext = useContext(CartContext);
+
+  const deleteProduct = (e) => {
+    const productIdToBeDeleted = e.currentTarget.dataset.productid;
+
+    cartContext.deleteItemFromCart(item.customerId, productIdToBeDeleted);
+  };
 
   return (
     <>
@@ -36,7 +45,7 @@ const SideShoppingCart = ({ item }) => {
           </Typography>
         </Grid>
         <Grid item md={1}>
-          <IconButton>
+          <IconButton data-productid={item.productId} onClick={deleteProduct}>
             <DeleteIcon fontSize='small' />
           </IconButton>
         </Grid>

@@ -90,5 +90,32 @@ export default async (req, res) => {
     });
 
     res.status(200).json(getCart);
+  } else if (req.method === 'DELETE') {
+    const customerId = req.body;
+
+    const productIdToBeDeleted = req.query.delete;
+
+    const deleteItem = await db.collection('cart').findOne({
+      customerId: ObjectId(customerId),
+    });
+
+    const newCart = deleteItem.cartItem.filter(
+      (item) =>
+        ObjectId(item.productId).toString() !==
+        ObjectId(productIdToBeDeleted).toString()
+    );
+
+    const saveNewCart = await db.collection('cart').updateOne(
+      {
+        customerId: ObjectId(customerId),
+      },
+      {
+        $set: {
+          cartItem: newCart,
+        },
+      }
+    );
+
+    res.status(200).json(saveNewCart);
   }
 };
