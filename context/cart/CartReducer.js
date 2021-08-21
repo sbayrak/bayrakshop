@@ -5,6 +5,7 @@ import {
   SHOW_HIDE_CART,
   UPDATE_CART,
   GET_CART,
+  LOGOUT,
 } from '../types';
 
 const CartReducer = (state, action) => {
@@ -19,6 +20,11 @@ const CartReducer = (state, action) => {
       return {
         ...state,
         cartItem: action.payload,
+      };
+    case LOGOUT:
+      return {
+        ...state,
+        cartItem: [],
       };
   }
 };

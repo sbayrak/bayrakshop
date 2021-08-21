@@ -8,10 +8,14 @@ import {
   CardActions,
   Button,
   IconButton,
+  Snackbar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import RemoveIcon from '@material-ui/icons/Remove';
 import AddIcon from '@material-ui/icons/Add';
+import ErrorIcon from '@material-ui/icons/Error';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
+import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -123,6 +127,18 @@ const useStyles = makeStyles((theme) => ({
     // height: '25px',
     marginBottom: theme.spacing(6),
   },
+
+  snackbarWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#F44336',
+    padding: theme.spacing(2),
+    borderRadius: '5px',
+  },
+  snackbarLink: {
+    color: '#fff',
+    fontWeight: theme.typography.fontWeightBold,
+  },
 }));
 
 const MostSoldCard = ({ item }) => {
@@ -130,22 +146,33 @@ const MostSoldCard = ({ item }) => {
   const [session, loading] = useSession();
   const cartContext = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (quantity <= 1) setQuantity(1);
   }, [quantity]);
 
-  const addCart = (e) => {
-    const product = {
-      productId: item._id,
-      productName: item.name,
-      productPrice: item.price,
-      productImg: item.image[0].secure_url,
-      quantity: quantity,
-      customerId: session.user._id,
-    };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
-    cartContext.addToCart(product);
+    setSnackbarOpen(false);
+  };
+  const addCart = (e) => {
+    if (!session) {
+      setSnackbarOpen(true);
+    } else if (session) {
+      const product = {
+        productId: item._id,
+        productName: item.name,
+        productPrice: item.price,
+        productImg: item.image[0].secure_url,
+        quantity: quantity,
+        customerId: session.user._id,
+      };
+      cartContext.addToCart(product);
+    }
   };
 
   const MostSoldCardDesktop = (
@@ -222,15 +249,53 @@ const MostSoldCard = ({ item }) => {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button
-            size='small'
-            variant='contained'
-            fullWidth
-            className={classes.MostSoldAddToCartForm}
-            onClick={addCart}
-          >
-            ADD TO CART
-          </Button>
+          {item.active ? (
+            <Button
+              style={{
+                backgroundColor: `${!item.active && '#f6f6f6'}`,
+              }}
+              className={classes.MostSoldAddToCartForm}
+              fullWidth
+              color='primary'
+              variant='contained'
+              disableRipple
+              disableFocusRipple
+              disableElevation
+              disableTouchRipple
+              disabled={false}
+              onClick={addCart}
+            >
+              <>
+                <AddShoppingCartIcon fontSize='small' />
+                &nbsp;&nbsp;
+                <span className={classes.productCardBtnWrapper}>
+                  Add to Cart
+                </span>
+              </>
+            </Button>
+          ) : (
+            <Button
+              style={{
+                backgroundColor: `${!item.active && '#f6f6f6'}`,
+              }}
+              className={classes.MostSoldAddToCartForm}
+              fullWidth
+              color='primary'
+              variant='contained'
+              disableRipple
+              disableFocusRipple
+              disableElevation
+              disableTouchRipple
+              disabled={true}
+            >
+              <>
+                <RemoveShoppingCartIcon fontSize='small' /> &nbsp;&nbsp;
+                <span className={classes.productCardBtnWrapper}>
+                  Out of Stock
+                </span>
+              </>
+            </Button>
+          )}
         </CardActions>
       </Card>
     </div>
@@ -313,6 +378,25 @@ const MostSoldCard = ({ item }) => {
     <>
       {MostSoldCardDesktop}
       {mobile}
+      {snackbarOpen && (
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={6000}
+          onClose={handleSnackbarClose}
+        >
+          <div className={classes.snackbarWrapper}>
+            <ErrorIcon color='secondary' />
+            &nbsp;&nbsp;
+            <Typography variant='body1' color='secondary'>
+              Please{' '}
+              <Link href='/auth/signin'>
+                <a className={classes.snackbarLink}>log in</a>
+              </Link>{' '}
+              first to add a product to your cart.
+            </Typography>
+          </div>
+        </Snackbar>
+      )}
     </>
   );
 };

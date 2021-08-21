@@ -210,7 +210,7 @@ const AddNewProduct = ({ categoryResult }) => {
     if (!price) {
       setErrorPrice(true);
     }
-    if (!description || !description.length < 59) {
+    if (!description || !description.length < 10 || !description.length > 70) {
       setErrorDescription(true);
     }
     if (!category) {

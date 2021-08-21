@@ -6,6 +6,7 @@ import {
   SHOW_HIDE_CART,
   UPDATE_CART,
   GET_CART,
+  LOGOUT,
 } from '../types';
 import CartContext from './CartContext';
 import CartReducer from './CartReducer';
@@ -59,6 +60,12 @@ const CartState = ({ children }) => {
     getCart(customerId);
   };
 
+  const logoutAndEmptyCart = () => {
+    dispatch({
+      type: LOGOUT,
+    });
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -67,6 +74,7 @@ const CartState = ({ children }) => {
         addToCart,
         getCart,
         deleteItemFromCart,
+        logoutAndEmptyCart,
       }}
     >
       {children}

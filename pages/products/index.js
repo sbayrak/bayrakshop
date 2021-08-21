@@ -1,9 +1,21 @@
 // @@@ MATERIAL-UI @@@
-import { Grid, Typography, Checkbox, Button, Box } from '@material-ui/core';
+import {
+  Grid,
+  Typography,
+  Checkbox,
+  Button,
+  Box,
+  Snackbar,
+  IconButton,
+} from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
+import ErrorIcon from '@material-ui/icons/Error';
+import RemoveIcon from '@material-ui/icons/Remove';
+import MostSoldCard from '../../components/index/MostSoldCard';
+import AddIcon from '@material-ui/icons/Add';
 // @@@ MATERIAL-UI @@@
 
 // @@@ nextjs @@@
@@ -11,7 +23,9 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { connectToDatabase } from '../../util/mongodb';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { useSession } from 'next-auth/client';
+import CartContext from '../../context/cart/CartContext';
 
 // @@@ nextjs @@@
 
@@ -145,31 +159,39 @@ const useStyles = makeStyles((theme) => ({
       gridTemplateColumns: '1fr 1fr',
     },
   },
-  productCardWrapper: {
-    position: 'relative',
-  },
   productsGridContainer: {
     paddingLeft: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+    },
+  },
+  productCardWrapper: {
+    position: 'relative',
+    [theme.breakpoints.down('xs')]: {
+      padding: `5px !important`,
+    },
   },
   productCard: {
     position: 'relative',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(1),
     paddingBottom: theme.spacing(3),
     borderRadius: '5px',
-    boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.2)',
+    boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.1)',
     backgroundColor: '#fff',
     border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',
     [theme.breakpoints.down('xs')]: {
       paddingBottom: 0,
+      padding: 0,
       marginTop: theme.spacing(1),
     },
   },
   productCardTypo: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
     paddingTop: theme.spacing(2),
     color: theme.palette.grey[600],
     [theme.breakpoints.down('sm')]: {
@@ -179,7 +201,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   productCardTypo2: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(4),
     paddingRight: theme.spacing(3),
     paddingLeft: theme.spacing(3),
@@ -195,7 +217,7 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(0),
     [theme.breakpoints.down('xs')]: {
       marginBottom: theme.spacing(1),
       marginTop: theme.spacing(1),
@@ -205,10 +227,10 @@ const useStyles = makeStyles((theme) => ({
   },
   productLink: {
     marginBottom: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    paddingBottom: theme.spacing(1),
     textDecoration: 'none',
     [theme.breakpoints.down('xs')]: {
-      marginBottom: theme.spacing(1),
+      marginBottom: theme.spacing(0),
       paddingBottom: theme.spacing(1),
     },
   },
@@ -220,12 +242,53 @@ const useStyles = makeStyles((theme) => ({
   productImageWrapper: {
     width: '100%',
   },
+  snackbarWrapper: {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: '#F44336',
+    padding: theme.spacing(2),
+    borderRadius: '5px',
+  },
+  snackbarLink: {
+    color: '#fff',
+    fontWeight: theme.typography.fontWeightBold,
+  },
+  typoWrapper: {
+    paddingTop: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+  },
+  MostSoldQuantityBtn: {
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(1),
+    },
+  },
+  itemDesc: {
+    maxHeight: '15px',
+    minHeight: '15px',
+    // height: '25px',
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  productName: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '16px',
+    },
+  },
+  MostSoldQuantityGrid: {},
 }));
 
 const Products = ({ getCategories, getProducts }) => {
   const classes = useStyles();
+  const cartContext = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [categories, setCategories] = useState([]);
+  const [session, loading] = useSession();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -279,6 +342,29 @@ const Products = ({ getCategories, getProducts }) => {
       return true;
     } else {
       return false;
+    }
+  };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setSnackbarOpen(false);
+  };
+
+  const addToCart = (e) => {
+    if (!session) {
+      setSnackbarOpen(true);
+    } else if (session) {
+      const product = {
+        productId: e.currentTarget.dataset.productid,
+        productName: e.currentTarget.dataset.productname,
+        productPrice: e.currentTarget.dataset.productprice,
+        productImg: e.currentTarget.dataset.productimg,
+        quantity: quantity,
+        customerId: session.user._id,
+      };
+      cartContext.addToCart(product);
     }
   };
 
@@ -341,16 +427,31 @@ const Products = ({ getCategories, getProducts }) => {
                   <Image
                     src={product.image[0].secure_url}
                     alt={`${process.env.NEXT_PUBLIC_URL} ${product.name}`}
-                    height={350}
-                    width={400}
+                    height={250}
+                    width={310}
                   />
                 </div>
-                <Typography
-                  className={classes.productCardTypo}
-                  style={{ textAlign: 'center' }}
-                >
-                  {product.name}
-                </Typography>
+                <div className={classes.typoWrapper}>
+                  <Typography
+                    gutterBottom
+                    variant='h5'
+                    component='h2'
+                    color='textPrimary'
+                    className={classes.productName}
+                  >
+                    {product.name}
+                  </Typography>
+                  <Typography
+                    variant='body2'
+                    color='textSecondary'
+                    component='p'
+                    gutterBottom
+                    paragraph
+                    className={classes.itemDesc}
+                  >
+                    {product.description}
+                  </Typography>
+                </div>
               </a>
             </Link>
             <Typography
@@ -360,21 +461,41 @@ const Products = ({ getCategories, getProducts }) => {
             >
               €{product.price}
             </Typography>
-            <div className={classes.productCardBtn}>
-              <Button
-                style={{
-                  backgroundColor: `${!product.active && '#f6f6f6'}`,
-                }}
-                fullWidth
-                color='primary'
-                variant='contained'
-                disableRipple
-                disableFocusRipple
-                disableElevation
-                disableTouchRipple
-                disabled={product.active ? false : true}
+            <Grid item md={12} className={classes.MostSoldQuantityGrid}>
+              <IconButton
+                className={classes.MostSoldQuantityBtn}
+                onClick={() => setQuantity(quantity - 1)}
               >
-                {product.active ? (
+                <RemoveIcon fontSize='small' color='primary' />
+              </IconButton>
+              <span>{quantity}</span>
+              <IconButton
+                className={classes.MostSoldQuantityBtn}
+                onClick={() => setQuantity(quantity + 1)}
+              >
+                <AddIcon fontSize='small' color='primary' />
+              </IconButton>
+            </Grid>
+            <div className={classes.productCardBtn}>
+              {product.active ? (
+                <Button
+                  style={{
+                    backgroundColor: `${!product.active && '#f6f6f6'}`,
+                  }}
+                  fullWidth
+                  color='primary'
+                  variant='contained'
+                  disableRipple
+                  disableFocusRipple
+                  disableElevation
+                  disableTouchRipple
+                  disabled={false}
+                  onClick={addToCart}
+                  data-productid={product._id}
+                  data-productname={product.name}
+                  data-productprice={product.price}
+                  data-productimg={product.image[0].secure_url}
+                >
                   <>
                     <AddShoppingCartIcon fontSize='small' />
                     &nbsp;&nbsp;
@@ -382,15 +503,29 @@ const Products = ({ getCategories, getProducts }) => {
                       Add to Cart
                     </span>
                   </>
-                ) : (
+                </Button>
+              ) : (
+                <Button
+                  style={{
+                    backgroundColor: `${!product.active && '#f6f6f6'}`,
+                  }}
+                  fullWidth
+                  color='primary'
+                  variant='contained'
+                  disableRipple
+                  disableFocusRipple
+                  disableElevation
+                  disableTouchRipple
+                  disabled={true}
+                >
                   <>
                     <RemoveShoppingCartIcon fontSize='small' /> &nbsp;&nbsp;
                     <span className={classes.productCardBtnWrapper}>
                       Out of Stock
                     </span>
                   </>
-                )}
-              </Button>
+                </Button>
+              )}
             </div>
           </div>
         </Grid>
@@ -404,6 +539,27 @@ const Products = ({ getCategories, getProducts }) => {
         <Grid container className={classes.gridContainer}>
           {categorySection}
           {productSection}
+          {/* {newCard} */}
+
+          {snackbarOpen && (
+            <Snackbar
+              open={snackbarOpen}
+              autoHideDuration={6000}
+              onClose={handleSnackbarClose}
+            >
+              <div className={classes.snackbarWrapper}>
+                <ErrorIcon color='secondary' />
+                &nbsp;&nbsp;
+                <Typography variant='body1' color='secondary'>
+                  Please{' '}
+                  <Link href='/auth/signin'>
+                    <a className={classes.snackbarLink}>log in</a>
+                  </Link>{' '}
+                  first to add a product to your cart.
+                </Typography>
+              </div>
+            </Snackbar>
+          )}
         </Grid>
       </div>
     </>

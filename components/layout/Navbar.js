@@ -330,6 +330,7 @@ const Navbar = () => {
   const logoutHandler = async () => {
     const data = await signOut({ redirect: false, callbackUrl: '/' });
     router.push(data.url);
+    cartContext.logoutAndEmptyCart();
   };
 
   var winY;
@@ -357,8 +358,6 @@ const Navbar = () => {
   const handleDesktopMenuClose = () => {
     setOpenDesktopProfileMenu(false);
   };
-
-  console.log(cartContext.cartItem);
 
   const desktop = (
     <Container className={classes.root}>
@@ -751,8 +750,13 @@ const Navbar = () => {
         </div>
         <div>
           <IconButton>
-            <Badge badgeContent={1} color='error'>
-              <ShoppingCartIcon />
+            <Badge
+              badgeContent={
+                cartContext.cartItem ? cartContext.cartItem.length : '0'
+              }
+              color='error'
+            >
+              <ShoppingCartIcon color='primary' />
             </Badge>
           </IconButton>
 
