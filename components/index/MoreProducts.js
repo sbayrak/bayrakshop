@@ -78,6 +78,8 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
     getDiscoverContent[0].image
   );
 
+  console.log(getDiscoverContent);
+
   return (
     <>
       <Box component='div'>
@@ -93,8 +95,14 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
                 <span className={classes.productTypo2}>desserts.</span>
               </Typography>
             </Grid>
-            <Grid container item md={12} xs={12}>
-              <Grid item md={6} className={classes.gridItem} xs={6}>
+            {/* {categoryContent.map((category) => (
+              <Grid
+                item
+                md={6}
+                className={classes.gridItem}
+                xs={6}
+                key={category._id}
+              >
                 <div className={classes.imgWrapper}>
                   <div className={classes.imgRoot}>
                     <Image
@@ -107,7 +115,7 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
                   </div>
 
                   <Link
-                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[0].category_url}`}
+                    href={`${process.env.NEXT_PUBLIC_URL}/products?category=${category.name}`}
                   >
                     <a
                       target='_blank'
@@ -115,25 +123,34 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
                       className={classes.productLink}
                     >
                       <Typography variant='h4' className={classes.productTypo}>
-                        {categoryContent[0].name}
+                        {category.name}
                       </Typography>
                     </a>
                   </Link>
                 </div>
               </Grid>
-              <Grid item md={6} className={classes.gridItem} xs={6}>
+            ))} */}
+            {categoryContent.map((category, index) => (
+              <Grid
+                item
+                md={6}
+                className={classes.gridItem}
+                xs={6}
+                key={category._id}
+              >
                 <div className={classes.imgWrapper}>
                   <div className={classes.imgRoot}>
                     <Image
-                      src={`${discoverImageContent[1].secure_url}`}
+                      src={`${discoverImageContent[index].secure_url}`}
                       layout='fill'
                       objectFit='cover'
                       alt='koslowshop baklava'
                       className={classes.img}
                     ></Image>
                   </div>
+
                   <Link
-                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[1].category_url}`}
+                    href={`${process.env.NEXT_PUBLIC_URL}/products?show=${category.name}`}
                   >
                     <a
                       target='_blank'
@@ -141,67 +158,13 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
                       className={classes.productLink}
                     >
                       <Typography variant='h4' className={classes.productTypo}>
-                        {categoryContent[1].name}
+                        {category.name}
                       </Typography>
                     </a>
                   </Link>
                 </div>
               </Grid>
-            </Grid>
-            <Grid container item md={12} xs={12}>
-              <Grid item md={6} className={classes.gridItem} xs={6}>
-                <div className={classes.imgWrapper}>
-                  <div className={classes.imgRoot}>
-                    <Image
-                      src={`${discoverImageContent[2].secure_url}`}
-                      layout='fill'
-                      objectFit='cover'
-                      alt='koslowshop baklava'
-                      className={classes.img}
-                    ></Image>
-                  </div>
-                  <Link
-                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[2].category_url}`}
-                  >
-                    <a
-                      target='_blank'
-                      rel='noreferrer noopener'
-                      className={classes.productLink}
-                    >
-                      <Typography variant='h4' className={classes.productTypo}>
-                        {categoryContent[2].name}
-                      </Typography>
-                    </a>
-                  </Link>
-                </div>
-              </Grid>
-              <Grid item md={6} className={classes.gridItem} xs={6}>
-                <div className={classes.imgWrapper}>
-                  <div className={classes.imgRoot}>
-                    <Image
-                      src={`${discoverImageContent[3].secure_url}`}
-                      layout='fill'
-                      objectFit='cover'
-                      alt='koslowshop baklava'
-                      className={classes.img}
-                    ></Image>
-                  </div>
-                  <Link
-                    href={`${process.env.NEXT_PUBLIC_URL}/${categoryContent[3].category_url}`}
-                  >
-                    <a
-                      target='_blank'
-                      rel='noreferrer noopener'
-                      className={classes.productLink}
-                    >
-                      <Typography variant='h4' className={classes.productTypo}>
-                        {categoryContent[3].name}
-                      </Typography>
-                    </a>
-                  </Link>
-                </div>
-              </Grid>
-            </Grid>
+            ))}
           </Grid>
         </Container>
       </Box>

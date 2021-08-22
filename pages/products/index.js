@@ -4,17 +4,14 @@ import {
   Typography,
   Checkbox,
   Button,
-  Box,
   Snackbar,
   IconButton,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
 import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 import RemoveShoppingCartIcon from '@material-ui/icons/RemoveShoppingCart';
 import ErrorIcon from '@material-ui/icons/Error';
 import RemoveIcon from '@material-ui/icons/Remove';
-import MostSoldCard from '../../components/index/MostSoldCard';
 import AddIcon from '@material-ui/icons/Add';
 // @@@ MATERIAL-UI @@@
 
@@ -26,6 +23,7 @@ import { connectToDatabase } from '../../util/mongodb';
 import { useState, useEffect, useContext } from 'react';
 import { useSession } from 'next-auth/client';
 import CartContext from '../../context/cart/CartContext';
+import { route } from 'next/dist/next-server/server/router';
 
 // @@@ nextjs @@@
 
@@ -38,7 +36,22 @@ export const getServerSideProps = async (context) => {
     .toArray();
   const getCategories = await JSON.parse(JSON.stringify(getCategoriesFromDB));
 
-  if (
+  if (context.query.show) {
+    const showCategory = context.query.show;
+    const getFilteredProducts = await db
+      .collection('products')
+      .find({
+        category: showCategory,
+      })
+      .toArray();
+    const getProducts = await JSON.parse(JSON.stringify(getFilteredProducts));
+    return {
+      props: {
+        getCategories,
+        getProducts,
+      },
+    };
+  } else if (
     !(
       Object.keys(context.query).length === 0 &&
       context.query.constructor === Object
@@ -292,26 +305,32 @@ const Products = ({ getCategories, getProducts }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (categories.length === 0) {
-      router.push(`${process.env.NEXT_PUBLIC_URL}/products`);
-    } else if (categories.length === 1) {
+    if (router.query.show) {
       router.push(
-        `${process.env.NEXT_PUBLIC_URL}/products?category=${categories[0]}`
+        `${process.env.NEXT_PUBLIC_URL}/products?show=${router.query.show}`
       );
-    } else if (categories.length > 1) {
-      let pushURL = `${process.env.NEXT_PUBLIC_URL}/products?`;
-      let queryString = [];
+    } else {
+      if (categories.length === 0) {
+        router.push(`${process.env.NEXT_PUBLIC_URL}/products`);
+      } else if (categories.length === 1) {
+        router.push(
+          `${process.env.NEXT_PUBLIC_URL}/products?category=${categories[0]}`
+        );
+      } else if (categories.length > 1) {
+        let pushURL = `${process.env.NEXT_PUBLIC_URL}/products?`;
+        let queryString = [];
 
-      for (let i = 0; i < categories.length; i++) {
-        const category = categories[i];
-        if (i > 0) {
-          queryString.push(`&category=${category}`);
-        } else {
-          queryString.push(`category=${category}`);
+        for (let i = 0; i < categories.length; i++) {
+          const category = categories[i];
+          if (i > 0) {
+            queryString.push(`&category=${category}`);
+          } else {
+            queryString.push(`category=${category}`);
+          }
         }
-      }
 
-      router.push(`${pushURL}${queryString.join('')}`);
+        router.push(`${pushURL}${queryString.join('')}`);
+      }
     }
   }, [categories]);
   // useEffect(() => {
@@ -319,6 +338,7 @@ const Products = ({ getCategories, getProducts }) => {
   // }, [quantity])
 
   const addToFilter = (e) => {
+    delete router.query.show;
     const categoryName = e.currentTarget.dataset.category;
 
     if (categories.length === 0) {
