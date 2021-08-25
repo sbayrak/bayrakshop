@@ -2,23 +2,14 @@ module.exports = {
   images: {
     domains: ['res.cloudinary.com'],
   },
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Note: we provide webpack above so you should not `require` it
-    // Perform customizations to webpack config
-    // Important: return the modified config
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // don't resolve 'fs' module on the client to prevent this error on build --> Error: Can't resolve 'fs'
+      config.resolve.fallback = {
+        fs: false,
+      };
+    }
 
-    // Example using webpack option
-    //config.plugins.push(new webpack.IgnorePlugin(/\/__tests__\//))
-    config.node = {
-      fs: 'empty',
-      net: 'empty',
-      tls: 'empty',
-    };
-    return config;
-  },
-  webpackDevMiddleware: (config) => {
-    // Perform customizations to webpack dev middleware config
-    // Important: return the modified config
     return config;
   },
 };
