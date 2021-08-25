@@ -13,7 +13,7 @@ import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   rootContact: {
-    marginTop: theme.spacing(25),
+    marginTop: theme.spacing(35),
     marginBottom: theme.spacing(25),
     [theme.breakpoints.down('xs')]: {
       marginTop: theme.spacing(10),

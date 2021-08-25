@@ -131,7 +131,7 @@ const useStyles = makeStyles((theme) => ({
   gridContainer: {
     // backgroundColor: '#fff',
     paddingBottom: theme.spacing(5),
-    marginTop: theme.spacing(20),
+    marginTop: theme.spacing(35),
     minHeight: '100vh',
     [theme.breakpoints.down('xs')]: {
       paddingRight: theme.spacing(1.5),
@@ -389,7 +389,7 @@ const Products = ({ getCategories, getProducts }) => {
   };
 
   const categorySection = (
-    <Grid item md={2} className={classes.filterGridContainer}>
+    <Grid item md={3} className={classes.filterGridContainer}>
       <div>
         <Typography
           variant='h6'
@@ -424,7 +424,7 @@ const Products = ({ getCategories, getProducts }) => {
     <Grid
       item
       container
-      md={10}
+      md={9}
       spacing={3}
       className={classes.productsGridContainer}
     >

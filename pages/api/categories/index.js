@@ -52,4 +52,15 @@ export default async (req, res) => {
       res.status(201).json({ msg: 'fail' });
     }
   }
+
+  if (req.method === 'GET') {
+    const { db } = await connectToDatabase();
+
+    const getCategoriesFromDB = await db
+      .collection('categories')
+      .find({})
+      .toArray();
+
+    res.status(200).json(getCategoriesFromDB);
+  }
 };

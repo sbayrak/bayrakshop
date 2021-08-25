@@ -23,6 +23,7 @@ import {
   Box,
   Divider,
   Button,
+  CircularProgress,
 } from '@material-ui/core';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -35,28 +36,28 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import MailIcon from '@material-ui/icons/Mail';
 import PhoneIcon from '@material-ui/icons/Phone';
-import DeleteIcon from '@material-ui/icons/Delete';
+import SideShoppingCart from './SideShoppingCart';
 // @@@ MATERIAL-UI @@@
 
 // @@@ NEXTJS @@@
 import Link from 'next/link';
 import { useState, useEffect, useContext } from 'react';
 import CartContext from '../../context/cart/CartContext';
+import CategoryContext from '../../context/category/CategoryContext';
 import { useSession, signOut } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import Image from 'next/image';
-import SideShoppingCart from './SideShoppingCart';
 // @@@ NEXTJS @@@
 
 const useStyles = makeStyles((theme) => ({
   appbar: {
     backgroundColor: '#f6f6f6',
     boxShadow: '3px 3px 15px -10px rgba(0,0,0,0.75)',
-    borderBottom: '5px solid',
+    borderBottom: '10px solid #5652de',
     borderImageSlice: 1,
     borderWidth: '10px',
-    borderImageSource:
-      'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
+    // borderImageSource:
+    //   'linear-gradient(236deg, rgba(5,221,250,0.5102415966386555) 0%, rgba(86,82,222,0.48503151260504207) 83%)',
+    borderImageSource: '#5652de',
     [theme.breakpoints.down('xs')]: {
       borderWidth: '2px',
     },
@@ -346,13 +347,17 @@ const Navbar = () => {
   const classes = useStyles();
   const router = useRouter();
   const cartContext = useContext(CartContext);
-  const [cartItems, setCartItems] = useState('');
+  const categoryContext = useContext(CategoryContext);
   const [openDrawer, setOpenDrawer] = useState(false);
   const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
   const [topGrid, setTopGrid] = useState('inline');
   const [session, loading] = useSession();
+
+  useEffect(() => {
+    categoryContext.getCategories();
+  }, []);
 
   useEffect(() => {
     if (loading === false && session) {
@@ -762,58 +767,39 @@ const Navbar = () => {
         </Grid>
         <Grid item md={12}>
           <ul className={classes.categoriesUl}>
-            <li className={classes.categoriesLi}>
-              <Link href='#!'>
-                <a className={classes.categoriesLink}>
-                  <Typography
-                    variant='subtitle1'
-                    color='primary'
-                    className={classes.categoriesTypo}
+            {categoryContext.categories ? (
+              categoryContext.categories.map((category) => (
+                <li className={classes.categoriesLi} key={category._id}>
+                  <Link
+                    href={`${process.env.NEXT_PUBLIC_URL}/products?show=${category.name}`}
                   >
-                    Baklava
-                  </Typography>
-                </a>
-              </Link>
-            </li>
-            <li className={classes.categoriesLi}>
-              <Link href='#!'>
-                <a className={classes.categoriesLink}>
-                  <Typography
-                    variant='subtitle1'
-                    color='primary'
-                    className={classes.categoriesTypo}
-                  >
-                    Baklava
-                  </Typography>
-                </a>
-              </Link>
-            </li>
-            <li className={classes.categoriesLi}>
-              <Link href='#!'>
-                <a className={classes.categoriesLink}>
-                  <Typography
-                    variant='subtitle1'
-                    color='primary'
-                    className={classes.categoriesTypo}
-                  >
-                    Baklava
-                  </Typography>
-                </a>
-              </Link>
-            </li>
-            <li className={classes.categoriesLi}>
-              <Link href='#!'>
-                <a className={classes.categoriesLink}>
-                  <Typography
-                    variant='subtitle1'
-                    color='primary'
-                    className={classes.categoriesTypo}
-                  >
-                    Baklava
-                  </Typography>
-                </a>
-              </Link>
-            </li>
+                    <a className={classes.categoriesLink}>
+                      <Typography
+                        variant='subtitle1'
+                        color='primary'
+                        className={classes.categoriesTypo}
+                      >
+                        {category.name}
+                      </Typography>
+                    </a>
+                  </Link>
+                </li>
+              ))
+            ) : (
+              <li className={classes.categoriesLi}>
+                <Link href='#!'>
+                  <a className={classes.categoriesLink}>
+                    <Typography
+                      variant='subtitle1'
+                      color='primary'
+                      className={classes.categoriesTypo}
+                    >
+                      <CircularProgress size='0.2em'></CircularProgress>
+                    </Typography>
+                  </a>
+                </Link>
+              </li>
+            )}
           </ul>
         </Grid>
       </Grid>

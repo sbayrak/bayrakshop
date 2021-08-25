@@ -8,6 +8,7 @@ import { Provider } from 'next-auth/client';
 import Navbar from '../components/layout/Navbar';
 import Layout from '../components/layout/Layout';
 import CartState from '../context/cart/CartState';
+import CategoryState from '../context/category/CategoryState';
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
@@ -33,9 +34,11 @@ export default function MyApp(props) {
         <CssBaseline />
         <Provider session={pageProps.session}>
           <CartState>
-            <Layout>
-              <Component {...pageProps} />
-            </Layout>
+            <CategoryState>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </CategoryState>
           </CartState>
         </Provider>
       </ThemeProvider>

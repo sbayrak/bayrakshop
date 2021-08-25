@@ -5,7 +5,7 @@ import Footer from './Footer';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    marginBottom: theme.spacing(10),
+    marginBottom: theme.spacing(25),
   },
 }));
 
