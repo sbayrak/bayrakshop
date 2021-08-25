@@ -276,11 +276,11 @@ export default function Home({
       <Hero getHeroContent={getHeroContent}></Hero>
       {mostSold}
       <InformativeBanner></InformativeBanner>
-      <About getAboutContent={getAboutContent}></About>
       <MoreProducts
         getCategories={getCategories}
         getDiscoverContent={getDiscoverContent}
       ></MoreProducts>
+      <About getAboutContent={getAboutContent}></About>
       <Contact getContactContent={getContactContent}></Contact>
     </>
   );

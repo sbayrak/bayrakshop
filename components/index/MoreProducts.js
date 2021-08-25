@@ -59,6 +59,7 @@ const useStyles = makeStyles((theme) => ({
   },
   productTypo1: {
     color: theme.palette.grey[800],
+    padding: theme.spacing(1),
   },
   productTypo2: {
     color: '#5652de',
@@ -78,8 +79,6 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
     getDiscoverContent[0].image
   );
 
-  console.log(getDiscoverContent);
-
   return (
     <>
       <Box component='div'>
@@ -95,41 +94,7 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
                 <span className={classes.productTypo2}>desserts.</span>
               </Typography>
             </Grid>
-            {/* {categoryContent.map((category) => (
-              <Grid
-                item
-                md={6}
-                className={classes.gridItem}
-                xs={6}
-                key={category._id}
-              >
-                <div className={classes.imgWrapper}>
-                  <div className={classes.imgRoot}>
-                    <Image
-                      src={`${discoverImageContent[0].secure_url}`}
-                      layout='fill'
-                      objectFit='cover'
-                      alt='koslowshop baklava'
-                      className={classes.img}
-                    ></Image>
-                  </div>
 
-                  <Link
-                    href={`${process.env.NEXT_PUBLIC_URL}/products?category=${category.name}`}
-                  >
-                    <a
-                      target='_blank'
-                      rel='noreferrer noopener'
-                      className={classes.productLink}
-                    >
-                      <Typography variant='h4' className={classes.productTypo}>
-                        {category.name}
-                      </Typography>
-                    </a>
-                  </Link>
-                </div>
-              </Grid>
-            ))} */}
             {categoryContent.map((category, index) => (
               <Grid
                 item

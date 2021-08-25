@@ -202,7 +202,7 @@ const About = ({ getAboutContent }) => {
                 </Typography>
               </Grid>
               <Grid item md={12} className={classes.AboutLeftGridItem}>
-                <Link href='#!'>
+                <Link href='/about'>
                   <a
                     target='_blank'
                     rel='noreferrer noopener'

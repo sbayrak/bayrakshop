@@ -143,7 +143,7 @@ const Hero = ({ getHeroContent }) => {
             {heroTitle}
           </Typography>
           <Typography variant='h5' className={classes.Typo2}>
-            <Link href='#!'>
+            <Link href='/products'>
               <a className={classes.Typo2Link}>
                 Shop Now &nbsp;
                 <ArrowForwardIosIcon className={classes.Typo2Icon} />

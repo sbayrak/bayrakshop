@@ -307,6 +307,39 @@ const useStyles = makeStyles((theme) => ({
       color: '#f6f6f6',
     },
   },
+  categoriesUl: {
+    padding: 0,
+    display: 'flex',
+    justifyContent: 'space-between',
+    listStyle: 'none',
+  },
+  categoriesLi: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 0,
+  },
+  categoriesLink: {
+    textDecoration: 'none',
+    color: '#5652de',
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+  },
+  categoriesTypo: {
+    padding: theme.spacing(1),
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'center',
+    fontWeight: theme.typography.fontWeightMedium,
+    transition: '0.2s ease',
+    '&:hover': {
+      backgroundColor: '#5652de',
+      color: '#fff',
+    },
+  },
 }));
 
 const Navbar = () => {
@@ -432,7 +465,7 @@ const Navbar = () => {
           </div>
         </Grid>
 
-        <Grid item className={classes.gridContainerBottom}>
+        <Grid item className={classes.gridContainerBottom} md={12}>
           <div className={classes.wrapperBottom}>
             <div className={classes.logoWrapper}>
               <Typography variant='h5'>
@@ -458,7 +491,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
+                  <Link href='/about'>
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
@@ -469,7 +502,7 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className={classes.bottomMidLi}>
-                  <Link href='#!'>
+                  <Link href='/contact'>
                     <a
                       target='_blank'
                       rel='noreferrer noopener'
@@ -710,18 +743,14 @@ const Navbar = () => {
                             </a>
                           </Link>
 
-                          <Link href='/'>
-                            <a
-                              className={classes.shoppingCartLink2}
-                              onClick={(e) =>
-                                setOpenShoppingCartDrawer(
-                                  !openShoppingCartDrawer
-                                )
-                              }
-                            >
-                              CONTINUE TO SHOPPING
-                            </a>
-                          </Link>
+                          <Button
+                            className={classes.shoppingCartLink2}
+                            onClick={(e) =>
+                              setOpenShoppingCartDrawer(!openShoppingCartDrawer)
+                            }
+                          >
+                            CONTINUE TO SHOPPING
+                          </Button>
                         </Grid>
                       </Grid>
                     </Box>
@@ -730,6 +759,62 @@ const Navbar = () => {
               </ul>
             </div>
           </div>
+        </Grid>
+        <Grid item md={12}>
+          <ul className={classes.categoriesUl}>
+            <li className={classes.categoriesLi}>
+              <Link href='#!'>
+                <a className={classes.categoriesLink}>
+                  <Typography
+                    variant='subtitle1'
+                    color='primary'
+                    className={classes.categoriesTypo}
+                  >
+                    Baklava
+                  </Typography>
+                </a>
+              </Link>
+            </li>
+            <li className={classes.categoriesLi}>
+              <Link href='#!'>
+                <a className={classes.categoriesLink}>
+                  <Typography
+                    variant='subtitle1'
+                    color='primary'
+                    className={classes.categoriesTypo}
+                  >
+                    Baklava
+                  </Typography>
+                </a>
+              </Link>
+            </li>
+            <li className={classes.categoriesLi}>
+              <Link href='#!'>
+                <a className={classes.categoriesLink}>
+                  <Typography
+                    variant='subtitle1'
+                    color='primary'
+                    className={classes.categoriesTypo}
+                  >
+                    Baklava
+                  </Typography>
+                </a>
+              </Link>
+            </li>
+            <li className={classes.categoriesLi}>
+              <Link href='#!'>
+                <a className={classes.categoriesLink}>
+                  <Typography
+                    variant='subtitle1'
+                    color='primary'
+                    className={classes.categoriesTypo}
+                  >
+                    Baklava
+                  </Typography>
+                </a>
+              </Link>
+            </li>
+          </ul>
         </Grid>
       </Grid>
     </Container>
