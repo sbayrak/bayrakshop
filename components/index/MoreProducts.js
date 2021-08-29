@@ -60,6 +60,9 @@ const useStyles = makeStyles((theme) => ({
   productTypo1: {
     color: theme.palette.grey[800],
     padding: theme.spacing(1),
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '20px',
+    },
   },
   productTypo2: {
     color: '#5652de',
@@ -69,6 +72,21 @@ const useStyles = makeStyles((theme) => ({
     position: 'relative',
     height: 350,
     width: '100%',
+    [theme.breakpoints.down('xs')]: {
+      height: 150,
+    },
+  },
+  MoreProductsContainer: {
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(10),
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
+    },
+    backgroundColor: '#fafafa',
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
   },
 }));
 
@@ -82,7 +100,7 @@ const MoreProducts = ({ getCategories, getDiscoverContent }) => {
   return (
     <>
       <Box component='div'>
-        <Container>
+        <Container className={classes.MoreProductsContainer}>
           <Grid container>
             <Grid container item md={12}>
               <Typography

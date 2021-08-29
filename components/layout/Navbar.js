@@ -255,6 +255,9 @@ const useStyles = makeStyles((theme) => ({
   menuItem: {
     paddingBottom: theme.spacing(2),
     marginTop: theme.spacing(1),
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
   },
   menu: {
     marginTop: theme.spacing(10),
@@ -341,6 +344,18 @@ const useStyles = makeStyles((theme) => ({
       color: '#fff',
     },
   },
+  categoriesMenu: {
+    textTransform: 'capitalize',
+    fontSize: '18px',
+    color: '#5652de',
+    fontWeight: 700,
+    '&:hover': {
+      transition: 'none !important',
+    },
+    '& .MuiButton-root': {
+      transition: 'none !important',
+    },
+  },
 }));
 
 const Navbar = () => {
@@ -352,6 +367,7 @@ const Navbar = () => {
   const [openShoppingCartDrawer, setOpenShoppingCartDrawer] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
   const [openDesktopProfileMenu, setOpenDesktopProfileMenu] = useState(false);
+  const [openCategoriesMenu, setOpenCategoriesMenu] = useState(false);
   const [topGrid, setTopGrid] = useState('inline');
   const [session, loading] = useSession();
 
@@ -382,6 +398,13 @@ const Navbar = () => {
     } else {
       setTopGrid('inline');
     }
+  };
+
+  const handleCategoriesMenuClick = (e) => {
+    setOpenCategoriesMenu(e.currentTarget);
+  };
+  const handleCategoriesMenuClose = () => {
+    setOpenCategoriesMenu(false);
   };
 
   const handleMenuClick = (e) => {
@@ -496,6 +519,55 @@ const Navbar = () => {
                   </Link>
                 </li>
                 <li className={classes.bottomMidLi}>
+                  <Button
+                    variant='text'
+                    disableElevation
+                    disableFocusRipple
+                    disableRipple
+                    disableTouchRipple
+                    className={classes.categoriesMenu}
+                    onClick={handleCategoriesMenuClick}
+                    style={{ transition: 'none !important' }}
+                  >
+                    Categories
+                  </Button>
+                  <Menu
+                    anchorEl={openCategoriesMenu}
+                    open={Boolean(openCategoriesMenu)}
+                    onClose={handleDesktopMenuClose}
+                    className={classes.menu}
+                    onClose={handleCategoriesMenuClose}
+                  >
+                    {categoryContext.categories ? (
+                      categoryContext.categories.map((category) => (
+                        <MenuItem
+                          onClick={handleClose}
+                          className={classes.menuItem}
+                        >
+                          <Link
+                            href={`${process.env.NEXT_PUBLIC_URL}/products?show=${category.name}`}
+                          >
+                            <a
+                              className={classes.mobileProductsLinks}
+                              target='_blank'
+                              rel='noreferrer noopener'
+                            >
+                              <ArrowRightIcon /> {category.name}
+                            </a>
+                          </Link>
+                        </MenuItem>
+                      ))
+                    ) : (
+                      <MenuItem
+                        onClick={handleClose}
+                        className={classes.menuItem}
+                      >
+                        <CircularProgress></CircularProgress>
+                      </MenuItem>
+                    )}
+                  </Menu>
+                </li>
+                <li className={classes.bottomMidLi}>
                   <Link href='/about'>
                     <a
                       target='_blank'
@@ -521,20 +593,6 @@ const Navbar = () => {
             </div>
             <div>
               <ul className={classes.bottomMidUl}>
-                <li className={classes.bottomMidLi}>
-                  <div className={classes.search}>
-                    <div className={classes.searchIcon}>
-                      <SearchIcon className={`  ${classes.toolLinks}`} />
-                    </div>
-                    <InputBase
-                      placeholder='Search…'
-                      classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                      }}
-                    />
-                  </div>
-                </li>
                 <li className={classes.bottomMidLi}>
                   {!session && (
                     <IconButton
@@ -764,43 +822,6 @@ const Navbar = () => {
               </ul>
             </div>
           </div>
-        </Grid>
-        <Grid item md={12}>
-          <ul className={classes.categoriesUl}>
-            {categoryContext.categories ? (
-              categoryContext.categories.map((category) => (
-                <li className={classes.categoriesLi} key={category._id}>
-                  <Link
-                    href={`${process.env.NEXT_PUBLIC_URL}/products?show=${category.name}`}
-                  >
-                    <a className={classes.categoriesLink}>
-                      <Typography
-                        variant='subtitle1'
-                        color='primary'
-                        className={classes.categoriesTypo}
-                      >
-                        {category.name}
-                      </Typography>
-                    </a>
-                  </Link>
-                </li>
-              ))
-            ) : (
-              <li className={classes.categoriesLi}>
-                <Link href='#!'>
-                  <a className={classes.categoriesLink}>
-                    <Typography
-                      variant='subtitle1'
-                      color='primary'
-                      className={classes.categoriesTypo}
-                    >
-                      <CircularProgress size='0.2em'></CircularProgress>
-                    </Typography>
-                  </a>
-                </Link>
-              </li>
-            )}
-          </ul>
         </Grid>
       </Grid>
     </Container>

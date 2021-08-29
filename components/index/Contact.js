@@ -13,13 +13,12 @@ import { useState } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   rootContact: {
-    marginTop: theme.spacing(35),
+    marginTop: theme.spacing(25),
     marginBottom: theme.spacing(25),
     [theme.breakpoints.down('xs')]: {
       marginTop: theme.spacing(10),
       marginBottom: theme.spacing(10),
     },
-    backgroundColor: '#fafafa',
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
   },
@@ -64,7 +63,6 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1),
     paddingRight: theme.spacing(3),
     paddingLeft: theme.spacing(3),
-    borderLeft: '2px solid rgba(86,82,222,0.1)',
   },
 
   contactTypo1: {
@@ -80,6 +78,18 @@ const useStyles = makeStyles((theme) => ({
     color: '#5652de',
     fontWeight: theme.typography.fontWeightMedium,
   },
+  ContactContainer: {
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(10),
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+    backgroundColor: '#fafafa',
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: theme.spacing(3),
+      paddingBottom: theme.spacing(3),
+    },
+  },
 }));
 
 const Contact = ({ getContactContent }) => {
@@ -92,7 +102,7 @@ const Contact = ({ getContactContent }) => {
   return (
     <>
       <Box component='div' className={classes.rootContact}>
-        <Container>
+        <Container className={classes.ContactContainer}>
           <Grid container>
             <Grid container item xs={12}>
               <Grid item md={6} xs={12} className={classes.contactLeftGridTypo}>

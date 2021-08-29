@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
     height: '80vh',
     marginTop: theme.spacing(15),
     [theme.breakpoints.down('sm')]: {
-      marginTop: theme.spacing(0),
-      height: '20vh',
+      marginTop: theme.spacing(-8),
+      height: '30vh',
     },
   },
   hero: {
@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
       height: '400px',
     },
     [theme.breakpoints.down('xs')]: {
-      height: '200px',
+      height: '300px',
     },
   },
   img: {},
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
       right: 150,
     },
     [theme.breakpoints.down('xs')]: {
-      top: 50,
+      top: 100,
       right: 0,
     },
   },

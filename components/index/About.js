@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   AboutRoot: {
     marginTop: theme.spacing(25),
     marginBottom: theme.spacing(25),
-    backgroundColor: '#fafafa',
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(5),
     [theme.breakpoints.down('xs')]: {
@@ -26,15 +25,29 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: theme.spacing(10),
     },
   },
+  AboutContainer: {
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
+    paddingLeft: theme.spacing(5),
+    paddingRight: theme.spacing(5),
+    backgroundColor: '#fafafa',
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: theme.spacing(0),
+      paddingRight: theme.spacing(0),
+    },
+  },
   AboutRootLeftGrid: {
     padding: theme.spacing(1),
     paddingRight: theme.spacing(3),
     paddingLeft: theme.spacing(3),
-    borderLeft: '2px solid rgba(86,82,222,0.1)',
-    borderTop: '2px solid rgba(86,82,222,0.1)',
   },
   AboutRootRightGrid: {
     marginTop: theme.spacing(5),
+    [theme.breakpoints.down('xs')]: {
+      paddingRight: theme.spacing(3),
+      paddingLeft: theme.spacing(3),
+    },
   },
   AboutLeftGridItem: {
     padding: theme.spacing(0.5),
@@ -77,7 +90,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(2),
     borderRadius: '5px',
     marginBottom: theme.spacing(1),
-    // backgroundColor: '#4062bb',
     backgroundColor: '#4062bb',
     color: '#f6f6f6',
     textAlign: 'center',
@@ -101,28 +113,24 @@ const useStyles = makeStyles((theme) => ({
       height: '75px',
     },
   },
-  aboutBottomImgWrapperGrid: {
-    // paddingLeft: theme.spacing(1),
-    // paddingRight: theme.spacing(1),
-  },
+  aboutBottomImgWrapperGrid: {},
   AboutImg: {
     borderRadius: '5px',
   },
-  // MOBILE
-  AboutWelcomerTitle: {
+  TopTypo: {
     [theme.breakpoints.down('xs')]: {
       fontSize: '12px',
     },
   },
-  AboutDesktop: {
-    [theme.breakpoints.down('xs')]: {
-      display: 'none',
-    },
-  },
-  AboutMobile: {
+  MobileImageSection: {
     display: 'none',
     [theme.breakpoints.down('xs')]: {
       display: 'inline',
+    },
+  },
+  DesktopImageSection: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
     },
   },
 }));
@@ -132,10 +140,86 @@ const About = ({ getAboutContent }) => {
   const [paragraph, setParagraph] = useState(getAboutContent[0].paragraph);
   const [image, setImage] = useState(getAboutContent[0].image);
 
-  const AboutDesktop = (
-    <div className={classes.AboutDesktop}>
+  const MobileImageSection = (
+    <Grid
+      item
+      md={6}
+      className={`${classes.AboutRootRightGrid} ${classes.MobileImageSection}`}
+      xs={12}
+    >
+      <Grid item md={12} xs={12}>
+        <div
+          className={classes.AboutImgWrapper}
+          style={{ height: `${image[0].height - 50}px` }}
+        >
+          <Image
+            src={image[0].secure_url}
+            blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+            layout='fill'
+            objectFit='cover'
+            alt='koslowshop-baklava'
+            className={classes.AboutImg}
+          />
+        </div>
+      </Grid>
+      <Grid container item md={12} xs={12}>
+        <Grid
+          item
+          md={6}
+          xs={6}
+          className={classes.aboutBottomImgWrapperGrid}
+          style={{
+            paddingRight: '10px',
+          }}
+        >
+          <div
+            className={classes.AboutImgWrapper}
+            style={{
+              height: `${image[0].height - 50}px`,
+            }}
+          >
+            <Image
+              src={image[1].secure_url}
+              blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+              layout='fill'
+              objectFit='cover'
+              alt='koslowshop-baklava'
+              className={classes.AboutImg}
+            />
+          </div>
+        </Grid>
+        <Grid
+          item
+          xs={6}
+          className={classes.aboutBottomImgWrapperGrid}
+          style={{
+            paddingLeft: '10px',
+          }}
+        >
+          <div
+            className={classes.AboutImgWrapper}
+            style={{
+              height: `${image[0].height - 50}px`,
+            }}
+          >
+            <Image
+              src={image[2].secure_url}
+              blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
+              layout='fill'
+              objectFit='cover'
+              alt='koslowshop-baklava'
+              className={classes.AboutImg}
+            />
+          </div>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
+
+  return (
+    <>
       <Box component='div' className={classes.AboutRoot}>
-        <Container>
+        <Container className={classes.AboutContainer}>
           <Grid container>
             <Grid item md={6} className={classes.AboutRootLeftGrid}>
               <Grid
@@ -146,7 +230,7 @@ const About = ({ getAboutContent }) => {
                 <Typography
                   variant='subtitle2'
                   color='textSecondary'
-                  className={classes.AboutWelcomeTo}
+                  className={`${classes.AboutWelcomeTo} ${classes.TopTypo}`}
                 >
                   Baklava, Lokum and more...
                 </Typography>
@@ -213,8 +297,13 @@ const About = ({ getAboutContent }) => {
                 </Link>
               </Grid>
             </Grid>
-            <Grid item md={6} className={classes.AboutRootRightGrid}>
-              <Grid item md={12}>
+            <Grid
+              item
+              md={6}
+              className={`${classes.AboutRootRightGrid} ${classes.DesktopImageSection}`}
+              xs={12}
+            >
+              <Grid item md={12} xs={12}>
                 <div
                   className={classes.AboutImgWrapper}
                   style={{ height: `${image[0].height + 50}px` }}
@@ -229,10 +318,11 @@ const About = ({ getAboutContent }) => {
                   />
                 </div>
               </Grid>
-              <Grid container item md={12}>
+              <Grid container item md={12} xs={12}>
                 <Grid
                   item
                   md={6}
+                  xs={6}
                   className={classes.aboutBottomImgWrapperGrid}
                   style={{
                     paddingRight: '10px',
@@ -256,7 +346,7 @@ const About = ({ getAboutContent }) => {
                 </Grid>
                 <Grid
                   item
-                  md={6}
+                  xs={6}
                   className={classes.aboutBottomImgWrapperGrid}
                   style={{
                     paddingLeft: '10px',
@@ -280,140 +370,10 @@ const About = ({ getAboutContent }) => {
                 </Grid>
               </Grid>
             </Grid>
+            {MobileImageSection}
           </Grid>
         </Container>
       </Box>
-    </div>
-  );
-  const AboutMobile = (
-    <div className={classes.AboutMobile}>
-      <Box component='div' className={classes.AboutRoot}>
-        <Container>
-          <Grid container>
-            <Grid item md={6} className={classes.AboutRootLeftGrid}>
-              <Grid
-                item
-                md={12}
-                xs={12}
-                className={`${classes.AboutLeftGridItem} ${classes.AboutTitle1}`}
-              >
-                <Typography
-                  variant='subtitle2'
-                  color='textSecondary'
-                  className={`${classes.AboutWelcomeTo} ${classes.AboutWelcomerTitle}`}
-                >
-                  Baklava, Lokum and more...
-                </Typography>
-              </Grid>
-              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
-                <Typography
-                  variant='h4'
-                  gutterBottom
-                  className={classes.AboutWelcomeTo}
-                >
-                  Welcome to{' '}
-                  <span className={classes.AboutKoslowShop}>
-                    <span className={classes.AboutKoslowShop2}>Koslow</span>Shop
-                  </span>
-                </Typography>
-              </Grid>
-              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
-                <Typography
-                  variant='subtitle1'
-                  className={classes.AboutSubTitle1}
-                >
-                  Who are we ?
-                </Typography>
-                <Typography variant='body2' className={classes.AboutSubTitle2}>
-                  {paragraph.parag1}
-                </Typography>
-              </Grid>
-              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
-                <Typography
-                  variant='subtitle1'
-                  className={classes.AboutSubTitle1}
-                >
-                  How we do it ?
-                </Typography>
-                <Typography variant='body2' className={classes.AboutSubTitle2}>
-                  {paragraph.parag2}
-                </Typography>
-              </Grid>
-              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
-                <Typography
-                  variant='subtitle1'
-                  className={classes.AboutSubTitle1}
-                >
-                  How can I order ?
-                </Typography>
-                <Typography
-                  variant='body2'
-                  className={classes.AboutSubTitle2}
-                  gutterBottom
-                  paragraph
-                >
-                  {paragraph.parag3}
-                </Typography>
-              </Grid>
-              <Grid item md={12} xs={12} className={classes.AboutLeftGridItem}>
-                <Link href='#!'>
-                  <a
-                    target='_blank'
-                    rel='noreferrer noopener'
-                    className={classes.AboutReadMore}
-                  >
-                    Read More
-                  </a>
-                </Link>
-              </Grid>
-            </Grid>
-            <Grid container item md={6} xs={12} spacing={2}>
-              <Grid item md={12} xs={12}>
-                <div className={classes.AboutImgWrapper}>
-                  <Image
-                    src={image[0].secure_url}
-                    blurDataURL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVQYV2MIC7r3HwAFDgKGo2ZBBwAAAABJRU5ErkJggg=='
-                    layout='fill'
-                    objectFit='cover'
-                    alt='koslowshop-baklava'
-                    className={classes.AboutImg}
-                  />
-                </div>
-              </Grid>
-
-              <Grid item md={6} xs={6}>
-                <div className={classes.AboutImgWrapper}>
-                  <Image
-                    src={image[1].secure_url}
-                    layout='fill'
-                    objectFit='cover'
-                    alt='koslowshop-baklava'
-                    className={classes.AboutImg}
-                  />
-                </div>
-              </Grid>
-              <Grid item md={6} xs={6}>
-                <div className={classes.AboutImgWrapper}>
-                  <Image
-                    src={image[2].secure_url}
-                    layout='fill'
-                    objectFit='cover'
-                    alt='koslowshop-baklava'
-                    className={classes.AboutImg}
-                  />
-                </div>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
-    </div>
-  );
-
-  return (
-    <>
-      {AboutDesktop}
-      {AboutMobile}
     </>
   );
 };
