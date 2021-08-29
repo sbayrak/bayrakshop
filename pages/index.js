@@ -80,6 +80,9 @@ const useStyles = makeStyles((theme) => ({
   // @@@ MOSTSOLD SECTION @@@
   MostSoldRoot: {
     marginTop: theme.spacing(15),
+    [theme.breakpoints.down('xs')]: {
+      marginTop: theme.spacing(25),
+    },
   },
   MostSoldTabRoot: {
     width: '100%',
@@ -94,9 +97,14 @@ const useStyles = makeStyles((theme) => ({
   },
   MostSoldRootContainer: {
     padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+    paddingLeft: theme.spacing(0),
+    paddingRight: theme.spacing(0),
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
   },
   MostSoldTypo1: {
     fontWeight: theme.typography.fontWeightRegular,
+    backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(1),
     marginBottom: theme.spacing(3),
     paddingLeft: theme.spacing(2),
@@ -213,6 +221,18 @@ const useStyles = makeStyles((theme) => ({
     fontSize: '18px',
     textTransform: 'none',
   },
+  MostSoldContainer: {
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
+  },
+  MostSoldCardMobile1: {
+    [theme.breakpoints.down('xs')]: {
+      paddingTop: '0 !important',
+      paddingBottom: '0 !important',
+    },
+  },
 }));
 
 export default function Home({
@@ -247,9 +267,15 @@ export default function Home({
         </Typography>
         <div className={classes.MostSoldSeperator}></div>
         <div className={classes.MostSoldTabRoot}>
-          <Grid container spacing={3}>
+          <Grid container spacing={3} className={classes.MostSoldContainer}>
             {getMostLovedProductsContent.map((item) => (
-              <Grid item md={3} xs={6} key={item._id}>
+              <Grid
+                item
+                md={3}
+                xs={6}
+                key={item._id}
+                className={classes.MostSoldCardMobile1}
+              >
                 <MostSoldCard item={item} key={item._id} />
               </Grid>
             ))}

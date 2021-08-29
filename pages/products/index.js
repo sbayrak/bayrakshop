@@ -136,6 +136,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       paddingRight: theme.spacing(1.5),
       paddingLeft: theme.spacing(1.5),
+      marginTop: theme.spacing(10),
     },
   },
   filterGridContainer: {
@@ -145,6 +146,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginRight: theme.spacing(2),
     borderRight: '1px solid rgba(0,0,0,0.05)',
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
   },
   filterTitle: {
     marginBottom: theme.spacing(3),
@@ -193,7 +195,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     paddingBottom: theme.spacing(3),
     borderRadius: '5px',
-    boxShadow: '1px 2px 5px 1px rgba(86,82,222,0.1)',
+    boxShadow: '0px 2px 15px -4px rgba(40,40,40,0.05)',
     backgroundColor: '#fff',
     border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',

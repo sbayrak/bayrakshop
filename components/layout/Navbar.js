@@ -543,6 +543,7 @@ const Navbar = () => {
                         <MenuItem
                           onClick={handleClose}
                           className={classes.menuItem}
+                          key={category._id}
                         >
                           <Link
                             href={`${process.env.NEXT_PUBLIC_URL}/products?show=${category.name}`}
@@ -659,8 +660,15 @@ const Navbar = () => {
                         <MenuItem
                           onClick={handleClose}
                           className={classes.menuItem}
+                          style={{ padding: 0 }}
                         >
-                          <Button onClick={logoutHandler}>Logout</Button>
+                          <Button
+                            onClick={logoutHandler}
+                            fullWidth
+                            style={{ paddingTop: 10, paddingBottom: 10 }}
+                          >
+                            Logout
+                          </Button>
                         </MenuItem>
                       </Menu>
                     </>

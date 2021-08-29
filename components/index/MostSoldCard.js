@@ -134,10 +134,19 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: '#F44336',
     padding: theme.spacing(2),
     borderRadius: '5px',
+    alignItems: 'center',
+    [theme.breakpoints.down('xs')]: {
+      alignItems: 'center',
+    },
   },
   snackbarLink: {
     color: '#fff',
     fontWeight: theme.typography.fontWeightBold,
+  },
+  snackbarTypo: {
+    [theme.breakpoints.down('xs')]: {
+      fontSize: '12px',
+    },
   },
 }));
 
@@ -361,14 +370,53 @@ const MostSoldCard = ({ item }) => {
           </Grid>
         </CardContent>
         <CardActions>
-          <Button
-            size='small'
-            variant='contained'
-            fullWidth
-            className={classes.MostSoldAddToCartForm}
-          >
-            ADD TO CART
-          </Button>
+          {item.active ? (
+            <Button
+              style={{
+                backgroundColor: `${!item.active && '#f6f6f6'}`,
+              }}
+              className={classes.MostSoldAddToCartForm}
+              fullWidth
+              color='primary'
+              variant='contained'
+              disableRipple
+              disableFocusRipple
+              disableElevation
+              disableTouchRipple
+              disabled={false}
+              onClick={addCart}
+            >
+              <>
+                <AddShoppingCartIcon fontSize='small' />
+                &nbsp;&nbsp;
+                <span className={classes.productCardBtnWrapper}>
+                  Add to Cart
+                </span>
+              </>
+            </Button>
+          ) : (
+            <Button
+              style={{
+                backgroundColor: `${!item.active && '#f6f6f6'}`,
+              }}
+              className={classes.MostSoldAddToCartForm}
+              fullWidth
+              color='primary'
+              variant='contained'
+              disableRipple
+              disableFocusRipple
+              disableElevation
+              disableTouchRipple
+              disabled={true}
+            >
+              <>
+                <RemoveShoppingCartIcon fontSize='small' /> &nbsp;&nbsp;
+                <span className={classes.productCardBtnWrapper}>
+                  Out of Stock
+                </span>
+              </>
+            </Button>
+          )}
         </CardActions>
       </Card>
     </div>
@@ -387,7 +435,11 @@ const MostSoldCard = ({ item }) => {
           <div className={classes.snackbarWrapper}>
             <ErrorIcon color='secondary' />
             &nbsp;&nbsp;
-            <Typography variant='body1' color='secondary'>
+            <Typography
+              variant='body1'
+              color='secondary'
+              className={classes.snackbarTypo}
+            >
               Please{' '}
               <Link href='/auth/signin'>
                 <a className={classes.snackbarLink}>log in</a>
