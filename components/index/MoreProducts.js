@@ -79,8 +79,8 @@ const useStyles = makeStyles((theme) => ({
   MoreProductsContainer: {
     paddingTop: theme.spacing(10),
     paddingBottom: theme.spacing(10),
-    paddingLeft: theme.spacing(5),
-    paddingRight: theme.spacing(5),
+    paddingLeft: theme.spacing(1.5),
+    paddingRight: theme.spacing(1.5),
     [theme.breakpoints.down('xs')]: {
       paddingTop: theme.spacing(3),
       paddingBottom: theme.spacing(3),

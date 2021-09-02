@@ -15,20 +15,26 @@ const useStyles = makeStyles((theme) => ({
   root: {
     marginTop: theme.spacing(15),
     marginBottom: theme.spacing(15),
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#5652de',
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
   },
   rootContainer: {
     padding: theme.spacing(1),
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
+    // paddingTop: theme.spacing(0),
+    // paddingBottom: theme.spacing(0),
     [theme.breakpoints.down('xs')]: {
       padding: '5px',
     },
   },
   gridItem: {
     borderRight: '2px solid rgba(86,82,222,0.1)',
-    borderRadius: '5px',
+    backgroundColor: '#fff',
     padding: theme.spacing(1),
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    boxShadow: '0px 7px 15px -4px rgba(40,40,40,0.17)',
     [theme.breakpoints.down('xs')]: {
       padding: '5px',
     },

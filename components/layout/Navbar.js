@@ -544,6 +544,7 @@ const Navbar = () => {
                           onClick={handleClose}
                           className={classes.menuItem}
                           key={category._id}
+                          style={{ padding: 0 }}
                         >
                           <Link
                             href={`${process.env.NEXT_PUBLIC_URL}/products?show=${category.name}`}
@@ -552,6 +553,10 @@ const Navbar = () => {
                               className={classes.mobileProductsLinks}
                               target='_blank'
                               rel='noreferrer noopener'
+                              style={{
+                                width: '100%',
+                                padding: '20px 35px',
+                              }}
                             >
                               <ArrowRightIcon /> {category.name}
                             </a>
@@ -628,9 +633,16 @@ const Navbar = () => {
                         <MenuItem
                           onClick={handleClose}
                           className={classes.menuItem}
+                          style={{ padding: 0 }}
                         >
                           <Link href='/auth/profile'>
-                            <a className={classes.mobileProductsLinks}>
+                            <a
+                              className={classes.mobileProductsLinks}
+                              style={{
+                                width: '100%',
+                                padding: '20px 35px',
+                              }}
+                            >
                               <ArrowRightIcon /> Profile
                             </a>
                           </Link>
@@ -638,9 +650,16 @@ const Navbar = () => {
                         <MenuItem
                           onClick={handleClose}
                           className={classes.menuItem}
+                          style={{ padding: 0 }}
                         >
                           <Link href='/auth/profile/orders'>
-                            <a className={classes.mobileProductsLinks}>
+                            <a
+                              className={classes.mobileProductsLinks}
+                              style={{
+                                width: '100%',
+                                padding: '20px 35px',
+                              }}
+                            >
                               <ArrowRightIcon /> Orders
                             </a>
                           </Link>
@@ -649,9 +668,18 @@ const Navbar = () => {
                           <MenuItem
                             onClick={handleClose}
                             className={classes.menuItem}
+                            style={{
+                              padding: 0,
+                            }}
                           >
                             <Link href='/dashboard'>
-                              <a className={classes.mobileProductsLinks}>
+                              <a
+                                className={classes.mobileProductsLinks}
+                                style={{
+                                  width: '100%',
+                                  padding: '20px 35px',
+                                }}
+                              >
                                 <ArrowRightIcon /> Dashboard
                               </a>
                             </Link>
@@ -683,9 +711,18 @@ const Navbar = () => {
                       <MenuItem
                         onClick={handleClose}
                         className={classes.menuItem}
+                        style={{
+                          padding: 0,
+                        }}
                       >
                         <Link href='/auth/signin'>
-                          <a className={classes.mobileProductsLinks}>
+                          <a
+                            className={classes.mobileProductsLinks}
+                            style={{
+                              width: '100%',
+                              padding: '20px 35px',
+                            }}
+                          >
                             <ArrowRightIcon /> Login
                           </a>
                         </Link>
@@ -693,9 +730,16 @@ const Navbar = () => {
                       <MenuItem
                         onClick={handleClose}
                         className={classes.menuItem}
+                        style={{ padding: 0 }}
                       >
                         <Link href='/auth/signup'>
-                          <a className={classes.mobileProductsLinks}>
+                          <a
+                            className={classes.mobileProductsLinks}
+                            style={{
+                              width: '100%',
+                              padding: '20px 35px',
+                            }}
+                          >
                             <ArrowRightIcon /> Register
                           </a>
                         </Link>

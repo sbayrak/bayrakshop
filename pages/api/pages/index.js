@@ -44,6 +44,35 @@ export default async (req, res) => {
       );
 
       res.status(200).json(updateAboutSection);
+    } else if (req.query.section === 'discount') {
+      const {
+        discountParag1,
+        discountParag2,
+        discountParag3,
+        discountLink,
+        image,
+      } = req.body;
+
+      const findSection = await db
+        .collection('pages')
+        .findOne({ section: req.query.section });
+
+      const updateDiscountSection = await db.collection('pages').updateOne(
+        {
+          _id: findSection._id,
+        },
+        {
+          $set: {
+            discountParag1,
+            discountParag2,
+            discountParag3,
+            discountLink,
+            image,
+          },
+        }
+      );
+
+      res.status(200).json(updateDiscountSection);
     } else if (req.query.section === 'discover') {
       const { image } = req.body;
 

@@ -657,8 +657,8 @@ const EditProduct = ({
             <div data-id={`${img.asset_id}`} className={classes.imgWrapper}>
               <Image
                 src={img.secure_url}
-                width={256}
-                height={100}
+                width={300}
+                height={200}
                 key={img.asset_id}
               />{' '}
               <IconButton

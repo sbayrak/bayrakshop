@@ -16,6 +16,8 @@
     "mongodb": "^3.6.11",
     "next": "^11.0.0",
     "next-auth": "^3.27.0",
+    "nextjs-progressbar": "^0.0.11",
+    "nprogress": "^0.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "uuid": "^8.3.2"

@@ -45,6 +45,9 @@ export const getStaticProps = async () => {
   const fillDiscoverContent = getPages.filter(
     (item) => item.section === 'discover'
   );
+  const fillDiscountContent = getPages.filter(
+    (item) => item.section === 'discount'
+  );
   const fillContactContent = getPages.filter(
     (pageItem) => pageItem.section === 'contact'
   );
@@ -52,6 +55,7 @@ export const getStaticProps = async () => {
   const heroContent = fillHeroContent[0];
   const aboutContent = fillAboutContent[0];
   const discoverContent = fillDiscoverContent[0];
+  const discountContent = fillDiscountContent[0];
   const contactContent = fillContactContent[0];
   // @@@ HERO CONTENT @@@
 
@@ -61,6 +65,7 @@ export const getStaticProps = async () => {
       aboutContent,
       discoverContent,
       contactContent,
+      discountContent,
       getCategories,
     },
   };
@@ -158,6 +163,7 @@ const Dashboard = ({
   aboutContent,
   discoverContent,
   contactContent,
+  discountContent,
   getCategories,
 }) => {
   const classes = useStyles();
@@ -167,8 +173,20 @@ const Dashboard = ({
   const [errorAboutUploadedImages, setErrorAboutUploadedImages] = useState(
     false
   );
+  const [
+    errorDiscountUploadedImages,
+    setErrorDiscountUploadedImages,
+  ] = useState(false);
   const [aboutUploadedImages, setAboutUploadedImages] = useState([]);
+  const [discountUploadedImages, setDiscountUploadedImages] = useState([]);
   const [aboutImageState, setAboutImageState] = useState('');
+  const [discountImageState, setDiscountImageState] = useState('');
+  const [discountParag1, setDiscountParag1] = useState('');
+  const [discountParag2, setDiscountParag2] = useState('');
+  const [discountParag3, setDiscountParag3] = useState('');
+  const [errorDiscountParag1, setErrorDiscountParag1] = useState(false);
+  const [errorDiscountParag2, setErrorDiscountParag2] = useState(false);
+  const [errorDiscountParag3, setErrorDiscountParag3] = useState(false);
   const [parag1, setParag1] = useState('');
   const [parag2, setParag2] = useState('');
   const [parag3, setParag3] = useState('');
@@ -217,6 +235,12 @@ const Dashboard = ({
       setContactEmail(contactContent.email);
       setContactAddress(contactContent.address);
       setContactMaps(contactContent.maps);
+    }
+    if (discountContent) {
+      setDiscountParag1(discountContent.discountParag1);
+      setDiscountParag2(discountContent.discountParag2);
+      setDiscountParag3(discountContent.discountParag3);
+      setDiscountUploadedImages(discountContent.image);
     }
     if (getCategories) {
       setDiscoverCategories(getCategories);
@@ -306,6 +330,15 @@ const Dashboard = ({
 
     setAboutUploadedImages(filteredImage);
   };
+  const discountRemoveUploadedImageHandler = (e) => {
+    e.preventDefault();
+
+    const filteredImage = discountUploadedImages.filter(
+      (img) => img.asset_id !== e.currentTarget.dataset.id
+    );
+
+    setDiscountUploadedImages(filteredImage);
+  };
   const discoverRemoveUploadedImageHandler = (e) => {
     e.preventDefault();
 
@@ -374,6 +407,35 @@ const Dashboard = ({
     }
     setAboutUploadedImages([...aboutUploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
   };
+
+  const discountNewImageUploadHandler = async (e) => {
+    e.preventDefault();
+    setSpinner(true);
+
+    console.log(discountImageState);
+
+    const formData = new FormData();
+    formData.append('file', discountImageState);
+    formData.append(
+      'upload_preset',
+      `${process.env.NEXT_PUBLIC_CLOUDINARY_PRESET}`
+    );
+
+    const submitData = await fetch(
+      ` https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUDNAME}/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
+
+    const result = await submitData.json();
+    if (result) {
+      setSpinner(false);
+    }
+    setDiscountUploadedImages([...discountUploadedImages, result]); // ADD NEW UPLOADED IMG TO uploadedImages STATE
+  };
+
   const discoverNewImageUploadHandler = async (e) => {
     e.preventDefault();
     setSpinner(true);
@@ -489,6 +551,42 @@ const Dashboard = ({
       );
 
       const result = await submitHero.json();
+      if (result.result.n === 1) {
+        setSuccessHero(true);
+      }
+    }
+  };
+
+  const discountSubmitHandler = async (e) => {
+    e.preventDefault();
+    let parags = {};
+
+    if (discountUploadedImages.length !== 1) {
+      setErrorDiscountUploadedImages(true);
+    } else if (!discountParag1) {
+      setErrorDiscountParag1(true);
+    } else if (!discountParag2) {
+      setErrorDiscountParag2(true);
+    } else if (!discountParag3) {
+      setErrorDiscountParag3(true);
+    } else {
+      const submitData = await fetch(
+        `${process.env.NEXT_PUBLIC_URL}/api/pages?section=discount`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            image: discountUploadedImages,
+            discountParag1: discountParag1,
+            discountParag2: discountParag2,
+            discountParag3: discountParag3,
+          }),
+        }
+      );
+
+      const result = await submitData.json();
       if (result.result.n === 1) {
         setSuccessHero(true);
       }
@@ -1106,6 +1204,191 @@ const Dashboard = ({
                 </Grid>
                 <Grid item md={6}></Grid>
               </Grid>
+
+              {/* DISCOUNT SECTION BEGINS */}
+              <Grid
+                item
+                md={12}
+                className={`${classes.gridFormItem} ${classes.heroSection} `}
+              >
+                <Typography variant='h4' gutterBottom>
+                  Discount Section
+                </Typography>
+                <Grid item md={6}></Grid>
+                <Grid item md={6} xs={12} className={classes.gridFormItem}>
+                  <Typography variant='h6' className={classes.activeTypo}>
+                    Image Section
+                  </Typography>
+                  <div style={{ display: 'flex' }}>
+                    {discountUploadedImages &&
+                      discountUploadedImages.map((img) => (
+                        <div
+                          data-id={`${img.asset_id}`}
+                          className={`${classes.imgWrapper} ${classes.aboutImgWrapper}  `}
+                          key={img.asset_id}
+                        >
+                          <Image
+                            src={img.secure_url}
+                            width={350}
+                            height={200}
+                            key={img.asset_id}
+                            alt={`${process.env.NEXT_PUBLIC_URL} image`}
+                          />
+                          <IconButton
+                            data-id={`${img.asset_id}`}
+                            onClick={discountRemoveUploadedImageHandler}
+                          >
+                            <CancelIcon style={{ color: '#F44336' }} />
+                          </IconButton>
+                        </div>
+                      ))}
+                  </div>
+                </Grid>
+                <Grid
+                  item
+                  md={6}
+                  xs={12}
+                  className={`${classes.gridFormItem} ${classes.imageWrapper}`}
+                  style={{
+                    border: `${
+                      errorDiscountUploadedImages
+                        ? `1px solid rgba(222,0,0,1)`
+                        : `1px solid rgba(0,0,0,0.2)`
+                    }`,
+                  }}
+                >
+                  <Typography variant='h6' className={classes.activeTypo}>
+                    Image
+                  </Typography>
+                  <div className={classes.root}>
+                    <form
+                      onSubmit={discountNewImageUploadHandler}
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                      }}
+                    >
+                      <div style={{ marginRight: '20px' }}>
+                        <input
+                          accept='image/*'
+                          className={classes.input}
+                          id='contained-button-fileDiscount'
+                          type='file'
+                          onChange={(e) =>
+                            setDiscountImageState(e.target.files[0])
+                          }
+                        />
+                        <label htmlFor='contained-button-fileDiscount'>
+                          <Button
+                            variant='contained'
+                            color='primary'
+                            component='span'
+                            disableElevation
+                            onChange={(e) =>
+                              setDiscountImageState(e.target.files[0])
+                            }
+                            disabled={
+                              discountUploadedImages.length >= 1 ? true : false
+                            }
+                          >
+                            Select
+                          </Button>
+                        </label>
+                      </div>
+                      <Button
+                        variant='contained'
+                        color='primary'
+                        fullWidth
+                        type='submit'
+                        disableElevation
+                        startIcon={<CloudUploadIcon />}
+                        disabled={
+                          discountUploadedImages.length >= 1 ? true : false
+                        }
+                      >
+                        {spinner ? (
+                          <CircularProgress
+                            color='secondary'
+                            fontSize='small'
+                          />
+                        ) : (
+                          'Upload'
+                        )}
+                      </Button>
+                    </form>
+                    {discountUploadedImages.length >= 1 && (
+                      <Typography variant='caption'>
+                        *You can only upload 1 photo.
+                      </Typography>
+                    )}
+                  </div>
+                </Grid>
+                <form onSubmit={discountSubmitHandler}>
+                  <Grid item md={6} className={classes.gridFormItem}>
+                    <Typography variant='h6'>Paragraphs</Typography>
+                    <TextField
+                      variant='outlined'
+                      fullWidth
+                      value={discountParag1}
+                      onChange={(e) => setDiscountParag1(e.target.value)}
+                      error={errorDiscountParag1}
+                      className={classes.aboutParagTxt}
+                      placeholder='Discount Label'
+                      helperText='Please enter the amount of discount to be displayed. e.g. 50%'
+                    ></TextField>
+                    <TextField
+                      variant='outlined'
+                      fullWidth
+                      value={discountParag2}
+                      onChange={(e) => setDiscountParag2(e.target.value)}
+                      error={errorDiscountParag2}
+                      className={classes.aboutParagTxt}
+                      helperText='Please enter a title to be displayed. e.g. Today`s deal!'
+                      placeholder='Label left title'
+                    ></TextField>
+                    <TextField
+                      variant='outlined'
+                      fullWidth
+                      value={discountParag3}
+                      onChange={(e) => setDiscountParag3(e.target.value)}
+                      error={errorDiscountParag3}
+                      className={classes.aboutParagTxt}
+                      multiline
+                      rows={4}
+                      helperText='Please enter a paragraph to be displayed, at most 20 characters.'
+                      placeholder='Label left bottom text'
+                    ></TextField>
+                  </Grid>
+                  <Grid item md={6}>
+                    <Button
+                      type='submit'
+                      variant='contained'
+                      fullWidth
+                      color='primary'
+                      disabled={
+                        discountUploadedImages.length <= 0 ||
+                        !discountParag1 ||
+                        !discountParag2 ||
+                        !discountParag3
+                          ? true
+                          : false
+                      }
+                    >
+                      update
+                    </Button>
+                    {discountUploadedImages.length <= 0 && (
+                      <Typography variant='caption'>
+                        *Please upload at most 1 photo.
+                      </Typography>
+                    )}
+                  </Grid>
+                </form>
+                <Grid item md={6}></Grid>
+              </Grid>
+
+              {/* DISCOUNT SECTION ENDS */}
+
               {contactSection}
             </Grid>
           </Grid>

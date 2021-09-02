@@ -22,6 +22,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import About from '../components/index/About';
 import MostSoldCard from '../components/index/MostSoldCard';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import Discount from '../components/layout/Discount';
 // @@@ MATERIAL-UI @@@
 
 export const getStaticProps = async () => {
@@ -35,6 +36,9 @@ export const getStaticProps = async () => {
   const getAboutContent = getPages.filter((data) => data.section === 'about');
   const getDiscoverContent = getPages.filter(
     (data) => data.section === 'discover'
+  );
+  const getDiscountContent = getPages.filter(
+    (data) => data.section === 'discount'
   );
   const getContactContent = getPages.filter(
     (data) => data.section === 'contact'
@@ -69,6 +73,7 @@ export const getStaticProps = async () => {
       getAboutContent,
       getMostLovedProductsContent,
       getContactContent,
+      getDiscountContent,
       getCategories,
       getDiscoverContent,
     },
@@ -241,6 +246,7 @@ export default function Home({
   getContactContent,
   getMostLovedProductsContent,
   getCategories,
+  getDiscountContent,
   getDiscoverContent,
 }) {
   const classes = useStyles();
@@ -306,7 +312,8 @@ export default function Home({
         getCategories={getCategories}
         getDiscoverContent={getDiscoverContent}
       ></MoreProducts>
-      <About getAboutContent={getAboutContent}></About>
+      <Discount getDiscountContent={getDiscountContent}></Discount>
+      {/* <About getAboutContent={getAboutContent}></About> */}
       <Contact getContactContent={getContactContent}></Contact>
     </>
   );
