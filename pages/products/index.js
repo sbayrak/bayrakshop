@@ -23,7 +23,6 @@ import { connectToDatabase } from '../../util/mongodb';
 import { useState, useEffect, useContext } from 'react';
 import { useSession } from 'next-auth/client';
 import CartContext from '../../context/cart/CartContext';
-import { route } from 'next/dist/next-server/server/router';
 
 // @@@ nextjs @@@
 
@@ -163,6 +162,7 @@ const useStyles = makeStyles((theme) => ({
   filterCheckBoxWrapper: {
     display: 'flex',
     alignItems: 'center',
+    justifyContent: 'flex-start',
     marginBottom: theme.spacing(1),
     [theme.breakpoints.down('sm')]: {
       marginRight: theme.spacing(3),
@@ -173,6 +173,9 @@ const useStyles = makeStyles((theme) => ({
       display: 'grid',
       gridTemplateColumns: '1fr 1fr',
     },
+  },
+  filterResetButton: {
+    marginTop: theme.spacing(7),
   },
   productsGridContainer: {
     paddingLeft: theme.spacing(2),
@@ -195,7 +198,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     paddingBottom: theme.spacing(3),
     borderRadius: '5px',
-    boxShadow: '0px 2px 15px -4px rgba(40,40,40,0.05)',
+    boxShadow: '0px 2px 10px -4px rgba(40,40,40,0.35)',
     backgroundColor: '#fff',
     border: '1px solid rgba(86,82,222,0.1)',
     transition: '0.5s ease',
@@ -216,7 +219,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   productCardTypo2: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(0),
     marginBottom: theme.spacing(4),
     paddingRight: theme.spacing(3),
     paddingLeft: theme.spacing(3),
@@ -390,6 +393,12 @@ const Products = ({ getCategories, getProducts }) => {
     }
   };
 
+  const resetFilter = () => {
+    const localCategory = '';
+    setCategories(localCategory);
+    router.reload();
+  };
+
   const categorySection = (
     <Grid item md={3} className={classes.filterGridContainer}>
       <div>
@@ -419,6 +428,17 @@ const Products = ({ getCategories, getProducts }) => {
             </div>
           ))}
         </div>
+        <div className={classes.filterResetButton}>
+          <Button
+            variant='contained'
+            color='primary'
+            fullWidth
+            disableElevation
+            onClick={resetFilter}
+          >
+            Reset
+          </Button>
+        </div>
       </div>
     </Grid>
   );
@@ -433,7 +453,7 @@ const Products = ({ getCategories, getProducts }) => {
       {getProducts.map((product) => (
         <Grid
           item
-          md={3}
+          md={4}
           xs={6}
           className={classes.productCardWrapper}
           key={product._id}
@@ -483,21 +503,6 @@ const Products = ({ getCategories, getProducts }) => {
             >
               €{product.price}
             </Typography>
-            <Grid item md={12} className={classes.MostSoldQuantityGrid}>
-              <IconButton
-                className={classes.MostSoldQuantityBtn}
-                onClick={() => setQuantity(quantity - 1)}
-              >
-                <RemoveIcon fontSize='small' color='primary' />
-              </IconButton>
-              <span>{quantity}</span>
-              <IconButton
-                className={classes.MostSoldQuantityBtn}
-                onClick={() => setQuantity(quantity + 1)}
-              >
-                <AddIcon fontSize='small' color='primary' />
-              </IconButton>
-            </Grid>
             <div className={classes.productCardBtn}>
               {product.active ? (
                 <Button
@@ -561,7 +566,6 @@ const Products = ({ getCategories, getProducts }) => {
         <Grid container className={classes.gridContainer}>
           {categorySection}
           {productSection}
-          {/* {newCard} */}
 
           {snackbarOpen && (
             <Snackbar

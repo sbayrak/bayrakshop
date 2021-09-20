@@ -19,6 +19,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useSession } from 'next-auth/client';
+import { getSession } from 'next-auth/client';
 // @@@@@@@@@ NEXTJS @@@@@@@@@@
 
 const useStyles = makeStyles((theme) => ({
@@ -183,7 +184,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = () => {
+export const getServerSideProps = async (context) => {
+  const session2 = await getSession(context);
+
+  if (session2) {
+    return {
+      redirect: {
+        destination: '/',
+      },
+    };
+  } else {
+    return {
+      props: {},
+    };
+  }
+};
+
+const SignIn = ({ session2 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [signInError, setSignInError] = useState('');
@@ -192,6 +209,7 @@ const SignIn = () => {
   const router = useRouter();
   const classes = useStyles();
   const [session, loading] = useSession();
+  console.log(session2);
 
   if (session) router.push('/');
 

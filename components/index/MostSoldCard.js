@@ -188,7 +188,11 @@ const MostSoldCard = ({ item }) => {
     <div className={classes.MostSoldCardDesktop}>
       <Card className={classes.MostSoldCardRoot} elevation={1}>
         <CardActionArea>
-          <Link href='#!'>
+          <Link
+            href={`${
+              process.env.NEXT_PUBLIC_URL
+            }/products/${item.name.toLowerCase().replace(' ', '-')}`}
+          >
             <a
               target='_blank'
               rel='noreferrer noopener'
