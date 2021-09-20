@@ -211,8 +211,6 @@ const SignIn = ({ session2 }) => {
   const [session, loading] = useSession();
   console.log(session2);
 
-  if (session) router.push('/');
-
   function emailIsValid(email) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
