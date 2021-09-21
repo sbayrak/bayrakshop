@@ -34,16 +34,28 @@ export const getStaticProps = async (context) => {
   const { db } = await connectToDatabase();
   const name = context.params.name;
 
-  const fetchProduct = await db.collection('products').findOne({
-    name: name.slice(0, 1).toUpperCase() + name.slice(1),
-  });
-  const product = await JSON.parse(JSON.stringify(fetchProduct));
+  if (name.includes('-')) {
+    const fetchProduct = await db.collection('products').findOne({
+      productUrl: name,
+    });
+    let product = await JSON.parse(JSON.stringify(fetchProduct));
 
-  return {
-    props: {
-      product,
-    },
-  };
+    return {
+      props: {
+        product,
+      },
+    };
+  } else if (!name.includes('-')) {
+    const fetchProduct = await db.collection('products').findOne({
+      name: name.slice(0, 1).toUpperCase() + name.slice(1),
+    });
+    const product = await JSON.parse(JSON.stringify(fetchProduct));
+    return {
+      props: {
+        product,
+      },
+    };
+  }
 };
 
 export const getStaticPaths = async () => {
@@ -122,6 +134,7 @@ const Product = ({ product }) => {
   const [session, loading] = useSession();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const router = useRouter();
+  // console.log(product);
 
   useEffect(() => {
     if (quantity <= 1) {
@@ -250,25 +263,25 @@ const Product = ({ product }) => {
                   </div>
                 </div>
                 <div>
-                  {product.active ? (
-                    <Button
-                      style={{
-                        backgroundColor: `${!product.active && '#f6f6f6'}`,
-                      }}
-                      fullWidth
-                      color='primary'
-                      variant='contained'
-                      disableRipple
-                      disableFocusRipple
-                      disableElevation
-                      disableTouchRipple
-                      disabled={false}
-                      onClick={addToCart}
-                      data-productid={product._id}
-                      data-productname={product.name}
-                      data-productprice={product.price}
-                      data-productimg={product.image[0].secure_url}
-                    >
+                  <Button
+                    style={{
+                      backgroundColor: `${!product.active && '#f6f6f6'}`,
+                    }}
+                    fullWidth
+                    color='primary'
+                    variant='contained'
+                    disableRipple
+                    disableFocusRipple
+                    disableElevation
+                    disableTouchRipple
+                    disabled={false}
+                    onClick={addToCart}
+                    data-productid={product._id}
+                    data-productname={product.name}
+                    data-productprice={product.price}
+                    data-productimg={product.image[0].secure_url}
+                  >
+                    {product.active ? (
                       <>
                         <AddShoppingCartIcon fontSize='small' />
                         &nbsp;&nbsp;
@@ -276,29 +289,15 @@ const Product = ({ product }) => {
                           Add to Cart
                         </span>
                       </>
-                    </Button>
-                  ) : (
-                    <Button
-                      style={{
-                        backgroundColor: `${!product.active && '#f6f6f6'}`,
-                      }}
-                      fullWidth
-                      color='primary'
-                      variant='contained'
-                      disableRipple
-                      disableFocusRipple
-                      disableElevation
-                      disableTouchRipple
-                      disabled={true}
-                    >
+                    ) : (
                       <>
                         <RemoveShoppingCartIcon fontSize='small' /> &nbsp;&nbsp;
                         <span className={classes.productCardBtnWrapper}>
                           Out of Stock
                         </span>
                       </>
-                    </Button>
-                  )}
+                    )}
+                  </Button>
                 </div>
               </Grid>
             </Grid>
@@ -308,7 +307,7 @@ const Product = ({ product }) => {
               <Typography>You Might Like</Typography>
             </Grid> */}
           {/* <Grid item md={12}>
-                RENDER 6 PRODUCTS 
+                RENDER 6 PRODUCTS
             </Grid>
           </Grid> */}
         </Grid>
