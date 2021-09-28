@@ -510,7 +510,6 @@ const Navbar = () => {
                 <li className={classes.bottomMidLi}>
                   <Link href='/products'>
                     <a
-                      target='_blank'
                       rel='noreferrer noopener'
                       className={classes.bottomMidLinks}
                     >

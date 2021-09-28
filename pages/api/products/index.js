@@ -8,6 +8,7 @@ export default async (req, res) => {
     const {
       name,
       description,
+      productUrl,
       price,
       active,
       quantity,
@@ -21,6 +22,7 @@ export default async (req, res) => {
       const newProduct = await db.collection('products').insertOne({
         name,
         description,
+        productUrl,
         price,
         active,
         quantity: quantity ? quantity : 0,

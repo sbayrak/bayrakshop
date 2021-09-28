@@ -224,9 +224,10 @@ const AddNewProduct = ({ categoryResult }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            name: name,
+            name: name.slice(0, 1).toUpperCase() + name.slice(1),
             price: price,
             description: description,
+            productUrl: name.toLowerCase().replace(' ', '-'),
             quantity: quantity,
             category: category,
             active: switchState,

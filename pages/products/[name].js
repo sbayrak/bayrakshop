@@ -97,6 +97,9 @@ const useStyles = makeStyles((theme) => ({
     textDecoration: 'none',
     color: '#5652de',
   },
+  breadCrumbsLinkCurrent: {
+    fontWeight: theme.typography.fontWeightBold,
+  },
   productGridContainer: {
     marginTop: theme.spacing(5),
   },
@@ -179,8 +182,14 @@ const Product = ({ product }) => {
               <Link href={`${process.env.NEXT_PUBLIC_URL}/products`}>
                 <a className={classes.breadCrumbsLink}>Products</a>
               </Link>
-              <Link href={`${process.env.NEXT_PUBLIC_URL}/products/`}>
-                <a className={classes.breadCrumbsLink}>Home</a>
+              <Link
+                href={`${process.env.NEXT_PUBLIC_URL}/products/${product.productUrl}`}
+              >
+                <a
+                  className={`${classes.breadCrumbsLink} ${classes.breadCrumbsLinkCurrent}`}
+                >
+                  Home
+                </a>
               </Link>
             </Breadcrumbs>
           </Grid>

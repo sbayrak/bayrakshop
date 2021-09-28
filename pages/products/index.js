@@ -247,6 +247,10 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(2),
     paddingBottom: theme.spacing(1),
     textDecoration: 'none',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
     [theme.breakpoints.down('xs')]: {
       marginBottom: theme.spacing(0),
       paddingBottom: theme.spacing(1),
@@ -274,6 +278,8 @@ const useStyles = makeStyles((theme) => ({
   typoWrapper: {
     paddingTop: theme.spacing(2),
     paddingLeft: theme.spacing(2),
+    width: '95%',
+    margin: '0 auto',
   },
   MostSoldQuantityBtn: {
     marginRight: theme.spacing(2),
@@ -284,8 +290,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   itemDesc: {
-    maxHeight: '15px',
     minHeight: '15px',
+    maxHeight: '35px',
     // height: '25px',
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down('xs')]: {
@@ -470,7 +476,7 @@ const Products = ({ getCategories, getProducts }) => {
                     src={product.image[0].secure_url}
                     alt={`${process.env.NEXT_PUBLIC_URL} ${product.name}`}
                     height={250}
-                    width={310}
+                    width={375}
                   />
                 </div>
                 <div className={classes.typoWrapper}>

@@ -84,7 +84,7 @@ export const getStaticProps = async () => {
 const useStyles = makeStyles((theme) => ({
   // @@@ MOSTSOLD SECTION @@@
   MostSoldRoot: {
-    marginTop: theme.spacing(15),
+    marginTop: theme.spacing(25),
     [theme.breakpoints.down('xs')]: {
       marginTop: theme.spacing(25),
     },
